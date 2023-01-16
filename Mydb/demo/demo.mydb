@@ -1,0 +1,21 @@
+// Auther: LinwinCloud
+// This is a demo of the mydb script.
+
+# This line is to list all the database in users VM path.
+list database
+# This line is to get the id value 1 in the database name 'default'.
+get 1 in "default"
+
+type 1 in "default"
+
+# Find the data has the "char" charset from the databse name "default".
+# You Can also use '*',and then will return all the data from this database.
+find "char" in "default"
+find * in "default"
+
+# BaseList can put a lot of Databse and data in it.
+# You can Understood as your system's File System.
+create baseList "Demo BaseList"
+
+
+
