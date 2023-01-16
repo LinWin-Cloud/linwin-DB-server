@@ -31,15 +31,19 @@ public class logon {
                         String GrantPermissions = Json.readJson(userConfig.getAbsolutePath(),"Grant Permissions");
                         String Passwd = Json.readJson(userConfig.getAbsolutePath(),"Passwd");
 
-                        Users users = new Users();
-                        users.setName(UsersName);
-                        users.setCreateTime(createTime);
-                        users.setPasswd(Passwd);
-                        users.setGrantPermissions(GrantPermissions);
+                        File database = new File(listUsers[i].getAbsolutePath()+"/Database");
+                        if (database.isDirectory() && database.exists()) {
+                            Users users = new Users();
+                            users.setName(UsersName);
+                            users.setCreateTime(createTime);
+                            users.setPasswd(Passwd);
+                            users.setGrantPermissions(GrantPermissions);
 
-                        logon.UserInformation.put(UsersName,users);
-                        logon.UsersList.add(UsersName);
-                        continue;
+                            logon.UserInformation.put(UsersName,users);
+                            logon.UsersList.add(UsersName);
+                        }else {
+                            continue;
+                        }
                     }else {
                         continue;
                     }

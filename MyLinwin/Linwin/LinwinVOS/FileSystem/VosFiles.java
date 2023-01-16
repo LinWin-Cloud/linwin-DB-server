@@ -1,5 +1,7 @@
 package LinwinVOS.FileSystem;
 
+import LinwinVOS.LinwinVOS;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -7,6 +9,7 @@ public class VosFiles {
     private String Type;
     private String name;
     private String path;
+    private String user;
     /**
      * IF the type is a data then do not use the directory function , and set it 'null';
      */
@@ -17,7 +20,21 @@ public class VosFiles {
      */
     private HashMap<String,Data> Database = new HashMap<String,Data>();
 
+    public void setDirectory(VMDirectory vmDirectory){
+        if (VosFiles.isDataBaseList(this)) {
+            this.Directory.put(this.name,vmDirectory);
+        }
+    }
+    public void setDatabase(Data data) {
+        if (VosFiles.isDataBase(this)) {
+            this.Database.put(this.name,data);
+        }
+    }
+
     public VosFiles() {
+    }
+    public void setUser(String user) {
+        this.user = user;
     }
     public void setType(String type) {
         this.Type = type;
@@ -37,6 +54,10 @@ public class VosFiles {
     }
     public String getPath() {
         return this.path;
+    }
+    public String getPhysicalPath() {
+        File file = new File(LinwinVOS.DatabasePath+"/"+this.user+"/"+this.path);
+        return file.getAbsolutePath();
     }
 
     public static boolean getRealFileExists(String var0) {

@@ -30,6 +30,7 @@ public class Data {
     public void autoSaveType(String str) {
         this.Type = this.getDataType(str);
     }
+
     public String getDataType(String content) {
         String saveType = "string";
         try{
@@ -57,5 +58,26 @@ public class Data {
             saveType = "string";
         }
         return saveType;
+    }
+    public int getId() {
+        return this.id;
+    }
+    public String getValue() {
+        return this.value;
+    }
+    public String getType() {
+        return this.Type;
+    }
+    public String getCreateTime() {
+        return this.createTime;
+    }
+    public String getSaveDatabase() {
+        return this.saveDatabase;
+    }
+    public String getName() {
+        return this.name;
+    }
+    public String getModificationTime() {
+        return this.ModificationTime;
     }
 }
