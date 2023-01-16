@@ -52,6 +52,13 @@ public class MyLinwin {
             }
         });
         runtime.start();
+        Thread outData = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        outData.start();
     }
     public static void getServerSocketBoot() {
         try{

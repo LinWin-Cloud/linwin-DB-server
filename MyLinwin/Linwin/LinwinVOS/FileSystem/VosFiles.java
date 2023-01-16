@@ -1,11 +1,21 @@
 package LinwinVOS.FileSystem;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class VosFiles {
     private String Type;
     private String name;
     private String path;
+    /**
+     * IF the type is a data then do not use the directory function , and set it 'null';
+     */
+    private HashMap<String,VMDirectory> Directory = new HashMap<String,VMDirectory>();
+    /**
+     * IF the type is 'Database' then can run this hashMap function.
+     * Other type will set it is null.
+     */
+    private HashMap<String,Data> Database = new HashMap<String,Data>();
 
     public VosFiles() {
     }
