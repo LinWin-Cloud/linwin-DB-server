@@ -11,7 +11,7 @@ import java.util.List;
 public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
     public static HashMap<String, UsersFileSystem> FileSystem = new HashMap<String, UsersFileSystem>();
-    public static List<String> databaseName = new ArrayList<String>();
+    public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
     public static String DatabasePath;
     public static void removeDataBase(String name) {
 

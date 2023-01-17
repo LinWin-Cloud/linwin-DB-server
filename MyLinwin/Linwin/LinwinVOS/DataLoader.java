@@ -1,6 +1,7 @@
 package LinwinVOS;
 import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
+import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.Users.logon;
 import LinwinVOS.data.Json;
 import LinwinVOS.runtime.dbLoader;
@@ -11,17 +12,17 @@ import java.util.List;
 
 public class DataLoader {
 
-    public static void loadData() {
+    public static void loadData(UsersFileSystem usersFileSystem) {
         String databasePath = LinwinVOS.DatabasePath;
         String[] userList = logon.UsersList.toArray(new String[logon.UsersList.size()]);
         //System.out.println("value="+userList.length);
         for (int i = 0; i < userList.length ; i++) {
             File usersDatabase = new File(databasePath+"/"+userList[i]+"/Database");
             File[] listDataBase = usersDatabase.listFiles();
-            DataLoader.UsersLoad(listDataBase,"/",userList[i]);
+            DataLoader.UsersLoad(listDataBase,usersFileSystem,userList[i]);
         }
     }
-    private static void UsersLoad(File[] listDataBase,String savePath,String user) {
+    private static void UsersLoad(File[] listDataBase,UsersFileSystem usersFileSystem,String user) {
         for (int i = 0 ; i < listDataBase.length ; i++)
         {
             if (listDataBase[i].isFile()) {
@@ -41,8 +42,7 @@ public class DataLoader {
                         vosDatabase.putData(list.get(j).getName(),list.get(j));
                     }
                     String name = listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf("."));
-                    //LinwinVOS.FileSystem.put(name,vosDatabase);
-                    //LinwinVOS.databaseName.add(name);
+
                 }
                 continue;
             }
