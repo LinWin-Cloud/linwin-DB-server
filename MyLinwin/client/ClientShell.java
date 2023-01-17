@@ -9,8 +9,8 @@ public class ClientShell {
             PrintWriter printWriter = new PrintWriter(outputStream);
 
             String user = "root";
-            String passwd = Md5Util.md5("123456");
-            String command = "list database";
+            String passwd = Md5Util_tool.md5("123456");
+            String command = "list database /main.mydb";
             String message = "Logon="+user+"?Passwd="+passwd+"?Command="+command;
             System.out.println(message);
             printWriter.println(message);
