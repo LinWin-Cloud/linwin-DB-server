@@ -1,4 +1,5 @@
-import LinwinVOS.FileSystem.VosDatabse;
+import LinwinVOS.FileSystem.Data;
+import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.data.*;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
@@ -7,6 +8,7 @@ import LinwinVOS.runtime.MydbEngine;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class MyLinwin {
     public static int ServicePort;
@@ -22,6 +24,7 @@ public class MyLinwin {
         System.out.println(" [Information] Boot Linwin Data Service!");
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
         MyLinwin.getServerSocketBoot();
+
         try {
             ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
             for (int i = 0 ; i < 16 ; i++) {
@@ -81,7 +84,7 @@ public class MyLinwin {
     }
     public static void LoadFiles() {
         try{
-            if (VosDatabse.getRealFileExists("../../config/service/Service.json")) {
+            if (VosDatabase.getRealFileExists("../../config/service/Service.json")) {
                 String port = Json.readJson("../../config/service/Service.json","Service-Port");
                 MyLinwin.ServicePort = Integer.valueOf(port);
             }else {
@@ -115,14 +118,16 @@ public class MyLinwin {
                     MydbEngine mydbEngine = new MydbEngine();
                     mydbEngine.setUser(logonUser);
                     mydbEngine.execLdbScript(command);
+
                     if (mydbEngine.getReturn() == null) {
                         outputStream.write("Error Command and Script".getBytes());
                         outputStream.flush();
                         socket.close();
+                    }else {
+                        outputStream.write(mydbEngine.getReturn().getBytes());
+                        socket.close();
+                        outputStream.close();
                     }
-                    outputStream.write(mydbEngine.getReturn().getBytes());
-                    socket.close();
-                    outputStream.close();
                 }else {
                     outputStream.write("Passwd Or UserName Error!".getBytes());
                     outputStream.flush();
