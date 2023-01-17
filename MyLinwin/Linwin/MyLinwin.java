@@ -119,6 +119,8 @@ public class MyLinwin {
                     mydbEngine.setUser(logonUser);
                     mydbEngine.execLdbScript(command);
 
+                    System.out.println(mydbEngine.getReturn());
+
                     if (mydbEngine.getReturn() == null) {
                         outputStream.write("Error Command and Script".getBytes());
                         outputStream.flush();

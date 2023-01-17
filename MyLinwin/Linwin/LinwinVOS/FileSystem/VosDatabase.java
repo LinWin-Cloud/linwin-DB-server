@@ -10,6 +10,7 @@ public class VosDatabase {
     private String savePath;
     private String user;
     private int size;
+    private int id;
     private String createTime;
     private String ModificationTime;
     private String value;
@@ -49,5 +50,9 @@ public class VosDatabase {
     public static boolean getRealFileExists(String var0) {
         File var1 = new File(var0);
         return var1.exists();
+    }
+    public void removeData(String name) {
+        this.dataList.remove(this.dataHashMap.get(name));
+        this.dataHashMap.remove(name);
     }
 }

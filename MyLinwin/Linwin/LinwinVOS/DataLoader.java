@@ -41,7 +41,8 @@ public class DataLoader {
                         vosDatabase.putData(list.get(j).getName(),list.get(j));
                     }
                     String name = listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf("."));
-                    LinwinVOS.FileSystem.put(name,vosDatabase);
+                    //LinwinVOS.FileSystem.put(name,vosDatabase);
+                    //LinwinVOS.databaseName.add(name);
                 }
                 continue;
             }

@@ -23,8 +23,8 @@ public class MydbEngine {
         exec.setEngine(this);
         script = MydbEngine.replaceSpace(script);
 
-        if (script.indexOf("list database") != -1) {
-            String list = exec.listDatabase(script);
+        if (script.equals("list database")) {
+            String list = exec.listDatabase();
             this.getFunction = list;
         }else {
             this.getFunction = "Error Command and Script";
