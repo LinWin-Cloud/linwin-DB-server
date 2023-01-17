@@ -1,13 +1,12 @@
 package LinwinVOS;
 
-import LinwinVOS.FileSystem.VosFiles;
 import LinwinVOS.Users.logon;
+import LinwinVOS.FileSystem.VosDatabase;
 import java.util.HashMap;
-import LinwinVOS.FileSystem.VMDirectory;
 
 public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
-    public static HashMap<String, VosFiles> FileSystem = new HashMap<String,VosFiles>();
+    public static HashMap<String, VosDatabase> FileSystem = new HashMap<String, VosDatabase>();
     public static String DatabasePath;
 
     public void BootSystem() {
@@ -25,6 +24,7 @@ public class LinwinVOS {
             String userName = userList[i];
             LinwinVOS.UsersNowPath.put(userName,"/");
         }
+        //System.out.println();
         DataLoader.loadData();
     }
 }

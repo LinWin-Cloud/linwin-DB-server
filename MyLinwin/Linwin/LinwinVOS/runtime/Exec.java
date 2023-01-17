@@ -1,5 +1,6 @@
 package LinwinVOS.runtime;
 
+import LinwinVOS.FileSystem.Data;
 import LinwinVOS.LinwinVOS;
 
 public class Exec {
@@ -8,13 +9,6 @@ public class Exec {
         this.mydbEngine = mydbEngine;
     }
     public String listDatabase(String command) {
-        //String getRunPath = LinwinVOS.UsersNowPath.get(this.mydbEngine.getUser());
-        String[] shell = command.split(" ");
-        if (shell.length == 3) {
-            String showPath = shell[2];
-
-        }else {
-            return null;
-        }
+        return null;
     }
 }

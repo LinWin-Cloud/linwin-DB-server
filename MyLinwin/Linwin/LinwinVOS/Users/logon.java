@@ -19,7 +19,7 @@ public class logon {
     public static void LoadUsers() {
         File nowPath = new File(logon.setPath);
         File TargetDataPath = new File(nowPath.getAbsolutePath()+"/../../Data/");
-        System.out.println(TargetDataPath.getAbsolutePath());
+        //System.out.println(TargetDataPath.getAbsolutePath());
         if (TargetDataPath.isDirectory() && TargetDataPath.exists()) {
             File[] listUsers = TargetDataPath.listFiles();
             for (int i = 0 ; i < listUsers.length ; i++) {
@@ -31,7 +31,8 @@ public class logon {
                         String GrantPermissions = Json.readJson(userConfig.getAbsolutePath(),"Grant Permissions");
                         String Passwd = Json.readJson(userConfig.getAbsolutePath(),"Passwd");
 
-                        File database = new File(listUsers[i].getAbsolutePath()+"/Database");
+                        // System.out.println(listUsers[i].getName()+"/");
+                        File database = new File(listUsers[i].getAbsolutePath()+"/Database/");
                         if (database.isDirectory() && database.exists()) {
                             Users users = new Users();
                             users.setName(UsersName);
