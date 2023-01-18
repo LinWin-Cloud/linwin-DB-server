@@ -12,14 +12,13 @@ import java.util.List;
 
 public class DataLoader {
 
-    public static void loadData(UsersFileSystem usersFileSystem) {
+    public static void loadData() {
         String databasePath = LinwinVOS.DatabasePath;
-        String[] userList = logon.UsersList.toArray(new String[logon.UsersList.size()]);
         //System.out.println("value="+userList.length);
-        for (int i = 0; i < userList.length ; i++) {
-            File usersDatabase = new File(databasePath+"/"+userList[i]+"/Database");
+        for (int i = 0; i < LinwinVOS.usersFileSystems.size() ; i++) {
+            File usersDatabase = new File(databasePath+"/"+LinwinVOS.usersFileSystems.get(i).getUserName()+"/Database");
             File[] listDataBase = usersDatabase.listFiles();
-            DataLoader.UsersLoad(listDataBase,usersFileSystem,userList[i]);
+            DataLoader.UsersLoad(listDataBase,LinwinVOS.usersFileSystems.get(i),LinwinVOS.usersFileSystems.get(i).getUserName());
         }
     }
     private static void UsersLoad(File[] listDataBase,UsersFileSystem usersFileSystem,String user) {
@@ -29,7 +28,7 @@ public class DataLoader {
                 if (DataLoader.getLastname(listDataBase[i].getName()).equals(".mydb")) {
                     VosDatabase vosDatabase = new VosDatabase();
                     vosDatabase.setUser(user);
-                    vosDatabase.setName(listDataBase[i].getName());
+                    vosDatabase.setName(listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf(".")));
                     vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[i].getAbsolutePath()));
                     vosDatabase.setModificationTime(base.getFileUpdateTime(listDataBase[i].getAbsolutePath()));
                     vosDatabase.setSavePath("/");
@@ -42,7 +41,7 @@ public class DataLoader {
                         vosDatabase.putData(list.get(j).getName(),list.get(j));
                     }
                     String name = listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf("."));
-
+                    usersFileSystem.putDatabase(name,vosDatabase);
                 }
                 continue;
             }

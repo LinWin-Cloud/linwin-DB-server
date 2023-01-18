@@ -19,7 +19,11 @@ public class VosDatabase {
     public VosDatabase() {
     }
     public void setName(String name) {
-        this.Name = name;
+        if (name.indexOf(" ") != -1) {
+            this.Name = name.replace(" ","");
+        }else {
+            this.Name = name;
+        }
     }
     public void setUser(String user) {
         this.user = user;
@@ -45,6 +49,9 @@ public class VosDatabase {
     }
     public List<Data> getListData() {
         return this.dataList;
+    }
+    public String getName() {
+        return this.Name;
     }
 
     public static boolean getRealFileExists(String var0) {

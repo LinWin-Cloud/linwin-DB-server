@@ -13,9 +13,6 @@ public class LinwinVOS {
     public static HashMap<String, UsersFileSystem> FileSystem = new HashMap<String, UsersFileSystem>();
     public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
     public static String DatabasePath;
-    public static void removeDataBase(String name) {
-
-    }
 
     public void BootSystem() {
         logon.setPath = System.getProperty("user.dir");

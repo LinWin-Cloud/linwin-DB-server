@@ -8,7 +8,6 @@ public class Data {
     private int id;
     private String value;
     private String Type;
-
     public void setName(String name) {
         this.name = name;
     }

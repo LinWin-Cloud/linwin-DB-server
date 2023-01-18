@@ -46,6 +46,7 @@ public class logon {
                             UsersFileSystem usersFileSystem = new UsersFileSystem();
                             usersFileSystem.setUserName(UsersName);
                             LinwinVOS.FileSystem.put(UsersName,usersFileSystem);
+                            LinwinVOS.usersFileSystems.add(usersFileSystem);
                         }else {
                             continue;
                         }

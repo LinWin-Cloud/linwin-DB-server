@@ -21,4 +21,7 @@ public class UsersFileSystem {
     public List<VosDatabase> getDatabase() {
         return this.databases;
     }
+    public String getUserName() {
+        return this.userName;
+    }
 }

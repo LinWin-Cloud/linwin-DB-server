@@ -18,15 +18,26 @@ public class MydbEngine {
     public String getUser() {
         return this.User;
     }
-    public void execLdbScript(String script) {
+    public void execLdbScript(String script,String user) {
         Exec exec = new Exec();
         exec.setEngine(this);
         script = MydbEngine.replaceSpace(script);
 
+        if (script == null) {
+            return;
+        }
         if (script.equals("list database")) {
-            String list = exec.listDatabase();
+            String list = exec.listDatabase(user);
             this.getFunction = list;
-        }else {
+        }
+        else if(script.indexOf("find ") != -1) {
+            String getFind = exec.Find(user,script);
+            this.getFunction = getFind;
+        }
+        else if(script.indexOf("get") != -1) {
+            this.getFunction = exec.Get(user,script);
+        }
+        else {
             this.getFunction = "Error Command and Script";
         }
     }
