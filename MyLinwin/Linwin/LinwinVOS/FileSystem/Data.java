@@ -8,6 +8,7 @@ public class Data {
     private int id;
     private String value;
     private String Type;
+    private String note;
     public void setName(String name) {
         this.name = name;
     }
@@ -24,7 +25,11 @@ public class Data {
         this.id = id;
     }
     public void setValue(String value) {
+        this.autoSaveType(value);
         this.value = value;
+    }
+    public void setNote(String note) {
+        this.note = note;
     }
     public void autoSaveType(String str) {
         this.Type = this.getDataType(str);
@@ -41,6 +46,12 @@ public class Data {
         try{
             Float f = Float.valueOf(content);
             return "float";
+        }catch (Exception exception){
+            saveType = "string";
+        }
+        try{
+            Boolean bool = Boolean.valueOf(content);
+            return "boolean";
         }catch (Exception exception){
             saveType = "string";
         }
@@ -79,4 +90,5 @@ public class Data {
     public String getModificationTime() {
         return this.ModificationTime;
     }
+    public String getNote() {return this.note;}
 }

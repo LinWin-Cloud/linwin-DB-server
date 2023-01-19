@@ -21,9 +21,9 @@ public class Exec {
          */
         String list = "";
         UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-        List<VosDatabase> databases = usersFileSystem.getDatabase();
-        for (int i = 0 ; i < databases.size() ;i++) {
-            list = list + databases.get(i).getName() + "\n";
+        HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+        for (VosDatabase vosDatabase : databases) {
+            list = list + vosDatabase.getName() + "\n";
         }
         return list;
     }
@@ -64,9 +64,9 @@ public class Exec {
             }
             if (findType.equals("database")) {
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-                List<VosDatabase> databases = usersFileSystem.getDatabase();
-                for (int i = 0 ; i < databases.size() ;i++) {
-                    String databaseName = databases.get(i).getName();
+                HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+                for (VosDatabase vosDatabase : databases) {
+                    String databaseName = vosDatabase.getName();
                     int s = databaseName.indexOf(findIndex);
                     if (s != -1) {
                         FindResult = FindResult + databaseName + "\n";
@@ -76,11 +76,10 @@ public class Exec {
             }else if (findType.equals("data")) {
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-                List<VosDatabase> databases = usersFileSystem.getDatabase();
-                for (int i = 0 ; i < databases.size() ;i++) {
-                    List<Data> dataList = databases.get(i).getListData();
-                    HashSet<Data> hashSet = new HashSet<>(dataList);
-                    for (Data data : hashSet) {
+                HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+                for (VosDatabase vosDatabase : databases) {
+                    HashSet<Data> dataList = vosDatabase.getListData();
+                    for (Data data : dataList) {
                         String dataName = data.getName();
                         int s = dataName.indexOf(findIndex);
                         if (s != -1) {
@@ -108,18 +107,56 @@ public class Exec {
          * How to use:
          * (This function is to get the data "name"'s 'value' attribute.
          * And the DB Service will find all the data in all the databases.)
-         * [1]      get name value
+         * [1]      get 'name'.value
+         *          get 'name'.type
          *
-         *
-         * 
+         * [2]      get 'name'.value in main
          */
-        int commandLength = command.length();
-        if (commandLength == 3) {
+        String[] getCommand = command.split(" ");
+        int commandLength = getCommand.length;
+        String Result = "";
 
+        if (commandLength == 2) {
+            String getWillGET = getCommand[1];
+            String getDataName = "";
+            String getDataValue = "";
+            try{
+                getDataName = getWillGET.substring(getWillGET.indexOf("'")+1,getWillGET.lastIndexOf("'"));
+                getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".")+1,getWillGET.length());
+                getDataValue = getDataValue.replace(" ","");
+            }catch (Exception exception){
+                return "Command Value Error! Error=1";
+            }
+            UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+            HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+
+            for (VosDatabase vosDatabase : databases) {
+                Data data = vosDatabase.getData(getDataName);
+                if (data != null) {
+                    if (getDataValue.equals("value")) {
+                        Result = Result + data.getValue() + "\n";
+                    }
+                    if (getDataValue.equals("type")) {
+                        Result = Result + data.getType() + "\n";
+                    }
+                    if (getDataValue.equals("update")) {
+                        Result = Result + data.getModificationTime();
+                    }
+                    if (getDataValue.equals("createTime")) {
+                        Result = Result + data.getCreateTime() + "\n";
+                    }
+                    if (getDataValue.equals("note")) {
+                        Result = Result + data.getNote() + "\n";
+                    }else {
+                        Result = "Command Value Error!";
+                    }
+                }
+            }
+            return Result;
         }else if(commandLength == 4) {
-
+            return null;
         }else {
-            return "Command Value Error!";
+            return "Command Value Error! Error";
         }
     }
 }

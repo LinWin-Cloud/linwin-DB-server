@@ -44,11 +44,11 @@ public class VosDatabase {
         this.dataHashMap.put(name,data);
         this.dataList.add(data);
     }
-    public Data getValue(String name) {
+    public Data getData(String name) {
         return this.dataHashMap.get(name);
     }
-    public List<Data> getListData() {
-        return this.dataList;
+    public HashSet<Data> getListData() {
+        return new HashSet<>(this.dataHashMap.values());
     }
     public String getName() {
         return this.Name;

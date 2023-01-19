@@ -4,6 +4,7 @@ import LinwinVOS.FileSystem.VosDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class UsersFileSystem {
@@ -18,8 +19,8 @@ public class UsersFileSystem {
         this.userDatabase.put(name,vosDatabase);
         this.databases.add(vosDatabase);
     }
-    public List<VosDatabase> getDatabase() {
-        return this.databases;
+    public HashSet<VosDatabase> getDatabase() {
+        return new HashSet<>(userDatabase.values());
     }
     public String getUserName() {
         return this.userName;

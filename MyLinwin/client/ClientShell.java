@@ -7,7 +7,8 @@ public class ClientShell {
         try{
             //ClientShell.sendMessage("find database 1");
             //ClientShell.sendMessage("list database");
-            ClientShell.sendMessage("find data hello");
+            //ClientShell.sendMessage("find data hello");
+            ClientShell.sendMessage("get 'hello'.value");
 
         }catch (Exception exception) {
             exception.printStackTrace();
