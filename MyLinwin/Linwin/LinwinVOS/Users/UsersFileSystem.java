@@ -20,7 +20,11 @@ public class UsersFileSystem {
         this.databases.add(vosDatabase);
     }
     public HashSet<VosDatabase> getDatabase() {
-        return new HashSet<>(userDatabase.values());
+        try{
+            return new HashSet<>(userDatabase.values());
+        }catch (Exception exception){
+            return new HashSet<>();
+        }
     }
     public String getUserName() {
         return this.userName;

@@ -16,31 +16,52 @@ public class DataLoader {
         String databasePath = LinwinVOS.DatabasePath;
         //System.out.println("value="+userList.length);
         for (int i = 0; i < LinwinVOS.usersFileSystems.size() ; i++) {
-            File usersDatabase = new File(databasePath+"/"+LinwinVOS.usersFileSystems.get(i).getUserName()+"/Database");
+            int I = i;
+            /**
+             * Use different thread to load users databases and data.
+             */
+            File usersDatabase = new File(databasePath+"/"+LinwinVOS.usersFileSystems.get(I).getUserName()+"/Database");
             File[] listDataBase = usersDatabase.listFiles();
-            DataLoader.UsersLoad(listDataBase,LinwinVOS.usersFileSystems.get(i),LinwinVOS.usersFileSystems.get(i).getUserName());
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try{
+                        long start = System.currentTimeMillis();
+                        DataLoader.UsersLoad(listDataBase,LinwinVOS.usersFileSystems.get(I),LinwinVOS.usersFileSystems.get(I).getUserName());
+                        long end = System.currentTimeMillis();
+                        System.out.println("[*]Finish Load All the Data From User: "+LinwinVOS.usersFileSystems.get(I).getUserName()+" Use Time: "+(end-start));
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
         }
     }
     private static void UsersLoad(File[] listDataBase,UsersFileSystem usersFileSystem,String user) {
         for (int i = 0 ; i < listDataBase.length ; i++)
         {
+            int I = i;
             if (listDataBase[i].isFile()) {
                 if (DataLoader.getLastname(listDataBase[i].getName()).equals(".mydb")) {
+                    /**
+                     * Use asynchronous to load all the users' databases.
+                     */
                     VosDatabase vosDatabase = new VosDatabase();
                     vosDatabase.setUser(user);
-                    vosDatabase.setName(listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf(".")));
-                    vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[i].getAbsolutePath()));
-                    vosDatabase.setModificationTime(base.getFileUpdateTime(listDataBase[i].getAbsolutePath()));
+                    vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
+                    vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
+                    vosDatabase.setModificationTime(base.getFileUpdateTime(listDataBase[I].getAbsolutePath()));
                     vosDatabase.setSavePath("/");
+
                     /**
                      * Put the data to the database.
                      */
-                    List<Data> list = dbLoader.LoadDB(listDataBase[i].getAbsolutePath());
+                    List<Data> list = dbLoader.LoadDB(listDataBase[I].getAbsolutePath());
                     for (int j = 0 ; j < list.size() ; j++){
                         //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
                         vosDatabase.putData(list.get(j).getName(),list.get(j));
                     }
-                    String name = listDataBase[i].getName().substring(0,listDataBase[i].getName().lastIndexOf("."));
+                    String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
                     usersFileSystem.putDatabase(name,vosDatabase);
                 }
                 continue;

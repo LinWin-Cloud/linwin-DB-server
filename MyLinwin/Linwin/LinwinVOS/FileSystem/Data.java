@@ -50,12 +50,6 @@ public class Data {
             saveType = "string";
         }
         try{
-            Boolean bool = Boolean.valueOf(content);
-            return "boolean";
-        }catch (Exception exception){
-            saveType = "string";
-        }
-        try{
             int i = Integer.valueOf(content);
             return "int";
         }catch (Exception exception){

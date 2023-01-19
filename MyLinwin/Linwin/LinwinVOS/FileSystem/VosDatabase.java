@@ -1,5 +1,6 @@
 package LinwinVOS.FileSystem;
 
+import com.sun.deploy.security.JarAsBLOBVerifier;
 import sun.util.resources.cldr.zh.CalendarData_zh_Hans_HK;
 
 import java.io.File;
@@ -61,5 +62,17 @@ public class VosDatabase {
     public void removeData(String name) {
         this.dataList.remove(this.dataHashMap.get(name));
         this.dataHashMap.remove(name);
+    }
+    public String getCreateTime() {
+        return this.createTime;
+    }
+    public String getModificationTime() {
+        return this.ModificationTime;
+    }
+    public String getSavePath() {
+        return this.savePath;
+    }
+    public HashSet<Data> findData(String index) {
+        
     }
 }

@@ -2,48 +2,65 @@ package LinwinVOS.runtime;
 
 import LinwinVOS.FileSystem.Data;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class dbLoader {
     public static List<Data> LoadDB(String name) {
         List<Data> list = new ArrayList<>();
         try{
-            FileReader fileReader = new FileReader(name);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String getLine;
-            while ((getLine = bufferedReader.readLine()) != null)
-            {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
+            FileInputStream fileInputStream = new FileInputStream(name);
+            FileChannel fileChannel = fileInputStream.getChannel();
+            int length = fileChannel.read(byteBuffer);
+            String fileContent = "";
+            while ((length != -1)) {
+                byteBuffer.flip();
+                byte[] bytes = byteBuffer.array();
+                String s = new String(bytes, Charset.defaultCharset());
+                fileContent = fileContent + s + "\n";
+                byteBuffer.clear();
+                length = fileChannel.read(byteBuffer);
+            }
+            String[] lines = fileContent.split("\n");
+            HashSet<String> hashSet = new HashSet<String>(Arrays.asList(lines));
+            for (String getLine : hashSet) {
                 int n = getLine.indexOf("Name=");
                 int v = getLine.indexOf("&Value=");
-                int i = getLine.indexOf("&Id=");
                 int t = getLine.lastIndexOf("&Type=");
                 int c = getLine.lastIndexOf("&createTime=");
                 int m = getLine.lastIndexOf("&ModificationTime=");
-                if (n!=-1&&v!=-1&&i!=-1&&t!=-1&c!=-1&&m!=-1) {
+                int Note = getLine.lastIndexOf("&note=");
+                if (n!=-1&&v!=-1&&t!=-1&c!=-1&&m!=-1&&Note!=-1) {
                     String getName = getLine.substring(n + "Name=".length(), v);
-                    String getValue = getLine.substring(v + "&Value=".length(), i);
-                    String getId = getLine.substring(i + "&Id=".length(), t);
+                    String getValue = getLine.substring(v + "&Value=".length(), t);
+                    String getType = getLine.substring(t + "&Type=".length(), c);
                     String getCreateTime = getLine.substring(c + "&createTime=".length(), m);
-                    String getModificationTime = getLine.substring(m + "&ModificationTime=".length(), getLine.length());
+                    String getModificationTime = getLine.substring(m + "&ModificationTime=".length(), Note);
+                    String getNote = getLine.substring(Note+"&note=".length(),getLine.length());
 
                     Data data = new Data();
                     data.setName(getName);
                     data.setCreateTime(getCreateTime);
-                    data.setId(Integer.valueOf(getId));
                     data.setSaveDatabase(name);
                     data.setModificationTime(getModificationTime);
                     data.setValue(getValue);
+                    data.setNote(getNote);
 
                     list.add(data);
                 }
             }
-
         }catch (Exception exception){
             exception.printStackTrace();
         }
         return list;
     }
+    /*
+     */
 }

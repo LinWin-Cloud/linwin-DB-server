@@ -7,8 +7,9 @@ public class ClientShell {
         try{
             //ClientShell.sendMessage("find database 1");
             //ClientShell.sendMessage("list database");
-            //ClientShell.sendMessage("find data hello");
-            ClientShell.sendMessage("get 'hello'.value");
+            ClientShell.sendMessage("find data 1");
+            //ClientShell.sendMessage("get 'data1'.value");
+            //ClientShell.sendMessage("get 'data2'.value in 800");
 
         }catch (Exception exception) {
             exception.printStackTrace();
@@ -30,10 +31,14 @@ public class ClientShell {
             InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+            int i = 0 ;
             while ((line = bufferedReader.readLine()) != null)
+
             {
+                i = i + 1;
                 System.out.println(" - "+line+"");
             }
+            System.out.println("Result Number: "+i);
             System.out.println("=============================");
             bufferedReader.close();
             inputStream.close();
