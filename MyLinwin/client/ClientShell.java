@@ -7,7 +7,7 @@ public class ClientShell {
         try{
             //ClientShell.sendMessage("find database 1");
             //ClientShell.sendMessage("list database");
-            ClientShell.sendMessage("find data 1");
+            ClientShell.sendMessage("find data a");
             //ClientShell.sendMessage("get 'data1'.value");
             //ClientShell.sendMessage("get 'data2'.value in 800");
 
@@ -33,10 +33,9 @@ public class ClientShell {
             String line;
             int i = 0 ;
             while ((line = bufferedReader.readLine()) != null)
-
             {
                 i = i + 1;
-                System.out.println(" - "+line+"");
+                //System.out.println(" - "+line+"");
             }
             System.out.println("Result Number: "+i);
             System.out.println("=============================");

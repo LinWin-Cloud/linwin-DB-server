@@ -78,14 +78,7 @@ public class Exec {
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 for (VosDatabase vosDatabase : databases) {
-                    HashSet<Data> dataList = vosDatabase.getListData();
-                    for (Data data : dataList) {
-                        String dataName = data.getName();
-                        int s = dataName.indexOf(findIndex);
-                        if (s != -1) {
-                            FindResult = FindResult + dataName + "\n";
-                        }
-                    }
+                    FindResult = FindResult + vosDatabase.findData(findIndex) + "\n";
                 }
                 return FindResult;
             }else {

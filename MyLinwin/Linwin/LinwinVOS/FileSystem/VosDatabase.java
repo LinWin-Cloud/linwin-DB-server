@@ -1,8 +1,5 @@
 package LinwinVOS.FileSystem;
 
-import com.sun.deploy.security.JarAsBLOBVerifier;
-import sun.util.resources.cldr.zh.CalendarData_zh_Hans_HK;
-
 import java.io.File;
 import java.util.*;
 
@@ -72,7 +69,20 @@ public class VosDatabase {
     public String getSavePath() {
         return this.savePath;
     }
-    public HashSet<Data> findData(String index) {
-        
+    public String findData(String index) {
+        String result = "";
+        HashSet<String> hashSet = new HashSet<String>(this.dataHashMap.keySet());
+        for (String name : hashSet) {
+            int s = name.indexOf(index);
+            if (s != -1) {
+                result = result + name + "\n";
+                continue;
+            }
+        }
+        if (result.equals("")) {
+            return "Do not find data.";
+        }else {
+            return result;
+        }
     }
 }
