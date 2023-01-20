@@ -7,10 +7,10 @@ public class ClientShell {
         try{
             //ClientShell.sendMessage("find database 9");
             //ClientShell.sendMessage("list database");
-            //ClientShell.sendMessage("find data d");
-            ClientShell.sendMessage("get 'data0'.value");
+            ClientShell.sendMessage("find data d");
+            //ClientShell.sendMessage("get 'data0'.value");
             //ClientShell.sendMessage("get 'data2'.value in 800");
-
+            //ClientShell.sendMessage("ls 11");
         }catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class ClientShell {
                 i = i + 1;
                 System.out.println(" - "+line+"");
             }
-            System.out.println("Result Number: "+i);
+            System.out.println("Result Number: "+(i-1));
             System.out.println("=============================");
             bufferedReader.close();
             inputStream.close();

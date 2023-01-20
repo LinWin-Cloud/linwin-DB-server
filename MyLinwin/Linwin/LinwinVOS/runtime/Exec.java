@@ -12,6 +12,10 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
 
 import java.util.HashSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Exec {
     private MydbEngine mydbEngine;
@@ -79,21 +83,29 @@ public class Exec {
                 }
                 return FindResult;
             }else if (findType.equals("data")) {
+                String[] findData = {""};
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 for (VosDatabase vosDatabase : databases) {
-                    System.out.println(vosDatabase.getListData());
-                    for (Data data : vosDatabase.getListData()) {
-                        String name = data.getName();
-                        int s = name.indexOf(findIndex);
-                        if (s != -1) {
-                            FindResult = FindResult + name + "\n";
-                            continue;
+                    final String index = findIndex;
+                    ExecutorService executorService = Executors.newFixedThreadPool(1);
+                    Future<Integer> future = executorService.submit(new Callable<Integer>() {
+                        @Override
+                        public Integer call() throws Exception {
+                            for (Data data : vosDatabase.getListData()) {
+                                String name = data.getName();
+                                int s = name.indexOf(index);
+                                if (s != -1) {
+                                    findData[0] = findData[0] + name + "\n";
+                                }
+                            }
+                            return 0;
                         }
-                    }
+                    });
+                    executorService.shutdownNow();
                 }
-                return FindResult;
+                return findData[0];
             }else {
                 return "Do Not Find The Target {Error='Send Type Error'}";
             }
@@ -238,8 +250,20 @@ public class Exec {
          * ls 'default'
          */
         try{
-            String listDatabase = command.substring(1,1);
-            return null;
+            String listDatabase = command.substring(3,command.length());
+            UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+            VosDatabase vosDatabase = usersFileSystem.get(listDatabase);
+
+            String result = "";
+
+            if (vosDatabase == null){
+                return "Do not find target database";
+            }else {
+                for (Data data : vosDatabase.getListData()) {
+                    result = result + data.getName() + "\n";
+                }
+            }
+            return result;
         }catch (Exception exception) {
             return "Command syntax error!";
         }

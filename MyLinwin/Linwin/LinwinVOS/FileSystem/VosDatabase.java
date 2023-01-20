@@ -71,7 +71,4 @@ public class VosDatabase {
         return this.savePath;
     }
 
-    public HashSet<Data> getDataSet() {
-        return new HashSet<>(this.dataList);
-    }
 }
