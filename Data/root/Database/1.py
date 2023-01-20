@@ -1,6 +1,6 @@
 import os
 
-for i in range(1000):
+for i in range(10):
     os.system("touch "+str(i)+".mydb")
     with open(str(i)+".mydb","a") as f:
         for j in range(1000):
