@@ -8,7 +8,16 @@ public class ClientShell {
             String remote = args[0];
             int port = Integer.valueOf(args[1]);
             String user = args[2];
-            String
+            String passwd = args[3];
+            String command = "";
+            //System.out.println(args.length);
+            for (int i = 0 ; i < args.length ; i++) {
+                if (i >= 4) {
+                    command = command + " " + args[i];
+                    continue;
+                }
+            }
+            ClientShell.sendMessage(command,remote,port,user,passwd);
         }catch (Exception exception) {
             exception.printStackTrace();
         }
