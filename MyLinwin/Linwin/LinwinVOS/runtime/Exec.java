@@ -1,3 +1,9 @@
+/**
+ * Mys Script Runtime.
+ * Author: LinwinCloud.
+ * Start time: 2023.1.14
+ */
+
 package LinwinVOS.runtime;
 
 import LinwinVOS.FileSystem.Data;
@@ -6,11 +12,6 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class Exec {
     private MydbEngine mydbEngine;
@@ -224,5 +225,18 @@ public class Exec {
         }else {
             return "Command Value Error! Error";
         }
+    }
+    public String LsDatabase(String user,String command) {
+        /**
+         * 'ls' command:
+         *
+         * This is a command to list all the data in the database.
+         * Update version in: 1.0
+         *
+         * How to use:
+         * [This command is to list all the data in database name 'default']
+         * ls 'default'
+         */
+        
     }
 }

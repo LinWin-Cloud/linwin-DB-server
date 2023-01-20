@@ -45,9 +45,9 @@ public class VosDatabase {
     public Data getData(String name) {
         return this.dataHashMap.get(name);
     }
-    public List<Data> getListData() {
-        //return new HashSet<>(this.dataHashMap.values());
-        return this.dataList;
+    public HashSet<Data> getListData() {
+        return new HashSet<>(this.dataHashMap.values());
+        //return this.dataList;
     }
     public String getName() {
         return this.Name;

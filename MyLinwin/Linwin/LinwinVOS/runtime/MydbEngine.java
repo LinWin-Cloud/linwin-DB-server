@@ -40,7 +40,7 @@ public class MydbEngine {
             this.getFunction = exec.Get(user,script);
         }
         else if(script.indexOf("ls") != -1) {
-
+            this.getFunction = exec.LsDatabase(user,script);
         }
         else {
             this.getFunction = "Error Command and Script";
