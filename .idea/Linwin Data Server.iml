@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/Linwin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/client" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/release" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/MyLinwin/ClientUI" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
     </content>
     <orderEntry type="inheritedJdk" />
