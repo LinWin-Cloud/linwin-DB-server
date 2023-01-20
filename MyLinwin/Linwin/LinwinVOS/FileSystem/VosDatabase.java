@@ -45,8 +45,9 @@ public class VosDatabase {
     public Data getData(String name) {
         return this.dataHashMap.get(name);
     }
-    public HashSet<Data> getListData() {
-        return new HashSet<>(this.dataHashMap.values());
+    public List<Data> getListData() {
+        //return new HashSet<>(this.dataHashMap.values());
+        return this.dataList;
     }
     public String getName() {
         return this.Name;
@@ -69,20 +70,8 @@ public class VosDatabase {
     public String getSavePath() {
         return this.savePath;
     }
-    public String findData(String index) {
-        String result = "";
-        HashSet<String> hashSet = new HashSet<String>(this.dataHashMap.keySet());
-        for (String name : hashSet) {
-            int s = name.indexOf(index);
-            if (s != -1) {
-                result = result + name + "\n";
-                continue;
-            }
-        }
-        if (result.equals("")) {
-            return "Do not find data.";
-        }else {
-            return result;
-        }
+
+    public HashSet<Data> getDataSet() {
+        return new HashSet<>(this.dataList);
     }
 }

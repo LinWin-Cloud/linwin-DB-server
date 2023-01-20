@@ -7,6 +7,10 @@ import LinwinVOS.Users.UsersFileSystem;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Exec {
     private MydbEngine mydbEngine;
@@ -78,7 +82,15 @@ public class Exec {
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 for (VosDatabase vosDatabase : databases) {
-                    FindResult = FindResult + vosDatabase.findData(findIndex) + "\n";
+                    System.out.println(vosDatabase.getListData());
+                    for (Data data : vosDatabase.getListData()) {
+                        String name = data.getName();
+                        int s = name.indexOf(findIndex);
+                        if (s != -1) {
+                            FindResult = FindResult + name + "\n";
+                            continue;
+                        }
+                    }
                 }
                 return FindResult;
             }else {

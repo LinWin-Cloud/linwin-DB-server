@@ -2,6 +2,8 @@ package LinwinVOS.runtime;
 import LinwinVOS.FileSystem.*;
 import LinwinVOS.LinwinVOS;
 
+import java.util.List;
+
 public class MydbEngine {
     private String getFunction = "";
     private String User;
@@ -36,6 +38,9 @@ public class MydbEngine {
         }
         else if(script.indexOf("get") != -1) {
             this.getFunction = exec.Get(user,script);
+        }
+        else if(script.indexOf("ls") != -1) {
+
         }
         else {
             this.getFunction = "Error Command and Script";

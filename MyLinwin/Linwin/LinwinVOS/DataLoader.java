@@ -56,13 +56,19 @@ public class DataLoader {
                     /**
                      * Put the data to the database.
                      */
-                    List<Data> list = dbLoader.LoadDB(listDataBase[I].getAbsolutePath());
-                    for (int j = 0 ; j < list.size() ; j++){
-                        //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
-                        vosDatabase.putData(list.get(j).getName(),list.get(j));
-                    }
-                    String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
-                    usersFileSystem.putDatabase(name,vosDatabase);
+                    Thread LoadDatabaseThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<Data> list = dbLoader.LoadDB(listDataBase[I].getAbsolutePath());
+                            for (int j = 0 ; j < list.size() ; j++){
+                                //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
+                                vosDatabase.putData(list.get(j).getName(),list.get(j));
+                            }
+                            String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
+                            usersFileSystem.putDatabase(name,vosDatabase);
+                        }
+                    });
+                    LoadDatabaseThread.start();
                 }
                 continue;
             }

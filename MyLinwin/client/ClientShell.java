@@ -5,10 +5,10 @@ import java.util.Scanner;
 public class ClientShell {
     public static void main(String[] args) {
         try{
-            //ClientShell.sendMessage("find database 1");
+            //ClientShell.sendMessage("find database 9");
             //ClientShell.sendMessage("list database");
-            ClientShell.sendMessage("find data a");
-            //ClientShell.sendMessage("get 'data1'.value");
+            //ClientShell.sendMessage("find data d");
+            ClientShell.sendMessage("get 'data0'.value");
             //ClientShell.sendMessage("get 'data2'.value in 800");
 
         }catch (Exception exception) {
@@ -35,7 +35,7 @@ public class ClientShell {
             while ((line = bufferedReader.readLine()) != null)
             {
                 i = i + 1;
-                //System.out.println(" - "+line+"");
+                System.out.println(" - "+line+"");
             }
             System.out.println("Result Number: "+i);
             System.out.println("=============================");
