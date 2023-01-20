@@ -9,6 +9,8 @@ import LinwinVOS.data.base;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DataLoader {
 
@@ -59,7 +61,8 @@ public class DataLoader {
                     Thread LoadDatabaseThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            List<Data> list = dbLoader.LoadDB(listDataBase[I].getAbsolutePath());
+                            dbLoader loader = new dbLoader();
+                            List<Data> list = loader.LoadDB(listDataBase[I].getAbsolutePath());
                             for (int j = 0 ; j < list.size() ; j++){
                                 //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
                                 vosDatabase.putData(list.get(j).getName(),list.get(j));

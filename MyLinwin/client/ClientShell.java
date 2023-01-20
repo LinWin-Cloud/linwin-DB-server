@@ -5,25 +5,22 @@ import java.util.Scanner;
 public class ClientShell {
     public static void main(String[] args) {
         try{
-            //ClientShell.sendMessage("find database 9");
-            //ClientShell.sendMessage("list database");
-            ClientShell.sendMessage("find data d");
-            //ClientShell.sendMessage("get 'data0'.value");
-            //ClientShell.sendMessage("get 'data2'.value in 800");
-            //ClientShell.sendMessage("ls 11");
+            String remote = args[0];
+            int port = Integer.valueOf(args[1]);
+            String user = args[2];
+            String
         }catch (Exception exception) {
             exception.printStackTrace();
         }
     }
-    public static void sendMessage(String getType) {
+    public static void sendMessage(String getType,String remote,int port,String user,String passwd) {
         try{
             long start = System.currentTimeMillis();
-            Socket socket = new Socket("127.0.0.1",8888);
+            Socket socket = new Socket(remote,port);
             OutputStream outputStream = socket.getOutputStream();
             PrintWriter printWriter = new PrintWriter(outputStream);
 
-            String user = "root";
-            String passwd = Md5Util_tool.md5("123456");
+            passwd = Md5Util_tool.md5(passwd);
             String message = "Logon="+user+"?Passwd="+passwd+"?Command="+getType;
             //System.out.println(message);
             printWriter.println(message);

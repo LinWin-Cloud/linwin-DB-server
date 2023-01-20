@@ -23,6 +23,10 @@ public class MyLinwin {
          */
         MyLinwin.LoadFiles();
         MyLinwin.RuntimeThread();
+        OutFileSystem outFileSystem = new OutFileSystem();
+        outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+        outFileSystem.run();
+
         System.out.println(" [Information] Boot Linwin Data Service!");
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
         MyLinwin.getServerSocketBoot();

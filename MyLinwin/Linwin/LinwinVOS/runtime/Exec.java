@@ -87,10 +87,11 @@ public class Exec {
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+                ExecutorService executorService = Executors.newFixedThreadPool(1);
+                Future<Integer> future = null;
                 for (VosDatabase vosDatabase : databases) {
                     final String index = findIndex;
-                    ExecutorService executorService = Executors.newFixedThreadPool(1);
-                    Future<Integer> future = executorService.submit(new Callable<Integer>() {
+                     future = executorService.submit(new Callable<Integer>() {
                         @Override
                         public Integer call() throws Exception {
                             for (Data data : vosDatabase.getListData()) {
@@ -103,8 +104,13 @@ public class Exec {
                             return 0;
                         }
                     });
-                    executorService.shutdownNow();
                 }
+                try{
+                    future.get();
+                }catch (Exception exception){
+                    exception.printStackTrace();
+                }
+                executorService.shutdownNow();
                 return findData[0];
             }else {
                 return "Do Not Find The Target {Error='Send Type Error'}";
