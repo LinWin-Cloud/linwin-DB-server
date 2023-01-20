@@ -24,7 +24,6 @@ public class MydbEngine {
         Exec exec = new Exec();
         exec.setEngine(this);
         script = MydbEngine.replaceSpace(script);
-
         if (script == null) {
             return;
         }
@@ -32,14 +31,14 @@ public class MydbEngine {
             String list = exec.listDatabase(user);
             this.getFunction = list;
         }
-        else if(script.indexOf("find ") != -1) {
+        else if(script.substring(0,4).equals("find")) {
             String getFind = exec.Find(user,script);
             this.getFunction = getFind;
         }
-        else if(script.indexOf("get") != -1) {
+        else if(script.substring(0,3).equals("get")) {
             this.getFunction = exec.Get(user,script);
         }
-        else if(script.indexOf("ls") != -1) {
+        else if(script.substring(0,2).equals("ls")) {
             this.getFunction = exec.LsDatabase(user,script);
         }
         else {

@@ -131,7 +131,7 @@ public class Exec {
                 getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".")+1,getWillGET.length());
                 getDataValue = getDataValue.replace(" ","");
             }catch (Exception exception){
-                return "Command Value Error! Error=1";
+                return "Command Value Error!";
             }
             UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
             HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
@@ -237,6 +237,11 @@ public class Exec {
          * [This command is to list all the data in database name 'default']
          * ls 'default'
          */
-        
+        try{
+            String listDatabase = command.substring(1,1);
+            return null;
+        }catch (Exception exception) {
+            return "Command syntax error!";
+        }
     }
 }
