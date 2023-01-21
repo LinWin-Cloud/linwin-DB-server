@@ -6,7 +6,6 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
 import LinwinVOS.runtime.MydbEngine;
 import ThreadSocket.ThreadSocket;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -60,12 +59,16 @@ public class MyLinwin {
             }
         });
         runtime.start();
+
+        String ioSocket = "false";
+
         Thread outData = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try{
                         Thread.sleep(1000 * 10);
+                        IO_Socket.sendMessage(ioSocket);
                         OutFileSystem outFileSystem = new OutFileSystem();
                         outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
                         outFileSystem.setThreadSocket(IO_Socket);

@@ -30,10 +30,8 @@ public class dbLoader {
                 byte[] bytes = byteBuffer.array();
                 String s = new String(bytes, Charset.defaultCharset());
                 try {
-                    fileContent.append(fileContent);
                     fileContent.append(s);
                     fileContent.append("\n");
-                    Thread.sleep(0);
                 } catch (Exception exception) {
                     try {
                         Thread.sleep(100);

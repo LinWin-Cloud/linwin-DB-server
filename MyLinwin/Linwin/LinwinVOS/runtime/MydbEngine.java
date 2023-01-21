@@ -21,27 +21,31 @@ public class MydbEngine {
         return this.User;
     }
     public void execLdbScript(String script,String user) {
-        Exec exec = new Exec();
-        exec.setEngine(this);
-        script = MydbEngine.replaceSpace(script);
-        if (script == null) {
-            return;
-        }
-        if (script.equals("list database")) {
-            String list = exec.listDatabase(user);
-            this.getFunction = list;
-        }
-        else if(script.substring(0,4).equals("find")) {
-            String getFind = exec.Find(user,script);
-            this.getFunction = getFind;
-        }
-        else if(script.substring(0,3).equals("get")) {
-            this.getFunction = exec.Get(user,script);
-        }
-        else if(script.substring(0,2).equals("ls")) {
-            this.getFunction = exec.LsDatabase(user,script);
-        }
-        else {
+        try{
+            Exec exec = new Exec();
+            exec.setEngine(this);
+            script = MydbEngine.replaceSpace(script);
+            if (script == null) {
+                return;
+            }
+            if (script.equals("list database")) {
+                String list = exec.listDatabase(user);
+                this.getFunction = list;
+            }
+            else if(script.substring(0,4).equals("find")) {
+                String getFind = exec.Find(user,script);
+                this.getFunction = getFind;
+            }
+            else if(script.substring(0,3).equals("get")) {
+                this.getFunction = exec.Get(user,script);
+            }
+            else if(script.substring(0,2).equals("ls")) {
+                this.getFunction = exec.LsDatabase(user,script);
+            }
+            else {
+                this.getFunction = "Error Command and Script";
+            }
+        }catch (Exception exception){
             this.getFunction = "Error Command and Script";
         }
     }

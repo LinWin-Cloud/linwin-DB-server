@@ -177,7 +177,7 @@ public class Exec {
                         Result = Result + data.getNote() + "\n";
                         continue;
                     }else {
-                        Result = "Command Value Error!";
+                        Result = "Command Value Error ! Error="+command;
                         break;
                     }
                 }
@@ -241,7 +241,7 @@ public class Exec {
                 return Result;
             }
         }else {
-            return "Command Value Error! Error";
+            return "Command Value Error! Error="+command;
         }
     }
     public String LsDatabase(String user,String command) {

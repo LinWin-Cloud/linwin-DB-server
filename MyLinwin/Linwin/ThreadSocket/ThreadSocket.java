@@ -16,7 +16,7 @@ public class ThreadSocket {
                 while (true) {
                     try{
                         String getMess = ThreadSocket.Message[0];
-                        Thread.sleep(20);
+                        Thread.sleep(100);
                         String newMess = ThreadSocket.Message[0];
                         if (!getMess.equals(newMess))
                         {
