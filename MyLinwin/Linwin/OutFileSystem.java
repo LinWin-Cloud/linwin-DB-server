@@ -21,9 +21,21 @@ public class OutFileSystem {
                 exception.printStackTrace();
             }
         }
+
     }
     private Boolean getAllUserLoad_STATUS() {
-
+        HashSet<UsersFileSystem> usersFileSystemHashSet = this.linwinVOS.getUserFileSystem();
+        Boolean ok = true;
+        for (UsersFileSystem usersFileSystem : usersFileSystemHashSet)
+        {
+            if (usersFileSystem.getLoadOk()) {
+                continue;
+            }else {
+                ok = false;
+                break;
+            }
+        }
+        return ok;
     }
     public void setThreadSocket(ThreadSocket threadSocket) {
         this.threadSocket = threadSocket;

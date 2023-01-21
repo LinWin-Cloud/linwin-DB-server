@@ -63,10 +63,17 @@ public class MyLinwin {
         Thread outData = new Thread(new Runnable() {
             @Override
             public void run() {
-                OutFileSystem outFileSystem = new OutFileSystem();
-                outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-                outFileSystem.setThreadSocket(IO_Socket);
-                outFileSystem.run();
+                while (true) {
+                    try{
+                        Thread.sleep(1000 * 300);
+                        OutFileSystem outFileSystem = new OutFileSystem();
+                        outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                        outFileSystem.setThreadSocket(IO_Socket);
+                        outFileSystem.run();
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
             }
         });
         outData.start();
@@ -78,10 +85,12 @@ public class MyLinwin {
                 }catch (Exception exception){
                     exception.printStackTrace();
                 }
-                InputFileSystem inputFileSystem = new InputFileSystem();
-                inputFileSystem.setThreadSocket(MyLinwin.IO_Socket);
-                inputFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-                inputFileSystem.run();
+                while (true) {
+                    InputFileSystem inputFileSystem = new InputFileSystem();
+                    inputFileSystem.setThreadSocket(MyLinwin.IO_Socket);
+                    inputFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                    inputFileSystem.run();
+                }
             }
         });
         inputData.start();
