@@ -71,4 +71,16 @@ public class VosDatabase {
         return this.savePath;
     }
 
+    public String getOutputData() {
+        StringBuffer stringBuffer = new StringBuffer("");
+        try{
+            Thread.sleep(0);
+            for (Data data : this.getListData()) {
+                stringBuffer.append(data.getStringBufferName()+"\n");
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return stringBuffer.toString();
+    }
 }

@@ -65,7 +65,7 @@ public class MyLinwin {
             public void run() {
                 while (true) {
                     try{
-                        Thread.sleep(1000 * 300);
+                        Thread.sleep(1000 * 10);
                         OutFileSystem outFileSystem = new OutFileSystem();
                         outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
                         outFileSystem.setThreadSocket(IO_Socket);
@@ -86,6 +86,11 @@ public class MyLinwin {
                     exception.printStackTrace();
                 }
                 while (true) {
+                    try{
+                        Thread.sleep(1000 * 10);
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
                     InputFileSystem inputFileSystem = new InputFileSystem();
                     inputFileSystem.setThreadSocket(MyLinwin.IO_Socket);
                     inputFileSystem.setLinwinVOS(MyLinwin.linwinVOS);

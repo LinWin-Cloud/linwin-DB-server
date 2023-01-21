@@ -24,13 +24,15 @@ public class dbLoader {
             FileInputStream fileInputStream = new FileInputStream(name);
             FileChannel fileChannel = fileInputStream.getChannel();
             int length = fileChannel.read(byteBuffer);
-            String fileContent = "";
+            StringBuffer fileContent = new StringBuffer("");
             while ((length != -1)) {
                 byteBuffer.flip();
                 byte[] bytes = byteBuffer.array();
                 String s = new String(bytes, Charset.defaultCharset());
                 try {
-                    fileContent = fileContent + s + "\n";
+                    fileContent.append(fileContent);
+                    fileContent.append(s);
+                    fileContent.append("\n");
                     Thread.sleep(0);
                 } catch (Exception exception) {
                     try {
@@ -43,7 +45,7 @@ public class dbLoader {
                 byteBuffer.clear();
                 length = fileChannel.read(byteBuffer);
             }
-            String[] lines = fileContent.split("\n");
+            String[] lines = fileContent.toString().split("\n");
             HashSet<String> hashSet = new HashSet<String>(Arrays.asList(lines));
             ExecutorService executorService = Executors.newFixedThreadPool(1);
             Future<Integer> future = executorService.submit(new Callable<Integer>() {
