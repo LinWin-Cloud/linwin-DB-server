@@ -1,4 +1,7 @@
 import LinwinVOS.LinwinVOS;
+import LinwinVOS.Users.UsersFileSystem;
+
+import java.util.HashSet;
 
 public class OutFileSystem {
     private  LinwinVOS linwinVOS;
@@ -7,5 +10,9 @@ public class OutFileSystem {
     }
     public void run() {
 
+        for (UsersFileSystem usersFileSystem : this.linwinVOS.getUserFileSystem())
+        {
+
+        }
     }
 }

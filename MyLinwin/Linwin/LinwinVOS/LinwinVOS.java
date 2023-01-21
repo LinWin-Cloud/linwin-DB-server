@@ -6,6 +6,7 @@ import LinwinVOS.FileSystem.VosDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class LinwinVOS {
@@ -31,5 +32,8 @@ public class LinwinVOS {
         }
         //System.out.println();
         DataLoader.loadData();
+    }
+    public HashSet<UsersFileSystem> getUserFileSystem() {
+        return new HashSet<UsersFileSystem>(LinwinVOS.FileSystem.values());
     }
 }
