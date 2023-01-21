@@ -30,7 +30,8 @@ public class DataLoader {
                         long start = System.currentTimeMillis();
                         DataLoader.UsersLoad(listDataBase,LinwinVOS.usersFileSystems.get(I),LinwinVOS.usersFileSystems.get(I).getUserName());
                         long end = System.currentTimeMillis();
-                        System.out.println("[*]Finish Load All the Data From User: "+LinwinVOS.usersFileSystems.get(I).getUserName()+" Use Time: "+(end-start));
+                        System.out.println("[*]Finish Load All the Data From User: "+LinwinVOS.usersFileSystems.get(I).getUserName()+" Use Time: "+(end-start)+"ms");
+                        LinwinVOS.usersFileSystems.get(I).setLoadOK(true);
                     }catch (Exception exception){
                         exception.printStackTrace();
                     }

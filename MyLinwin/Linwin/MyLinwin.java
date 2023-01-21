@@ -5,6 +5,7 @@ import LinwinVOS.data.*;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
 import LinwinVOS.runtime.MydbEngine;
+import ThreadSocket.ThreadSocket;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MyLinwin {
     public static int ServicePort;
     private static int bootNumber = 0;
+    private static ThreadSocket IO_Socket = new ThreadSocket();
     public static LinwinVOS linwinVOS = new LinwinVOS();
     public static void main(String[] args)
     {
@@ -23,9 +25,6 @@ public class MyLinwin {
          */
         MyLinwin.LoadFiles();
         MyLinwin.RuntimeThread();
-        OutFileSystem outFileSystem = new OutFileSystem();
-        outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-        outFileSystem.run();
 
         System.out.println(" [Information] Boot Linwin Data Service!");
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
@@ -64,10 +63,28 @@ public class MyLinwin {
         Thread outData = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                OutFileSystem outFileSystem = new OutFileSystem();
+                outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                outFileSystem.setThreadSocket(IO_Socket);
+                outFileSystem.run();
             }
         });
         outData.start();
+        Thread inputData = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(1000);
+                }catch (Exception exception){
+                    exception.printStackTrace();
+                }
+                InputFileSystem inputFileSystem = new InputFileSystem();
+                inputFileSystem.setThreadSocket(MyLinwin.IO_Socket);
+                inputFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                inputFileSystem.run();
+            }
+        });
+        inputData.start();
     }
     public static void getServerSocketBoot() {
         try{
