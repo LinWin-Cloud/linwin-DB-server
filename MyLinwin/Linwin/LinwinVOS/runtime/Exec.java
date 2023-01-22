@@ -10,12 +10,12 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
-
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
 
 public class Exec {
     private MydbEngine mydbEngine;
@@ -301,7 +301,10 @@ public class Exec {
          * The UpdateTime,CreateTime and the Type Value The LinwinDB will deal these
          * and you needn't worry these.
          *
-         * [2] create data 'hello' setting('hello world','LinwinDB')
+         * This mean create a data call 'hello', value is 'hello world', Note is 'LinwinDB',
+         * save it in 'main' database.
+         *
+         * [2] create data 'hello' setting('hello world','LinwinDB') in main
          */
 
         Boolean isData = false;
@@ -310,12 +313,11 @@ public class Exec {
 
         try{
             String dataType = splitCommand[1];
+            //System.out.println(dataType+";"+dataType.equals("data"));
             if (dataType.equals("data")) {
                 isData = true;
-            }if (dataType.equals("database")) {
-                isData = false;
             }else {
-                return "Error Command Value";
+                isData = false;
             }
             createName = splitCommand[2];
             createName = createName.substring(createName.indexOf("'")+1,createName.lastIndexOf("'"));
@@ -323,7 +325,34 @@ public class Exec {
             return "Command syntax error!";
         }
         if (isData) {
+            try{
+                String func = command.substring(command.indexOf(createName)+createName.length()+2,command.lastIndexOf(")"));
+                func = func.replace(" ","<Spacex00000x0ds12x657fgh2>");
+                String[] splitInput = func.split("','");
+                String value = splitInput[0].replace("<Spacex00000x0ds12x657fgh2>"," ");
+                String note = splitInput[1].replace("<Spacex00000x0ds12x657fgh2>"," ");
+                value = value.substring(value.indexOf("'")+1,value.length());
+                note = note.substring(0,note.lastIndexOf("'"));
 
+                String saveDatabase = command.substring(command.lastIndexOf("in ")+3,command.length());
+                VosDatabase save = LinwinVOS.FileSystem.get(user).get(saveDatabase);
+                if (save == null) {
+                    return "Do not find this database";
+                }else {
+                    Data data = new Data();
+                    data.setName(createName);
+                    data.setCreateTime(Func.getNowTime());
+                    data.setNote(note);
+                    data.setValue(value);
+                    data.setModificationTime(Func.getNowTime());
+                    data.setSaveDatabase(saveDatabase);
+                    LinwinVOS.FileSystem.get(user).get(saveDatabase).putData(createName,data);
+
+                    return "Create Successful!";
+                }
+            }catch (Exception exception){
+                return "Command syntax error!";
+            }
         }else {
             UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
             VosDatabase vosDatabase = new VosDatabase();
