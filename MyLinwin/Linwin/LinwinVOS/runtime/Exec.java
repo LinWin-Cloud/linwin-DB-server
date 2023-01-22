@@ -260,18 +260,81 @@ public class Exec {
             UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
             VosDatabase vosDatabase = usersFileSystem.get(listDatabase);
 
-            String result = "";
+            StringBuffer stringBuffer = new StringBuffer("");
 
             if (vosDatabase == null){
                 return "Do not find target database";
             }else {
-                for (Data data : vosDatabase.getListData()) {
-                    result = result + data.getName() + "\n";
+                for (Data data : vosDatabase.dataHashMap.values()) {
+                    stringBuffer.append(data.getName());
+                    stringBuffer.append("\n");
                 }
             }
-            return result;
+            String result = stringBuffer.toString();
+            if (result.equals("")) {
+                return "Do not have data in the database.";
+            }else {
+                return result;
+            }
         }catch (Exception exception) {
             return "Command syntax error!";
+        }
+    }
+    public String create(String user,String command) {
+        /**
+         * 'create' command:
+         *
+         * This is a command to create new data or database.
+         *
+         * How to use:
+         * (Notice: The database's name can not have space,or the Linwin Data Server
+         * when load the database will replace the space
+         * For example: You write the database Name 'hello world',Linwin
+         * Data Server will deal to 'helloworld'.
+         * )
+         *
+         * [1] create database 'helloworld'             [This is to create a database name cell 'helloworld']
+         *
+         * The content 'setting''s Input Value;
+         * 1. 'hello world' is your want to save the value of this data.
+         * 2. 'LinwinDB' is your want to save the note of this data.
+         * The UpdateTime,CreateTime and the Type Value The LinwinDB will deal these
+         * and you needn't worry these.
+         *
+         * [2] create data 'hello' setting('hello world','LinwinDB')
+         */
+
+        Boolean isData = false;
+        String[] splitCommand = command.split(" ");
+        String createName = "";
+
+        try{
+            String dataType = splitCommand[1];
+            if (dataType.equals("data")) {
+                isData = true;
+            }if (dataType.equals("database")) {
+                isData = false;
+            }else {
+                return "Error Command Value";
+            }
+            createName = splitCommand[2];
+            createName = createName.substring(createName.indexOf("'")+1,createName.lastIndexOf("'"));
+        }catch (Exception exception){
+            return "Command syntax error!";
+        }
+        if (isData) {
+
+        }else {
+            UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+            VosDatabase vosDatabase = new VosDatabase();
+            vosDatabase.setName(createName);
+            vosDatabase.setCreateTime(Func.getNowTime());
+            vosDatabase.setUser(user);
+            vosDatabase.setModificationTime(Func.getNowTime());
+            vosDatabase.setSavePath("/");
+
+            usersFileSystem.putDatabase(createName,vosDatabase);
+            return "Create Successful!";
         }
     }
 }

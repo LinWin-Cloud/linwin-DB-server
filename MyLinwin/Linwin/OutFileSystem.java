@@ -25,16 +25,23 @@ public class OutFileSystem {
             Future<Integer> future = executorService.submit(new Callable<Integer>() {
                 @Override
                 public Integer call() throws Exception {
-                    String users = usersFileSystem.getUserName();
-                    HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
-                    for (VosDatabase vosDatabase:databases) {
-                        String getWriteContent = "";
-                        String  DatabaseName = vosDatabase.getName();
-                        for (Data data : vosDatabase.dataHashMap.values()) {
-                            String content = "Name="+data.getName()+"&Value="+data.getValue()+"&Type="+data.getType()+"&createTime="+data.getCreateTime()+"&ModificationTime="+data.getModificationTime()+"&note="+data.getNote();
-                            getWriteContent = getWriteContent + content + "\n";
+                    try{
+                        HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+                        for (VosDatabase vosDatabase:databases) {
+                            String  DatabaseName = vosDatabase.getName();
+                            FileWriter fileWriter = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",true);
+                            FileWriter fw = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",false);
+                            fw.write("");
+                            fw.close();
+                            for (Data data : vosDatabase.dataHashMap.values()) {
+                                String content = "Name="+data.getName()+"&Value="+data.getValue()+"&Type="+data.getType()+"&createTime="+data.getCreateTime()+"&ModificationTime="+data.getModificationTime()+"&note="+data.getNote()+"\n";
+                                fileWriter.write(content);
+                            }
+                            fileWriter.close();
+                            //System.out.println(getWriteContent);
                         }
-                        OutFileSystem.writeFile(LinwinVOS.DatabasePath+"/"+users+"/Database/"+DatabaseName+".mydb",getWriteContent);
+                    }catch (Exception exception){
+                        exception.printStackTrace();
                     }
                     return 0;
                 }
@@ -59,16 +66,15 @@ public class OutFileSystem {
     public void setThreadSocket(ThreadSocket threadSocket) {
         this.threadSocket = threadSocket;
     }
-    public static void writeFile(String name,String content) {
+    public static void writeFile(String name,String content,FileWriter fileWriter) {
         try{
             name = name.replace("//","/");
             File writeFile = new File(name);
             if (!writeFile.exists()) {
                 writeFile.createNewFile();
             }
-            FileWriter fw = new FileWriter(writeFile,false);
-            fw.write(content);
-            fw.close();
+            fileWriter.write(content);
+            fileWriter.flush();
         }catch (Exception exception){
             exception.printStackTrace();
         }

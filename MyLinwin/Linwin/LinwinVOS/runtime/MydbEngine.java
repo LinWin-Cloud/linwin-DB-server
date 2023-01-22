@@ -42,6 +42,9 @@ public class MydbEngine {
             else if(script.substring(0,2).equals("ls")) {
                 this.getFunction = exec.LsDatabase(user,script);
             }
+            else if(script.substring(0,6).equals("create")) {
+                this.getFunction = exec.create(user,script);
+            }
             else {
                 this.getFunction = "Error Command and Script";
             }
