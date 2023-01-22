@@ -36,4 +36,12 @@ public class LinwinVOS {
     public HashSet<UsersFileSystem> getUserFileSystem() {
         return new HashSet<UsersFileSystem>(LinwinVOS.FileSystem.values());
     }
+    public int getDataSize() {
+        int y = 0;
+        for (UsersFileSystem usersFileSystem : LinwinVOS.FileSystem.values())
+        {
+            y = y + usersFileSystem.getSize();
+        }
+        return y;
+    }
 }

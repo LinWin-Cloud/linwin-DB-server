@@ -10,7 +10,14 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
+
+import javax.swing.event.ListDataEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.OutputStream;
 import java.util.HashSet;
+import java.util.List;
+import java.util.SplittableRandom;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,6 +55,9 @@ public class Exec {
          *
          * [This is a command to find all the databases were have this word 'default']
          * find database default
+         *
+         * [This is a command to find all the data from user's database.]
+         * find data 1
          */
         String[] getCommand = command.split(" ");
 
@@ -364,6 +374,76 @@ public class Exec {
 
             usersFileSystem.putDatabase(createName,vosDatabase);
             return "Create Successful!";
+        }
+    }
+    public String deleteData(String user,String command) {
+        /**
+         * 'delete' command:
+         * delete the data or the database.
+         *
+         * How to use:
+         * (This command is to delete the database name call 'hello')
+         * [1] delete database hello
+         *
+         * (This command is to delete the data from the database name call 'helloDB')
+         * [2] delete data 'hello' in helloDB
+         *
+         * (This command will delete all the Mydb Database and data on user's FileSystem)
+         * [3] delete *
+         */
+        try {
+            if (command.equals("delete *")) {
+                File file = new File(LinwinVOS.DatabasePath + "/" + user + "/Database/");
+                File[] files = file.listFiles();
+
+                UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+                usersFileSystem.removeAll();
+
+                for (int i = 0; i < files.length; i++) {
+                    File ListDB = files[i];
+                    if (Func.getLastName(ListDB.getName()).equals(".mydb")) {
+                        ListDB.delete();
+                        continue;
+                    }
+                }
+                return "Delete Successful!";
+            } else {
+                String[] splitCommand = command.split(" ");
+                Boolean isData = command.equals(splitCommand[1]);
+                UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+
+                if (isData) {
+                    String dataName = command.substring(command.indexOf("'") + 1, command.lastIndexOf("'"));
+                    String DataBase = command.substring(command.lastIndexOf("in ") + 3, command.length());
+                    VosDatabase vosDatabase = usersFileSystem.get(DataBase);
+                    if (vosDatabase == null) {
+                        return "Do not have this database!";
+                    } else {
+                        vosDatabase.removeData(dataName);
+                        return "Delete Successful!";
+                    }
+                } else {
+                    String getName = splitCommand[2];
+                    VosDatabase vosDatabase = usersFileSystem.get(getName);
+                    if (vosDatabase == null) {
+                        return "Do not have this database!";
+                    } else {
+                        try {
+                            usersFileSystem.deleteDataBase(getName);
+                            File file = new File(LinwinVOS.DatabasePath + "/" + user + "/Database/" + getName + ".mydb");
+                            if (file.delete()) {
+                                return "Delete Successful!";
+                            } else {
+                                return "Do have Permissions to delete Target File";
+                            }
+                        } catch (Exception exception) {
+                            return "Do have Permissions to delete Target File";
+                        }
+                    }
+                }
+            }
+        }catch (Exception exception){
+            return "Command syntax error!";
         }
     }
 }

@@ -13,14 +13,22 @@ public class VosDatabase {
     private String ModificationTime;
     private String value;
     public HashMap<String,Data> dataHashMap = new HashMap<String,Data>();
-    private List<Data> dataList = new ArrayList<Data>();
     public VosDatabase() {
     }
     public void setName(String name) {
-        if (name.indexOf(" ") != -1) {
-            this.Name = name.replace(" ","");
+        int charsetA = name.indexOf("'");
+        int charsetB = name.indexOf("\"");
+        int charsetC = name.indexOf("/");
+        int charsetD = name.indexOf(",");
+
+        if (charsetA != -1 || charsetB != -1 || charsetC != -1 || charsetD != -1){
+            return;
         }else {
-            this.Name = name;
+            if (name.indexOf(" ") != -1) {
+                this.Name = name.replace(" ","");
+            }else {
+                this.Name = name;
+            }
         }
     }
     public void setUser(String user) {
@@ -35,12 +43,8 @@ public class VosDatabase {
     public void setSavePath(String savePath) {
         this.savePath = savePath;
     }
-    public int getSize() {
-        return this.dataHashMap.size();
-    }
     public void putData(String name,Data data) {
         this.dataHashMap.put(name,data);
-        this.dataList.add(data);
     }
     public Data getData(String name) {
         return this.dataHashMap.get(name);
@@ -58,7 +62,6 @@ public class VosDatabase {
         return var1.exists();
     }
     public void removeData(String name) {
-        this.dataList.remove(this.dataHashMap.get(name));
         this.dataHashMap.remove(name);
     }
     public String getCreateTime() {
@@ -69,5 +72,8 @@ public class VosDatabase {
     }
     public String getSavePath() {
         return this.savePath;
+    }
+    public int getSize() {
+        return this.dataHashMap.size();
     }
 }

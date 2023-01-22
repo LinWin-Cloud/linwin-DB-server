@@ -4,7 +4,13 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
 import ThreadSocket.ThreadSocket;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +44,6 @@ public class OutFileSystem {
                                 fileWriter.write(content);
                             }
                             fileWriter.close();
-                            //System.out.println(getWriteContent);
                         }
                     }catch (Exception exception){
                         exception.printStackTrace();
@@ -77,6 +82,46 @@ public class OutFileSystem {
             fileWriter.flush();
         }catch (Exception exception){
             exception.printStackTrace();
+        }
+    }
+    public static String getFileContent(String name) throws Exception {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
+        FileInputStream fileInputStream = new FileInputStream(name);
+        FileChannel fileChannel = fileInputStream.getChannel();
+        int length = fileChannel.read(byteBuffer);
+        StringBuffer fileContent = new StringBuffer("");
+        while ((length != -1)) {
+            byteBuffer.flip();
+            byte[] bytes = byteBuffer.array();
+            String s = new String(bytes, Charset.defaultCharset());
+            try {
+                fileContent.append(s);
+                fileContent.append("\n");
+            } catch (Exception exception) {
+                try {
+                    Thread.sleep(100);
+                    continue;
+                } catch (Exception exception1) {
+                    exception1.printStackTrace();
+                }
+            }
+            byteBuffer.clear();
+            length = fileChannel.read(byteBuffer);
+        }
+        return fileContent.toString();
+    }
+    public static String getLastName(String str) {
+        try{
+            return str.substring(str.lastIndexOf("."),str.length());
+        }catch (Exception exception){
+            return "";
+        }
+    }
+    public static String onlyGetName(String str) {
+        try{
+            return str.substring(0,str.lastIndexOf("."));
+        }catch (Exception exception){
+            return str;
         }
     }
 }

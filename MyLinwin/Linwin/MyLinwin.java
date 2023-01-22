@@ -9,8 +9,11 @@ import ThreadSocket.ThreadSocket;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MyLinwin {
     public static int ServicePort;
@@ -78,11 +81,31 @@ public class MyLinwin {
                         exception.printStackTrace();
                     }
                 }
+                int getSleepTime = 0;
                 while (true) {
                     try{
-                        Thread.sleep(1000 * 300);
+                        int getDataSize = MyLinwin.linwinVOS.getDataSize();
+                        if (getDataSize <= 100) {
+                            getSleepTime = 150;
+                        }else if (getDataSize > 100 && getDataSize <= 500) {
+                            getSleepTime = 250;
+                        }else if(getDataSize > 500 && getDataSize <=1000) {
+                            getSleepTime = 1000;
+                        }else if(getDataSize > 1000 && getDataSize <=1000) {
+                            getSleepTime = 2000;
+                        }else if(getDataSize > 1000 && getDataSize <= 10000) {
+                            getSleepTime = 40000;
+                        }else if (getDataSize > 10000 && getDataSize <= 100000) {
+                            getSleepTime = 120000;
+                        }else if (getDataSize > 100000 && getDataSize <= 1000000) {
+                            getSleepTime = 240000;
+                        }else if (getDataSize > 1000000) {
+                            getSleepTime = 300000;
+                        }
+
                         IO_Socket.sendMessage(ioSocket);
                         outFileSystem.run();
+                        Thread.sleep(getSleepTime);
                     }catch (Exception exception){
                         exception.printStackTrace();
                     }

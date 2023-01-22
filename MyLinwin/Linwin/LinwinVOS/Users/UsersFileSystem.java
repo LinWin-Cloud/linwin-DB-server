@@ -1,5 +1,6 @@
 package LinwinVOS.Users;
 
+import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 
 import java.util.ArrayList;
@@ -32,5 +33,21 @@ public class UsersFileSystem {
     }
     public void setLoadOK(Boolean bool) {
         this.loadOK = bool;
+    }
+    public int getSize() {
+        int y = 0;
+        for (VosDatabase vosDatabase:this.userDatabase.values()) {
+            y = y + vosDatabase.getSize();
+        }
+        return y;
+    }
+    public void deleteDataBase(String dataName) {
+        this.userDatabase.remove(dataName);
+    }
+    public void removeAll() {
+        for (VosDatabase vosDatabase : this.getDatabase()) {
+            String name = vosDatabase.getName();
+            this.userDatabase.remove(name);
+        }
     }
 }

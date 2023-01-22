@@ -1,11 +1,19 @@
 package LinwinVOS.runtime;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Func {
     public static String getNowTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm:ss");
-        return formatter.toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+        java.util.Date date = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(date);
+    }
+    public static String getLastName(String str) {
+        try{
+            return str.substring(str.lastIndexOf("."),str.length());
+        }catch (Exception exception){
+            return "";
+        }
     }
 }
