@@ -1,11 +1,7 @@
 import os
 
-a = 0
-for i in range(5):
-    a = a +1
+for i in range(2):
     os.system("touch "+str(i)+".mydb")
-    with open(str(i)+".mydb","a") as f:
-        for j in range(100):
-	        a = a + 1
-	        f.write("Name=data"+str(j+i+a)+"&Value=hello"+str(j+i)+"&Type=string&createTime=2023.1.16&ModificationTime=2023.1.16&note=linwincloud\n")
-	        
+    for j in range(2):
+        with open(str(i)+".mydb","a") as f:
+            f.write("Name=data"+str(i+j)+"&Value="+str(i+j)+"&Type=string&createTime=2023.1.1&ModificationTime=2023.1.1&note=No\n")
