@@ -9,11 +9,8 @@ public class Data {
     private String value;
     private String Type;
     private String note;
-    private StringBuffer stringBufferName = new StringBuffer("");
     public void setName(String name) {
         this.name = name;
-        this.stringBufferName.setLength(0);
-        this.stringBufferName.append(name);
     }
     public void setSaveDatabase(String saveDatabase) {
         this.saveDatabase = saveDatabase;
@@ -88,7 +85,4 @@ public class Data {
         return this.ModificationTime;
     }
     public String getNote() {return this.note;}
-    public StringBuffer getStringBufferName() {
-        return this.stringBufferName;
-    }
 }

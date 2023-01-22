@@ -65,13 +65,23 @@ public class MyLinwin {
         Thread outData = new Thread(new Runnable() {
             @Override
             public void run() {
+                OutFileSystem outFileSystem = new OutFileSystem();
+                outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                outFileSystem.setThreadSocket(IO_Socket);
+                while (true){
+                    try{
+                        Thread.sleep(100);
+                        if (outFileSystem.getAllUserLoad_STATUS()) {
+                            break;
+                        }
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
                 while (true) {
                     try{
-                        Thread.sleep(1000 * 10);
+                        Thread.sleep(1000 * 300);
                         IO_Socket.sendMessage(ioSocket);
-                        OutFileSystem outFileSystem = new OutFileSystem();
-                        outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-                        outFileSystem.setThreadSocket(IO_Socket);
                         outFileSystem.run();
                     }catch (Exception exception){
                         exception.printStackTrace();
@@ -80,28 +90,6 @@ public class MyLinwin {
             }
         });
         outData.start();
-        Thread inputData = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Thread.sleep(1000);
-                }catch (Exception exception){
-                    exception.printStackTrace();
-                }
-                while (true) {
-                    try{
-                        Thread.sleep(1000 * 10);
-                    }catch (Exception exception){
-                        exception.printStackTrace();
-                    }
-                    InputFileSystem inputFileSystem = new InputFileSystem();
-                    inputFileSystem.setThreadSocket(MyLinwin.IO_Socket);
-                    inputFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-                    inputFileSystem.run();
-                }
-            }
-        });
-        inputData.start();
     }
     public static void getServerSocketBoot() {
         try{

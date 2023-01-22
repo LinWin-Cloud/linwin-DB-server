@@ -1,3 +1,4 @@
+import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
@@ -17,16 +18,6 @@ public class OutFileSystem {
         this.linwinVOS = linwinVOS;
     }
     public void run() {
-        while (true) {
-            try{
-                Thread.sleep(100);
-                if (this.getAllUserLoad_STATUS()) {
-                    break;
-                }
-            }catch (Exception exception){
-                exception.printStackTrace();
-            }
-        }
         HashSet<UsersFileSystem> hashSet = this.linwinVOS.getUserFileSystem();
         for (UsersFileSystem usersFileSystem : hashSet)
         {
@@ -37,9 +28,13 @@ public class OutFileSystem {
                     String users = usersFileSystem.getUserName();
                     HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                     for (VosDatabase vosDatabase:databases) {
-                        String DatabaseName = vosDatabase.getName();
-                        String getWriteContent = vosDatabase.getOutputData();
-                        OutFileSystem.writeFile(LinwinVOS.DatabasePath+"/"+users+"/"+DatabaseName+".mydb",getWriteContent);
+                        String getWriteContent = "";
+                        String  DatabaseName = vosDatabase.getName();
+                        for (Data data : vosDatabase.dataHashMap.values()) {
+                            String content = "Name="+data.getName()+"&Value="+data.getValue()+"&Type="+data.getType()+"&createTime="+data.getCreateTime()+"&ModificationTime="+data.getModificationTime()+"&note="+data.getNote();
+                            getWriteContent = getWriteContent + content + "\n";
+                        }
+                        OutFileSystem.writeFile(LinwinVOS.DatabasePath+"/"+users+"/Database/"+DatabaseName+".mydb",getWriteContent);
                     }
                     return 0;
                 }
@@ -47,7 +42,7 @@ public class OutFileSystem {
             executorService.shutdown();
         }
     }
-    private Boolean getAllUserLoad_STATUS() {
+    public Boolean getAllUserLoad_STATUS() {
         HashSet<UsersFileSystem> usersFileSystemHashSet = this.linwinVOS.getUserFileSystem();
         Boolean ok = true;
         for (UsersFileSystem usersFileSystem : usersFileSystemHashSet)
@@ -66,14 +61,14 @@ public class OutFileSystem {
     }
     public static void writeFile(String name,String content) {
         try{
+            name = name.replace("//","/");
             File writeFile = new File(name);
-            if (!writeFile.exists() || !writeFile.isFile()) {
+            if (!writeFile.exists()) {
                 writeFile.createNewFile();
             }
-            FileWriter fileWriter = new FileWriter(writeFile);
-            fileWriter.write(content);
-            fileWriter.flush();
-            fileWriter.close();
+            FileWriter fw = new FileWriter(writeFile,false);
+            fw.write(content);
+            fw.close();
         }catch (Exception exception){
             exception.printStackTrace();
         }
