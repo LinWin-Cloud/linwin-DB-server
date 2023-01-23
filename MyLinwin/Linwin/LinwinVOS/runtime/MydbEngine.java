@@ -47,6 +47,8 @@ public class MydbEngine {
             }
             else if(script.substring(0,6).equals("delete")) {
                 this.getFunction = exec.deleteData(user,script);
+            }else if(script.substring(0,4).equals("info")) {
+                this.getFunction = exec.Info(user,script);
             }
             else {
                 this.getFunction = "Error Command and Script";

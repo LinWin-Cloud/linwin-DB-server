@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import LinwinVOS.runtime.lib.Info;
 
 
 public class Exec {
@@ -426,5 +427,9 @@ public class Exec {
         }catch (Exception exception){
             return "Command syntax error!";
         }
+    }
+    public String Info(String user,String command) {
+        Info info = new Info();
+        return info.info(user,command);
     }
 }
