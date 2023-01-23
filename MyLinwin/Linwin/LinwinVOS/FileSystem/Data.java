@@ -38,6 +38,12 @@ public class Data {
     public String getDataType(String content) {
         String saveType = "string";
         try{
+            int i = Integer.valueOf(content);
+            return "int";
+        }catch (Exception exception){
+            saveType = "string";
+        }
+        try{
             double d = Double.valueOf(content);
             return "double";
         }catch (Exception exception){
@@ -46,12 +52,6 @@ public class Data {
         try{
             Float f = Float.valueOf(content);
             return "float";
-        }catch (Exception exception){
-            saveType = "string";
-        }
-        try{
-            int i = Integer.valueOf(content);
-            return "int";
         }catch (Exception exception){
             saveType = "string";
         }

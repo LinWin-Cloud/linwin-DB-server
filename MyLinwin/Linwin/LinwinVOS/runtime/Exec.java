@@ -93,35 +93,16 @@ public class Exec {
                 }
                 return FindResult;
             }else if (findType.equals("data")) {
-                String[] findData = {""};
+                StringBuffer stringBuffer = new StringBuffer("");
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 ExecutorService executorService = Executors.newFixedThreadPool(1);
-                Future<Integer> future = null;
                 for (VosDatabase vosDatabase : databases) {
-                    final String index = findIndex;
-                     future = executorService.submit(new Callable<Integer>() {
-                        @Override
-                        public Integer call() throws Exception {
-                            for (Data data : vosDatabase.getListData()) {
-                                String name = data.getName();
-                                int s = name.indexOf(index);
-                                if (s != -1) {
-                                    findData[0] = findData[0] + name + "\n";
-                                }
-                            }
-                            return 0;
-                        }
-                    });
-                }
-                try{
-                    future.get();
-                }catch (Exception exception){
-                    exception.printStackTrace();
+                     stringBuffer.append(vosDatabase.findData(findIndex));
                 }
                 executorService.shutdownNow();
-                return findData[0];
+                return stringBuffer.toString();
             }else {
                 return "Do Not Find The Target {Error='Send Type Error'}";
             }

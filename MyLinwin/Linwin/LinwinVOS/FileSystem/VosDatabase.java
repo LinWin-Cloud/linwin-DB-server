@@ -2,6 +2,10 @@ package LinwinVOS.FileSystem;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class VosDatabase {
     private String Name;
@@ -75,5 +79,30 @@ public class VosDatabase {
     }
     public int getSize() {
         return this.dataHashMap.size();
+    }
+    public StringBuffer findData(String index) {
+        StringBuffer stringBuffer = new StringBuffer("");
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
+        Future<Integer> future = null;
+        for (Data data : this.dataHashMap.values()) {
+            future = executorService.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    int s = data.getName().indexOf(index);
+                    if (s != -1) {
+                        stringBuffer.append(data.getName());
+                        stringBuffer.append("\n");
+                    }
+                    return 0;
+                }
+            });
+        }
+        try{
+            future.get();
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+        executorService.shutdown();
+        return stringBuffer;
     }
 }
