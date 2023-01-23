@@ -34,21 +34,20 @@ public class MyLinwin {
 
         try {
             ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
-            for (int i = 0 ; i < 16 ; i++) {
-                Thread ServiceThread = new Thread(new Runnable() {
+            ExecutorService executorService = Executors.newFixedThreadPool(2);
+            while (true) {
+                Socket socket = serverSocket.accept();
+                Future<Integer> future = executorService.submit(new Callable<Integer>() {
                     @Override
-                    public void run() {
+                    public Integer call() throws Exception {
                         try{
-                            while (true) {
-                                Socket socket = serverSocket.accept();
-                                MyLinwin.MyLinwin_Service(socket);
-                            }
+                            MyLinwin.MyLinwin_Service(socket);
                         }catch (Exception exception){
                             exception.printStackTrace();
                         }
+                        return 0;
                     }
                 });
-                ServiceThread.start();
             }
         }catch (Exception exception){
             exception.printStackTrace();
