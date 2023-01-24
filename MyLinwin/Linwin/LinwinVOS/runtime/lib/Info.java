@@ -36,11 +36,12 @@ public class Info {
                     stringBuffer.append("\n");
                 }
                 return stringBuffer.toString();
-            }else {
-                return "Command syntax error!";
             }
             if (getType.equals("update")) {
                 return vosDatabase.getModificationTime()+"\n";
+            }
+            else {
+                return "Command syntax error!";
             }
         } catch (Exception exception) {
             return "Command syntax error!";

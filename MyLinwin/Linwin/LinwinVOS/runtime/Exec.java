@@ -22,7 +22,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
 import LinwinVOS.runtime.lib.Info;
+import LinwinVOS.runtime.lib.ReName;
 
 
 public class Exec {
@@ -339,6 +341,7 @@ public class Exec {
                     data.setModificationTime(Func.getNowTime());
                     data.setSaveDatabase(saveDatabase);
                     LinwinVOS.FileSystem.get(user).get(saveDatabase).putData(createName,data);
+                    LinwinVOS.FileSystem.get(user).get(saveDatabase).setModificationTime(Func.getNowTime());
 
                     return "Create Successful!";
                 }
@@ -346,16 +349,21 @@ public class Exec {
                 return "Command syntax error!";
             }
         }else {
-            UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-            VosDatabase vosDatabase = new VosDatabase();
-            vosDatabase.setName(createName);
-            vosDatabase.setCreateTime(Func.getNowTime());
-            vosDatabase.setUser(user);
-            vosDatabase.setModificationTime(Func.getNowTime());
-            vosDatabase.setSavePath("/");
+            try{
+                UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
+                VosDatabase vosDatabase = new VosDatabase();
+                vosDatabase.setName(createName);
+                vosDatabase.setCreateTime(Func.getNowTime());
+                vosDatabase.setUser(user);
+                vosDatabase.setModificationTime(Func.getNowTime());
+                vosDatabase.setSavePath("/");
 
-            usersFileSystem.putDatabase(createName,vosDatabase);
-            return "Create Successful!";
+                usersFileSystem.putDatabase(createName,vosDatabase);
+                new File(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb").createNewFile();
+                return "Create Successful!";
+            }catch (Exception exception){
+                return "Do not create new database in the Physical Path";
+            }
         }
     }
     public String deleteData(String user,String command) {
@@ -431,5 +439,9 @@ public class Exec {
     public String Info(String user,String command) {
         Info info = new Info();
         return info.info(user,command);
+    }
+    public String ReName(String user,String command) {
+        ReName reName = new ReName();
+        return reName.reName(user,command);
     }
 }
