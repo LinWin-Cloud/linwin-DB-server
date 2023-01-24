@@ -28,7 +28,6 @@ public class logon {
                     if (userConfig.exists() && userConfig.isFile()) {
                         String UsersName = listUsers[i].getName();
                         String createTime = Json.readJson(userConfig.getAbsolutePath(),"Create Time");
-                        String GrantPermissions = Json.readJson(userConfig.getAbsolutePath(),"Grant Permissions");
                         String Passwd = Json.readJson(userConfig.getAbsolutePath(),"Passwd");
 
                         // System.out.println(listUsers[i].getName()+"/");
@@ -38,7 +37,6 @@ public class logon {
                             users.setName(UsersName);
                             users.setCreateTime(createTime);
                             users.setPasswd(Passwd);
-                            users.setGrantPermissions(GrantPermissions);
 
                             logon.UserInformation.put(UsersName,users);
                             logon.UsersList.add(UsersName);

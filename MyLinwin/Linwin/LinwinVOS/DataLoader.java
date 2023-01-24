@@ -53,7 +53,7 @@ public class DataLoader {
                     vosDatabase.setUser(user);
                     vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
                     vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
-                    vosDatabase.setModificationTime(base.getFileUpdateTime(listDataBase[I].getAbsolutePath()));
+                    vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
                     vosDatabase.setSavePath("/");
 
                     /**

@@ -18,6 +18,7 @@ public class VosDatabase {
     private String value;
     public HashMap<String,Data> dataHashMap = new HashMap<String,Data>();
     public VosDatabase() {
+
     }
     public void setName(String name) {
         int charsetA = name.indexOf("'");
