@@ -25,6 +25,7 @@ public class MydbEngine {
             Exec exec = new Exec();
             exec.setEngine(this);
             script = MydbEngine.replaceSpace(script);
+            script = MydbEngine.replaceLastSpace(script);
             if (script == null) {
                 return;
             }
@@ -67,6 +68,19 @@ public class MydbEngine {
             String charset = str.substring(i,i+1);
             if (!charset.equals(" ")) {
                 String Code = str.substring(str.indexOf(charset),length);
+                getSpaceStr = Code;
+                break;
+            }
+        }
+        return getSpaceStr;
+    }
+    public static String replaceLastSpace(String str) {
+        int length = str.length();
+        String getSpaceStr = null;
+        for (int i = 0 ; i < length ;i++) {
+            String charset = str.substring(length-i-1,length-i);
+            if (!charset.equals(" ")) {
+                String Code = str.substring(0,str.lastIndexOf(charset)+1);
                 getSpaceStr = Code;
                 break;
             }
