@@ -1,7 +1,7 @@
 import os
 
 os.system("rm -f *.mydb")
-for i in range(10):
+for i in range(5):
     os.system("touch "+str(i)+".mydb")
     with open(str(i)+".mydb","a") as a:
         a.write("""
@@ -9,6 +9,6 @@ for i in range(10):
     "Update" : "2023.1.24"
 }
                 """)
-    for j in range(10):
+    for j in range(5):
         with open(str(i)+".mydb","a") as f:
             f.write("Name=data"+str(i+j)+"&Value="+str(i+j)+"&Type=string&createTime=2023.1.1&ModificationTime=2023.1.1&note=No\n")
