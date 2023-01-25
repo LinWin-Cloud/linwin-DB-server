@@ -79,9 +79,7 @@ public class dbLoader {
             });
             executorService.shutdownNow();
             future.get();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+        } catch (Exception exception) {}
         return list;
     }
 }

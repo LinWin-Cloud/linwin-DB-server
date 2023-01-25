@@ -3,11 +3,13 @@ import LinwinVOS.FileSystem.*;
 import LinwinVOS.LinwinVOS;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class MydbEngine {
     private String getFunction = "";
     private String User;
     private String usersPhysicalPath;
+    private ExecutorService executorService = null;
 
     public String getReturn() {
         return this.getFunction;
@@ -17,6 +19,9 @@ public class MydbEngine {
         String getRunPath = LinwinVOS.UsersNowPath.get(this.User);
         this.usersPhysicalPath = LinwinVOS.DatabasePath+"/"+user+getRunPath;
     }
+    public void setExecutorService(ExecutorService executorService){
+        this.executorService = executorService;
+    }
     public String getUser() {
         return this.User;
     }
@@ -24,6 +29,7 @@ public class MydbEngine {
         try{
             Exec exec = new Exec();
             exec.setEngine(this);
+            exec.setFuture(executorService);
             script = MydbEngine.replaceSpace(script);
             script = MydbEngine.replaceLastSpace(script);
             if (script == null) {
@@ -53,6 +59,8 @@ public class MydbEngine {
             }
             else if (script.substring(0,6).equals("rename")) {
                 this.getFunction = exec.ReName(user,script);
+            }else if (script.substring(0,6).equals("update")) {
+                this.getFunction = exec.UpdateDatabase(user,script);
             }
             else {
                 this.getFunction = "Error Command and Script";

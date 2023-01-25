@@ -40,7 +40,7 @@ public class DataLoader {
             thread.start();
         }
     }
-    private static void UsersLoad(File[] listDataBase,UsersFileSystem usersFileSystem,String user) {
+    public static void UsersLoad(File[] listDataBase, UsersFileSystem usersFileSystem, String user) {
         for (int i = 0 ; i < listDataBase.length ; i++)
         {
             int I = i;

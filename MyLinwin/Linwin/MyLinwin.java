@@ -35,13 +35,14 @@ public class MyLinwin {
         try {
             ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
             ExecutorService executorService = Executors.newFixedThreadPool(2);
+            Future<Integer> integerFuture = null;
             while (true) {
                 Socket socket = serverSocket.accept();
                 Future<Integer> future = executorService.submit(new Callable<Integer>() {
                     @Override
                     public Integer call() throws Exception {
                         try{
-                            MyLinwin.MyLinwin_Service(socket);
+                            MyLinwin.MyLinwin_Service(socket,executorService);
                         }catch (Exception exception){
                             exception.printStackTrace();
                         }
@@ -144,7 +145,7 @@ public class MyLinwin {
             System.out.println("[ERROR] "+exception.getMessage());
         }
     }
-    public static void MyLinwin_Service(Socket socket) {
+    public static void MyLinwin_Service(Socket socket,ExecutorService executorService) {
         try{
             //System.out.println("[Message] Connect="+socket.getInetAddress());
             OutputStream outputStream = socket.getOutputStream();
@@ -167,6 +168,7 @@ public class MyLinwin {
                     MydbEngine mydbEngine = new MydbEngine();
                     mydbEngine.setUser(logonUser);
                     mydbEngine.execLdbScript(command,logonUser);
+                    mydbEngine.setExecutorService(executorService);
 
                     if (mydbEngine.getReturn() == null) {
                         printWriter.println("Error Command and Script");

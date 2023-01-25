@@ -1,5 +1,4 @@
 
-
 public class Base64 {
     public static String addPasswd(String str) {
         return java.util.Base64.getUrlEncoder().encodeToString(str.getBytes());

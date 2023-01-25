@@ -10,6 +10,7 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
+import LinwinVOS.DataLoader;
 
 import javax.swing.event.ListDataEvent;
 import java.io.File;
@@ -31,6 +32,10 @@ public class Exec {
     private MydbEngine mydbEngine;
     public void setEngine(MydbEngine mydbEngine) {
         this.mydbEngine = mydbEngine;
+    }
+    private ExecutorService executorService = null;
+    public void setFuture(ExecutorService executorService) {
+        this.executorService = executorService;
     }
     public String listDatabase(String user) {
         /**
@@ -443,5 +448,16 @@ public class Exec {
     public String ReName(String user,String command) {
         ReName reName = new ReName();
         return reName.reName(user,command);
+    }
+    public String UpdateDatabase(String user,String command) {
+        File usersDatabase = new File(LinwinVOS.DatabasePath+"/"+user+"/Database");
+        File[] listDataBase = usersDatabase.listFiles();
+
+        LinwinVOS.FileSystem.get(user).setLoadOK(false);
+        long start = System.currentTimeMillis();
+        DataLoader.UsersLoad(listDataBase,LinwinVOS.FileSystem.get(user),user);
+        long end = System.currentTimeMillis();
+        LinwinVOS.FileSystem.get(user).setLoadOK(true);
+        return "[*]Finish Load All the Data From User: "+user+" Use Time: "+(end-start)+"ms\n";
     }
 }
