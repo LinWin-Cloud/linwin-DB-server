@@ -1,5 +1,6 @@
 
 import action.LoginAction;
+import action.ReadFile;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -24,6 +25,7 @@ public class Logon extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.initOwner(ClientUI.stage);
+        primaryStage.requestFocus();
 
         primaryStage.setWidth(550);
         primaryStage.setHeight(400);
@@ -69,6 +71,16 @@ public class Logon extends Application {
                     String Port = LoginAction.port.getText();
 
                     if (LoginAction.connectRemote(remote,Login,Port,Passwd)) {
+                        if (autoLogin.isSelected()) {
+                            String json = "{\n" +
+                                    "  \"port\" : \""+Port+"\",\n" +
+                                    "  \"remote\" : \""+remote+"\",\n" +
+                                    "  \"user\" : \""+ Login +"\",\n" +
+                                    "  \"passwd\" : \""+Passwd+"\"\n" +
+                                    "}";
+                            ReadFile.writeFile("../../config/client/UIauto","true");
+                            ReadFile.writeFile("../../config/client/autoLogin.json",json);
+                        }
                         primaryStage.close();
                     }else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);

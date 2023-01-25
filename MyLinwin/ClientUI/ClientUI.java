@@ -1,3 +1,6 @@
+import action.Json;
+import action.LoginAction;
+import action.ReadFile;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -10,7 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
 public class ClientUI extends Application {
+    public static String userName = "";
+    public static String Passwd = "";
+    public static String port = "";
+    public static String IP = "";
     public static Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -21,7 +29,6 @@ public class ClientUI extends Application {
         GridPane gridPane = new GridPane();
         Scene scene = new Scene(gridPane);
         primaryStage.setScene(scene);
-        primaryStage.show();
 
         MenuBar menuBar = new MenuBar();
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
@@ -54,8 +61,33 @@ public class ClientUI extends Application {
             @Override
             public void run() {
                 try{
-                    Logon logon = new Logon();
-                    logon.start(new Stage());
+                    if (ReadFile.getLine("../../config/client/UIauto").replace(" ","").equals("true")) {
+                        String port = Json.readJson("../../config/client/autoLogin.json","port");
+                        String remote = Json.readJson("../../config/client/autoLogin.json","remote");
+                        String user = Json.readJson("../../config/client/autoLogin.json","user");
+                        String passwd = Json.readJson("../../config/client/autoLogin.json","passwd");
+
+                        System.out.println(port+" "+remote+" "+user+" "+passwd);
+                        System.out.println(LoginAction.connectRemote(remote,user,port,passwd));
+
+                        if (LoginAction.connectRemote(remote,user,port,passwd)) {
+                            ClientUI.userName = user;
+                            ClientUI.IP = remote;
+                            ClientUI.Passwd = passwd;
+                            ClientUI.port = port;
+
+                            primaryStage.show();
+                        }else {
+                            Logon logon = new Logon();
+                            primaryStage.show();
+                            logon.start(new Stage());
+                        }
+                    }
+                    else {
+                        Logon logon = new Logon();
+                        primaryStage.show();
+                        logon.start(new Stage());
+                    }
                 }catch (Exception exception){
                     exception.printStackTrace();
                 }
