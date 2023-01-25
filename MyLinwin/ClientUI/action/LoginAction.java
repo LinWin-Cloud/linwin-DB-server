@@ -1,16 +1,16 @@
 package action;
 
 import javafx.scene.control.TextField;
-import client.ClientShell;
-
+import connect.ClientShell;
 public class LoginAction {
     public LoginAction(int id) {
+        this.id = id;
     }
     private int id;
-    public static TextField Server;
-    public static TextField UserName;
-    public static TextField Passwd;
-    public static TextField port;
+    public static TextField Server = null;
+    public static TextField UserName = null;
+    public static TextField Passwd = null;
+    public static TextField port = null;
 
     public TextField getServer() {
         return this.Server;
@@ -35,7 +35,6 @@ public class LoginAction {
     }
     public static Boolean connectRemote(String ip,String user,String port,String passwd) {
         String[] command = {ip,port,user,passwd,"list database"};
-        ClientShell.main(command);
-        return true;
+        return ClientShell.connect(command);
     }
 }

@@ -9,9 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -43,7 +41,7 @@ public class Logon extends Application {
         primaryStage.setScene(scene);
 
         VBox box = new VBox();
-        box.setSpacing(10);
+        box.setSpacing(5);
         box.setPadding(new Insets(40));
 
         Label title = new Label("Linwin SQL");
@@ -55,15 +53,32 @@ public class Logon extends Application {
         HBox user = InputBox.InputProject("UsersName: ",new LoginAction(3));
         HBox passwd = InputBox.InputProject("Passwd: ",new LoginAction(4));
 
+        CheckBox autoLogin = new CheckBox("Auto login");
         Button logon = lib.buttonUI.buttonUI("Logon");
 
-        box.getChildren().addAll(title,server,port,user,passwd,logon);
+        box.getChildren().addAll(title,server,port,user,passwd,autoLogin,logon);
         gridPane.getChildren().addAll(box);
 
         logon.setOnAction((ActionEvent e) -> {
-            String remote = LoginAction.Server.getText();
-            String Login = LoginAction.UserName.getText();
-            String Passwd = LoginAction.Passwd.getText();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    String remote = LoginAction.Server.getText();
+                    String Login = LoginAction.UserName.getText();
+                    String Passwd = LoginAction.Passwd.getText();
+                    String Port = LoginAction.port.getText();
+
+                    if (LoginAction.connectRemote(remote,Login,Port,Passwd)) {
+                        primaryStage.close();
+                    }else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Login Error");
+                        alert.setHeaderText("Login Error!");
+                        alert.setContentText("Password or UserName Error!");
+                        alert.showAndWait();
+                    }
+                }
+            });
         });
 
         primaryStage.xProperty().addListener(new ChangeListener<Number>() {

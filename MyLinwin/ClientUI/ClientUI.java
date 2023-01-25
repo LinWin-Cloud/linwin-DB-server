@@ -30,10 +30,6 @@ public class ClientUI extends Application {
         Menu project = new Menu("Project");
         Menu help = new Menu("Help");
 
-        MenuItem newMydb = new MenuItem("New Mydb File");
-        MenuItem newMys = new MenuItem("New Mys File");
-        MenuItem startProject = new MenuItem("Open Project");
-        MenuItem setConnect = new MenuItem("Set Connect to LinwinDB");
         MenuItem close = new MenuItem("Exit");
 
         MenuItem showTerminal = new MenuItem("New LinwinDB Terminal");
@@ -46,7 +42,7 @@ public class ClientUI extends Application {
         MenuItem pro = new MenuItem("Linwin Data Server Project");
         MenuItem about = new MenuItem("About");
 
-        file.getItems().addAll(newMydb,newMys,startProject,setConnect,close);
+        file.getItems().addAll(close);
         terminal.getItems().addAll(showTerminal,command);
         project.getItems().addAll(OpenProject,Connect);
         help.getItems().addAll(doc,pro,about);
