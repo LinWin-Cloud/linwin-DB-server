@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -6,11 +7,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ClientUI extends Application {
+    public static Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ClientUI.stage = primaryStage;
         primaryStage.setWidth(1000);
         primaryStage.setHeight(750);
 
@@ -50,7 +54,17 @@ public class ClientUI extends Application {
         menuBar.getMenus().addAll(file,terminal,project,help);
         gridPane.getChildren().add(menuBar);
 
-        HBox leftPanel
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Logon logon = new Logon();
+                    logon.start(new Stage());
+                }catch (Exception exception){
+                    exception.printStackTrace();
+                }
+            }
+        });
     }
     public static void main(String[] args) {
         ClientUI.launch();
