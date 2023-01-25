@@ -1,9 +1,8 @@
 package main;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
-public class ClientShell {
+public class ConnectRemote {
     public static void main(String[] args) {
         try{
             String remote = args[0];
@@ -18,7 +17,7 @@ public class ClientShell {
                     continue;
                 }
             }
-            ClientShell.sendMessage(command,remote,port,user,passwd);
+            ConnectRemote.sendMessage(command,remote,port,user,passwd);
         }catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -42,10 +41,8 @@ public class ClientShell {
             while ((line = bufferedReader.readLine()) != null)
             {
                 i = i + 1;
-                System.out.println(" - "+line+"");
+                System.out.println(" --- "+line+"");
             }
-            System.out.println("Result Number: "+(i-1));
-            System.out.println("=============================");
             bufferedReader.close();
             inputStream.close();
             socket.close();
