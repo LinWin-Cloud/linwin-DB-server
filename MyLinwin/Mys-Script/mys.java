@@ -1,3 +1,5 @@
+import Engine.HeadType;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,6 +10,7 @@ public class mys {
         int commandLength = args.length;
         if (commandLength == 0) {
             System.out.println(mys.getFileContent("../../config/help/MysInfo.txt"));
+            System.exit(0);
         }
         if (commandLength == 1) {
             File testFile1 = new File(System.getProperty("user.dir")+"/"+args[1]);
@@ -42,18 +45,61 @@ public class mys {
     public static void loadMysFiles(String path) {
         try{
             HashSet<String> stringHashSet = new HashSet<>();
+            StringBuffer stringBuffer = new StringBuffer("");
 
             FileReader fileReader = new FileReader(path);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                stringHashSet.add(line);
+                line = mys.replaceSpace(line);
+                line = mys.replaceLastSpace(line);
+                stringBuffer.append(line);
+                stringBuffer.append("\n");
             }
+            String user = "";
+            String passwd = "";
+            String remote = "";
+            String port = "";
+
+            HeadType headType = new HeadType();
+            headType.dealHeadType(path);
+
+            user = headType.getUser();
+            passwd = headType.getPasswd();
+            remote = headType.getRemote();
+            port = headType.getPort();
+
             for (String getLine : stringHashSet) {
 
             }
         }catch (Exception exception){
             exception.printStackTrace();
         }
+    }
+    public static String replaceSpace(String str) {
+        int length = str.length();
+        String getSpaceStr = null;
+        for (int i = 0 ; i < length ;i++) {
+            String charset = str.substring(i,i+1);
+            if (!charset.equals(" ")) {
+                String Code = str.substring(str.indexOf(charset),length);
+                getSpaceStr = Code;
+                break;
+            }
+        }
+        return getSpaceStr;
+    }
+    public static String replaceLastSpace(String str) {
+        int length = str.length();
+        String getSpaceStr = null;
+        for (int i = 0 ; i < length ;i++) {
+            String charset = str.substring(length-i-1,length-i);
+            if (!charset.equals(" ")) {
+                String Code = str.substring(0,str.lastIndexOf(charset)+1);
+                getSpaceStr = Code;
+                break;
+            }
+        }
+        return getSpaceStr;
     }
 }
