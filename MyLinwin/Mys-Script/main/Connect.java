@@ -1,9 +1,10 @@
 package main;
+
 import java.io.*;
 import java.net.Socket;
 
-public class ConnectRemote {
-    public static void main(String[] args) {
+public class Connect {
+    public static Boolean connect(String[] args) {
         try{
             String remote = args[0];
             int port = Integer.valueOf(args[1]);
@@ -17,14 +18,13 @@ public class ConnectRemote {
                     continue;
                 }
             }
-            ConnectRemote.sendMessage(command,remote,port,user,passwd);
+            return Connect.sendMessage(command,remote,port,user,passwd);
         }catch (Exception exception) {
-            exception.printStackTrace();
+            return false;
         }
     }
-    public static void sendMessage(String getType,String remote,int port,String user,String passwd) {
+    public static Boolean sendMessage(String getType,String remote,int port,String user,String passwd) {
         try{
-            long start = System.currentTimeMillis();
             Socket socket = new Socket(remote,port);
             OutputStream outputStream = socket.getOutputStream();
             PrintWriter printWriter = new PrintWriter(outputStream);
@@ -37,21 +37,15 @@ public class ConnectRemote {
             InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            int i = 0 ;
             while ((line = bufferedReader.readLine()) != null)
             {
-                i = i + 1;
-                System.out.println(" --- "+line+"");
+                if (line.equals("Send Message Error") || line.equals("Passwd Or UserName Error!")) {
+                    return false;
+                }
             }
-            bufferedReader.close();
-            inputStream.close();
-            socket.close();
-            System.out.println();
-
-            long end = System.currentTimeMillis();
-            System.out.println(end-start+"ms");
+            return true;
         }catch (Exception exception){
-            exception.printStackTrace();
+            return false;
         }
     }
 }
