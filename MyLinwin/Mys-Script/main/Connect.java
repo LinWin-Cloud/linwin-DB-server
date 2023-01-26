@@ -2,9 +2,11 @@ package main;
 
 import java.io.*;
 import java.net.Socket;
+import Engine.Function.Function;
 
 public class Connect {
-    public static Boolean connect(String[] args) {
+    private String getRunMessage = "";
+    public Boolean connect(String[] args) {
         try{
             String remote = args[0];
             int port = Integer.valueOf(args[1]);
@@ -18,12 +20,12 @@ public class Connect {
                     continue;
                 }
             }
-            return Connect.sendMessage(command,remote,port,user,passwd);
+            return this.sendMessage(command,remote,port,user,passwd);
         }catch (Exception exception) {
             return false;
         }
     }
-    public static Boolean sendMessage(String getType,String remote,int port,String user,String passwd) {
+    public Boolean sendMessage(String getType,String remote,int port,String user,String passwd) {
         try{
             Socket socket = new Socket(remote,port);
             OutputStream outputStream = socket.getOutputStream();
@@ -32,20 +34,35 @@ public class Connect {
             passwd = Md5Util_tool.md5(passwd);
             String message = "Logon="+user+"?Passwd="+passwd+"?Command="+getType;
             //System.out.println(message);
-            printWriter.println(message);
+            printWriter.println("GET "+message+" HTTP/1.1");
             printWriter.flush();
             InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+           StringBuffer stringBuffer = new StringBuffer("");
             while ((line = bufferedReader.readLine()) != null)
             {
                 if (line.equals("Send Message Error") || line.equals("Passwd Or UserName Error!")) {
+                    stringBuffer.delete(0,stringBuffer.length());
+                    stringBuffer.append("\n");
+                    stringBuffer.append(line);
                     return false;
                 }
+                if (line.equals("Error Command and Script")) {
+                    return false;
+                }
+                stringBuffer.append(" -- ");
+                stringBuffer.append(line);
+                stringBuffer.append("\n");
             }
+            this.getRunMessage = stringBuffer.toString();
             return true;
         }catch (Exception exception){
+            this.getRunMessage = "\n[ERR] "+exception.getMessage()+"\n";
             return false;
         }
+    }
+    public String getMessage() {
+        return this.getRunMessage;
     }
 }

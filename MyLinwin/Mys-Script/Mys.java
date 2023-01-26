@@ -1,10 +1,16 @@
 import Engine.HeadType;
 import Engine.Syntax;
+import Engine.var.Var;
+import Engine.var.VarType;
+import main.Connect;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
+import java.util.List;
 
 public class Mys {
     public static void main(String[] args) {
@@ -46,7 +52,7 @@ public class Mys {
     }
     public static void loadMysFiles(String path) {
         try{
-            HashSet<String> stringHashSet = new HashSet<>();
+            List<String> stringHashSet = new ArrayList<>();
             StringBuffer stringBuffer = new StringBuffer("");
 
             FileReader fileReader = new FileReader(path);
@@ -57,6 +63,7 @@ public class Mys {
                 line = Mys.replaceLastSpace(line);
                 stringBuffer.append(line);
                 stringBuffer.append("\n");
+
                 stringHashSet.add(line);
             }
             String user = "";
@@ -73,18 +80,46 @@ public class Mys {
             port = headType.getPort();
 
             Syntax syntax = new Syntax();
+            Var var = new Var();
+
             syntax.setPasswd(passwd);
             syntax.setRemote(remote);
             syntax.setPort(port);
             syntax.setUser(user);
 
+            int LineLength = 0 ;
             for (String getLine : stringHashSet) {
+                LineLength = LineLength + 1;
                 try{
                     if (syntax.isAnnotated(getLine)) {
                         continue;
                     }
                     if (getLine.substring(0,6).equals("upload")) {
                         System.out.println(syntax.UpLoad_Command(getLine,path));
+                        continue;
+                    }
+                    if (syntax.isINFO(getLine)) {
+                        continue;
+                    }
+                    if (Var.createVarType(getLine)) {
+                        continue;
+                    }
+                    else {
+                        Connect connect = new Connect();
+                        getLine = Var.DealVar(getLine,Var.ValueMap);
+                        Boolean run = connect.sendMessage(getLine,remote,Integer.valueOf(port),user,passwd);
+                        if (run == false) {
+                            System.out.println("\n############################################\n");
+                            System.out.println("Error Line="+LineLength);
+                            System.out.println("File="+path);
+                            System.exit(0);
+                        }
+                        System.out.print(connect.getMessage());
+                        if (run == true) {
+                            continue;
+                        }else {
+                            break;
+                        }
                     }
                 }catch (Exception exception) {
                     continue;

@@ -3,6 +3,9 @@
 ./main/Base64.java
 ./Mys.java
 ./Engine/HeadType.java
+./Engine/Function/Function.java
+./Engine/var/Var.java
+./Engine/var/VarType.java
 ./Engine/DbLoader.java
 ./Engine/Json.java
 ./Engine/Syntax.java

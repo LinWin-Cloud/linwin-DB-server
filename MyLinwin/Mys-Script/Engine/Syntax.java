@@ -52,15 +52,19 @@ public class Syntax {
             }
 
             DbLoader dbLoader = new DbLoader();
+            String message = "";
             for (String i : dbLoader.LoadDB_CommandScript(upLoadPath))
             {
-                if (Connect.sendMessage(i,this.remote,Integer.valueOf(this.port),this.user,this.passwd)) {
+                Connect connect = new Connect();
+                if (connect.sendMessage(i,this.remote,Integer.valueOf(this.port),this.user,this.passwd)) {
+                    message = "Upload Successful";
                     continue;
                 }else {
-                    return "Error Options!";
+                    message = "Error Options!";
+                    break;
                 }
             }
-            return "Run Successful!";
+            return message;
         }catch (Exception exception){
             return "Error command syntax";
         }
@@ -71,5 +75,26 @@ public class Syntax {
         }catch (Exception exception){
             return str;
         }
+    }
+    public Boolean isINFO(String code) {
+        code = code.replace(" ","");
+        Boolean bool = false;
+        try{
+            if (code.substring(0,1).equals("\"")) {
+                bool = true;
+            }
+            if (code.substring(0,7).equals("Login={")) {
+                bool = true;
+            }
+            if (code.substring(0,1).equals("{")) {
+                bool = true;
+            }
+            if (code.substring(0,1).equals("}")) {
+                bool = true;
+            }
+        }catch (Exception exception){
+
+        }
+        return bool;
     }
 }

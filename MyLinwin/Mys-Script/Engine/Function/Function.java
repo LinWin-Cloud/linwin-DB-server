@@ -1,2 +1,4 @@
-package Engine.Function;public class Function {
+package Engine.Function;
+
+public class Function {
 }
