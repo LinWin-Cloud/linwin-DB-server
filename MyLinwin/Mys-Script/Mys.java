@@ -6,26 +6,27 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashSet;
 
-public class mys {
+public class Mys {
     public static void main(String[] args) {
         int commandLength = args.length;
+        //System.out.println(args[0]);
         if (commandLength == 0) {
-            System.out.println(mys.getFileContent("../../config/help/MysInfo.txt"));
+            System.out.println(Mys.getFileContent("../../config/help/MysInfo.txt"));
             System.exit(0);
         }
         if (commandLength == 1) {
-            File testFile1 = new File(System.getProperty("user.dir")+"/"+args[1]);
-            File testFile2 = new File(args[1]);
+            File testFile1 = new File(System.getProperty("user.dir")+"/"+args[0]);
+            File testFile2 = new File(args[0]);
             if (testFile1.exists()) {
-                mys.loadMysFiles(testFile1.getAbsolutePath());
+                Mys.loadMysFiles(testFile1.getAbsolutePath());
             }else if (testFile2.exists()) {
-                mys.loadMysFiles(testFile2.getAbsolutePath());
+                Mys.loadMysFiles(testFile2.getAbsolutePath());
             }else {
-                System.out.println("[Mys Runtime] can not open file '"+args[1]+"'");
+                System.out.println("[Mys Runtime] can not open file '"+args[0]+"'");
                 System.exit(0);
             }
         }else {
-            System.out.println(mys.getFileContent("../../config/help/MysInfo.txt"));
+            System.out.println(Mys.getFileContent("../../config/help/MysInfo.txt"));
         }
     }
     public static String getFileContent(String name) {
@@ -52,10 +53,11 @@ public class mys {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                line = mys.replaceSpace(line);
-                line = mys.replaceLastSpace(line);
+                line = Mys.replaceSpace(line);
+                line = Mys.replaceLastSpace(line);
                 stringBuffer.append(line);
                 stringBuffer.append("\n");
+                stringHashSet.add(line);
             }
             String user = "";
             String passwd = "";
@@ -71,13 +73,21 @@ public class mys {
             port = headType.getPort();
 
             Syntax syntax = new Syntax();
+            syntax.setPasswd(passwd);
+            syntax.setRemote(remote);
+            syntax.setPort(port);
+            syntax.setUser(user);
 
             for (String getLine : stringHashSet) {
-                if (syntax.isAnnotated(getLine)) {
+                try{
+                    if (syntax.isAnnotated(getLine)) {
+                        continue;
+                    }
+                    if (getLine.substring(0,6).equals("upload")) {
+                        System.out.println(syntax.UpLoad_Command(getLine,path));
+                    }
+                }catch (Exception exception) {
                     continue;
-                }
-                if (getLine.substring(0,6).equals("upload")) {
-                    System.out.println(syntax.UpLoad_Command(getLine,path));
                 }
             }
         }catch (Exception exception){
@@ -98,6 +108,9 @@ public class mys {
         return getSpaceStr;
     }
     public static String replaceLastSpace(String str) {
+        if (str == null) {
+            return "";
+        }
         int length = str.length();
         String getSpaceStr = null;
         for (int i = 0 ; i < length ;i++) {
