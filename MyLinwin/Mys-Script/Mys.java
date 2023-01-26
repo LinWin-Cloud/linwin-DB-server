@@ -1,4 +1,5 @@
 import Engine.HeadType;
+import Engine.Syntax;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,8 +70,15 @@ public class mys {
             remote = headType.getRemote();
             port = headType.getPort();
 
-            for (String getLine : stringHashSet) {
+            Syntax syntax = new Syntax();
 
+            for (String getLine : stringHashSet) {
+                if (syntax.isAnnotated(getLine)) {
+                    continue;
+                }
+                if (getLine.substring(0,6).equals("upload")) {
+                    System.out.println(syntax.UpLoad_Command(getLine,path));
+                }
             }
         }catch (Exception exception){
             exception.printStackTrace();

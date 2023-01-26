@@ -1,7 +1,7 @@
 package action;
 
 import javafx.scene.control.TextField;
-import connect.ClientShell;
+import connect.Connect;
 public class LoginAction {
     public LoginAction(int id) {
         this.id = id;
@@ -35,6 +35,6 @@ public class LoginAction {
     }
     public static Boolean connectRemote(String ip,String user,String port,String passwd) {
         String[] command = {ip,port,user,passwd,"list database"};
-        return ClientShell.connect(command);
+        return Connect.connect(command);
     }
 }

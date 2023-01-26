@@ -2,7 +2,6 @@ package connect;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientShell {
     public static Boolean connect(String[] args) {
@@ -19,7 +18,7 @@ public class ClientShell {
                     continue;
                 }
             }
-            return ClientShell.sendMessage(command,remote,port,user,passwd);
+            return Connect.sendMessage(command,remote,port,user,passwd);
         }catch (Exception exception) {
             return false;
         }
