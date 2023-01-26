@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/release" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/ClientUI" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/Mys-Script" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SqlDrive/Java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
     </content>
     <orderEntry type="inheritedJdk" />
