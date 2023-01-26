@@ -1,6 +1,8 @@
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.Socket;
+import java.net.URL;
 import java.util.Scanner;
 
 public class ClientShell {
@@ -26,16 +28,12 @@ public class ClientShell {
     public static void sendMessage(String getType,String remote,int port,String user,String passwd) {
         try{
             long start = System.currentTimeMillis();
-            Socket socket = new Socket(remote,port);
-            OutputStream outputStream = socket.getOutputStream();
-            PrintWriter printWriter = new PrintWriter(outputStream);
+            URL url = new URL("http://"+remote+":"+port+"/?Logon="+user+"?Passwd="+Md5Util_tool.md5(passwd)+"?Command="+getType);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.connect();
+            InputStream inputStream = httpURLConnection.getInputStream();
 
-            passwd = Md5Util_tool.md5(passwd);
-            String message = "Logon="+user+"?Passwd="+passwd+"?Command="+getType;
-            //System.out.println(message);
-            printWriter.println("GET "+message+" HTTP/1.1");
-            printWriter.flush();
-            InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             int i = 0 ;
@@ -48,7 +46,7 @@ public class ClientShell {
             System.out.println("=============================");
             bufferedReader.close();
             inputStream.close();
-            socket.close();
+            httpURLConnection.disconnect();
             System.out.println();
 
             long end = System.currentTimeMillis();

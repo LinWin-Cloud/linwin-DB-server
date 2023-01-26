@@ -168,10 +168,14 @@ public class MyLinwin {
                 int s_passwd = getRequests.indexOf(text_2);
                 int s_command = getRequests.indexOf(text_3);
                // System.out.println(s_logon+" "+s_command+" "+s_passwd);
+                printWriter.println("HTTP/1.1 200 OK");
+                printWriter.println("Content-Type: text/html");
+                printWriter.println();
+                printWriter.flush();
                 if (s_logon != -1 && s_passwd != -1 && s_command != -1 && s_passwd > s_logon && s_passwd < s_command) {
                     String logonUser = getRequests.substring(s_logon+text_1.length(),s_passwd);
                     String md5_passwd = getRequests.substring(s_passwd+text_2.length(),s_command);
-                    String command = getRequests.substring(s_command+text_3.length(),getRequests.length());
+                    String command = getRequests.substring(s_command+text_3.length());
                     //System.out.println(logonUser+" "+md5_passwd+" "+command);
 
                     if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
