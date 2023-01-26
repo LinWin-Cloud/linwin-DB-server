@@ -6,6 +6,7 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
 import LinwinVOS.runtime.MydbEngine;
 import ThreadSocket.ThreadSocket;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,6 +31,7 @@ public class MyLinwin {
 
         System.out.println(" [Information] Boot Linwin Data Service!");
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
+        System.out.println(" [Info ] Boot Successful!");
         MyLinwin.getServerSocketBoot();
 
         try {
@@ -153,44 +155,54 @@ public class MyLinwin {
             InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String getRequests = bufferedReader.readLine();
-            String text_1 = "Logon=";
-            String text_2 = "?Passwd=";
-            String text_3 = "?Command=";
-            int s_logon = getRequests.indexOf(text_1);
-            int s_passwd = getRequests.indexOf(text_2);
-            int s_command = getRequests.indexOf(text_3);
-            if (s_logon != -1 && s_passwd != -1 && s_command != -1 && s_passwd > s_logon && s_passwd < s_command) {
-                String logonUser = getRequests.substring(s_logon+text_1.length(),s_passwd);
-                String md5_passwd = getRequests.substring(s_passwd+text_2.length(),s_command);
-                String command = getRequests.substring(s_command+text_3.length(),getRequests.length());
-                if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
+            if (getRequests == null) {
+                socket.close();
+            }else {
+                getRequests = java.net.URLDecoder.decode(getRequests);
+                getRequests = getRequests.substring(getRequests.indexOf(" ")+1,getRequests.lastIndexOf("HTTP/")-1);
 
-                    MydbEngine mydbEngine = new MydbEngine();
-                    mydbEngine.setUser(logonUser);
-                    mydbEngine.execLdbScript(command,logonUser);
-                    mydbEngine.setExecutorService(executorService);
+                String text_1 = "Logon=";
+                String text_2 = "?Passwd=";
+                String text_3 = "?Command=";
+                int s_logon = getRequests.indexOf(text_1);
+                int s_passwd = getRequests.indexOf(text_2);
+                int s_command = getRequests.indexOf(text_3);
+               // System.out.println(s_logon+" "+s_command+" "+s_passwd);
+                if (s_logon != -1 && s_passwd != -1 && s_command != -1 && s_passwd > s_logon && s_passwd < s_command) {
+                    String logonUser = getRequests.substring(s_logon+text_1.length(),s_passwd);
+                    String md5_passwd = getRequests.substring(s_passwd+text_2.length(),s_command);
+                    String command = getRequests.substring(s_command+text_3.length(),getRequests.length());
+                    //System.out.println(logonUser+" "+md5_passwd+" "+command);
 
-                    if (mydbEngine.getReturn() == null) {
-                        printWriter.println("Error Command and Script");
-                        outputStream.flush();
-                        socket.close();
+                    if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
+
+                        MydbEngine mydbEngine = new MydbEngine();
+                        mydbEngine.setUser(logonUser);
+                        mydbEngine.execLdbScript(command,logonUser);
+                        mydbEngine.setExecutorService(executorService);
+
+                        if (mydbEngine.getReturn() == null) {
+                            printWriter.println("Error Command and Script");
+                            outputStream.flush();
+                            socket.close();
+                        }else {
+                            printWriter.println(mydbEngine.getReturn());
+                            printWriter.flush();
+                            socket.close();
+                            printWriter.close();
+                        }
                     }else {
-                        printWriter.println(mydbEngine.getReturn());
+                        printWriter.println("Passwd Or UserName Error!");
                         printWriter.flush();
                         socket.close();
-                        printWriter.close();
                     }
                 }else {
-                    printWriter.println("Passwd Or UserName Error!");
+                    printWriter.println("Send Message Error");
                     printWriter.flush();
+                    printWriter.close();
+                    inputStream.close();
                     socket.close();
                 }
-            }else {
-                printWriter.println("Send Message Error");
-                printWriter.flush();
-                printWriter.close();
-                inputStream.close();
-                socket.close();
             }
         }catch (Exception exception){
             exception.printStackTrace();

@@ -33,7 +33,7 @@ public class ClientShell {
             passwd = Md5Util_tool.md5(passwd);
             String message = "Logon="+user+"?Passwd="+passwd+"?Command="+getType;
             //System.out.println(message);
-            printWriter.println(message);
+            printWriter.println("GET "+message+" HTTP/1.1");
             printWriter.flush();
             InputStream inputStream = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

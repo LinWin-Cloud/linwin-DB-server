@@ -101,7 +101,6 @@ public class VosDatabase {
         try{
             future.get();
         }catch (Exception exception){
-            exception.printStackTrace();
         }
         executorService.shutdown();
         return stringBuffer;

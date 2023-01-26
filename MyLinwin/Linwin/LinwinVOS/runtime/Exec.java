@@ -107,7 +107,7 @@ public class Exec {
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 ExecutorService executorService = Executors.newFixedThreadPool(1);
                 for (VosDatabase vosDatabase : databases) {
-                     stringBuffer.append(vosDatabase.findData(findIndex));
+                    stringBuffer.append(vosDatabase.findData(findIndex));
                 }
                 executorService.shutdownNow();
                 return stringBuffer.toString();
