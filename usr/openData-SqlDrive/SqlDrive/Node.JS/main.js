@@ -1,22 +1,33 @@
-
 var _md5 = require("./Md5");
-function setRemote(remote) {
-    /**
-     * Remote Value = Url + Port || Or only use url;
-     */
-    this.remote = remote;
-}
+
+var message = "";
+
 function setLoginUser(user) {
     this.user = user;
 }
 function setLoginPasswd(passwd){
     this.passwd = _md5._md5(passwd);
 }
-function run(command) {
+function setCommand(line) {
+    this.command = line;
+}
+function setRemote(remote) {
+    /**
+     * Remote Value = Url + Port || Or only use url;
+     */
+    this.remote = remote;
+}
+function setMes(mes) {
+    message = mes;
+}
+function getContent() {
+    return message;
+}
+function run() {
     //console.log(this.user+" "+this.passwd+" "+this.command);
     var http = require('http');
     try{
-        http.get(this.remote+"/?Logon="+this.user+"?Passwd="+this.passwd+"?Command="+command, function(res) {
+        http.get(this.remote+"/?Logon="+this.user+"?Passwd="+this.passwd+"?Command="+this.command, function(res) {
             var data = '';
             var mes = "";
             res.setEncoding("utf8");
@@ -40,12 +51,4 @@ function run(command) {
         return false;
     }
 }
-function createData(name,value,note,database) {
-    run("create data '"+name+"' setting('"+value+"','"+note+"') in "+database);
-}
-function createDatabase(name) {
-    run("create database '"+name+"'");
-}
-function deleteData(name,database) {
-    run("");
-}
+module.exports = {setLoginUser,setCommand,setLoginPasswd,run,setRemote,getContent,message};
