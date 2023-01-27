@@ -10,7 +10,15 @@
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/ClientUI" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/MyLinwin/Mys-Script" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/SqlDrive/Java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/Data" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/ClientUI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Linwin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Mys-Script" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/client" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/release" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-SqlDrive/SqlDrive/Java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/usr/openData-Server/out" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
