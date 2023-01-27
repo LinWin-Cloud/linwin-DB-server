@@ -403,9 +403,8 @@ public class Exec {
                 return "Delete Successful!";
             } else {
                 String[] splitCommand = command.split(" ");
-                Boolean isData = command.equals(splitCommand[1]);
+                Boolean isData = splitCommand[1].equals("data");
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-
                 if (isData) {
                     String dataName = command.substring(command.indexOf("'") + 1, command.lastIndexOf("'"));
                     String DataBase = command.substring(command.lastIndexOf("in ") + 3, command.length());

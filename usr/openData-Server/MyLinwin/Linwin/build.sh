@@ -1,3 +1,4 @@
+rm -fr ../../out/Linwin/*
 find . -type f | grep .java > source.txt
 javac -d ../../out/Linwin/ @source.txt
 cd ../../out/Linwin/
