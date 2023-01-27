@@ -1,7 +1,0 @@
-
-Mys Runtime:
-    Command->
-        mys [mys script file path]
-
-For Example:
-    mys ./hello.mys             #This command is to run the hello.mys
