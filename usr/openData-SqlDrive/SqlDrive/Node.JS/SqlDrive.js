@@ -47,5 +47,38 @@ function createDatabase(name) {
     run("create database '"+name+"'");
 }
 function deleteData(name,database) {
-    run("");
+    run("delete data '"+name+"' in "+database);
 }
+function deleteDatabase(name) {
+    run("delete database "+name);
+}
+function findData(name) {
+    run("find data "+name);
+}
+function findDatabase(name) {
+    run("find database "+name);
+}
+function indexData(name,database) {
+    run("index '"+name+"' in "+database);
+}
+function reNameDatabase(database,rename) {
+    run("rename database '"+database+"' '"+rename+"'");
+}
+function reNameData(data,rename,database) {
+    run("rename data '"+database+"' '"+rename+"' in "+database);
+}
+
+module.exports = {
+    createData,
+    createDatabase,
+    deleteData,
+    deleteDatabase,
+    findData,
+    findDatabase,
+    indexData,
+    reNameData,
+    reNameDatabase,
+    setLoginPasswd,
+    setLoginUser,
+    setRemote
+};

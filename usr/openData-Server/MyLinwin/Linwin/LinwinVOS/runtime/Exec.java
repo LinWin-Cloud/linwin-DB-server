@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import LinwinVOS.runtime.lib.Index;
 import LinwinVOS.runtime.lib.Info;
 import LinwinVOS.runtime.lib.ReName;
 
@@ -457,5 +458,20 @@ public class Exec {
         long end = System.currentTimeMillis();
         LinwinVOS.FileSystem.get(user).setLoadOK(true);
         return "[*]Finish Load All the Data From User: "+user+" Use Time: "+(end-start)+"ms\n";
+    }
+    public String Index(String user,String command) {
+        /**
+         * 'index' command:
+         * This command is to Indexes the specified from the database.
+         *
+         * How to use it:
+         *
+         * (This command is to index all the datas have this word 'hello' in the
+         * Database cell 'main')
+         * [1] index 'hello' in main
+         *
+         */
+        Index index = new Index();
+        return index.IndexCommand(user,command);
     }
 }

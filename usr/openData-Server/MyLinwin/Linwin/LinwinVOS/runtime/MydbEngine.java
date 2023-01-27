@@ -61,6 +61,8 @@ public class MydbEngine {
                 this.getFunction = exec.ReName(user,script);
             }else if (script.substring(0,6).equals("update")) {
                 this.getFunction = exec.UpdateDatabase(user,script);
+            }else if (script.substring(0,5).equals("index")) {
+                this.getFunction = exec.Index(user,script);
             }
             else {
                 this.getFunction = "Error Command and Script";
