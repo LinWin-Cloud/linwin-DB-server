@@ -1,4 +1,4 @@
-
+package LogService;
 import java.io.FileWriter;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
