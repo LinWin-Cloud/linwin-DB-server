@@ -1,3 +1,5 @@
 {
-  "Service-Port" : "8888"
+  "Service-Port" : "8888",
+  "Log-Path" : "../../../../var/log/openData/",
+  "Update-Log" : "3600000"
 }
