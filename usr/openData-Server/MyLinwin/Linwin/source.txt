@@ -1,5 +1,6 @@
 ./base64.java
 ./MyLinwin.java
+./Init.java
 ./LinwinVOS/data/base.java
 ./LinwinVOS/data/Json.java
 ./LinwinVOS/LinwinVOS.java
@@ -21,4 +22,5 @@
 ./ThreadSocket/ThreadSocket.java
 ./OutFileSystem.java
 ./Md5Util.java
+./LogService/LogService.java
 ./InputFileSystem.java

@@ -1,6 +1,6 @@
-import LinwinVOS.FileSystem.Data;
+
 import LinwinVOS.FileSystem.VosDatabase;
-import LinwinVOS.Users.UsersFileSystem;
+import LogService.LogService;
 import LinwinVOS.data.*;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
@@ -10,15 +10,17 @@ import ThreadSocket.ThreadSocket;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class MyLinwin {
+    public static String logPath;
     public static int ServicePort;
     private static int bootNumber = 0;
+    public static int updateLog = 1000 * 60 * 60;
+    public static LogService logService = new LogService();
     private static ThreadSocket IO_Socket = new ThreadSocket();
     public static LinwinVOS linwinVOS = new LinwinVOS();
     public static void main(String[] args)
@@ -26,8 +28,11 @@ public class MyLinwin {
         /**
          * Load all the config files and start.
          */
+        Init init = new Init();
+
         MyLinwin.LoadFiles();
-        MyLinwin.RuntimeThread();
+        MyLinwin.RuntimeThread(logService);
+        init.loadLogModule();
 
         System.out.println(" [Information] Boot Linwin Data Service!");
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
@@ -56,7 +61,7 @@ public class MyLinwin {
             exception.printStackTrace();
         }
     }
-    public static void RuntimeThread() {
+    public static void RuntimeThread(LogService logService) {
         Thread runtime = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,12 +144,20 @@ public class MyLinwin {
         try{
             if (VosDatabase.getRealFileExists("../../config/service/Service.json")) {
                 String port = Json.readJson("../../config/service/Service.json","Service-Port");
+                String logPath = Json.readJson("../../config/service/Service.json","Log-Path");
+                String logUpdate = Json.readJson("../../config/service/Service.json","Update-Log");
+
                 MyLinwin.ServicePort = Integer.valueOf(port);
+                MyLinwin.logPath = logPath;
+                MyLinwin.updateLog = Integer.valueOf(logUpdate);
             }else {
                 System.out.println("[ERROR] DO NOT FIND CONFIG FILE");
             }
         }catch (Exception exception){
             System.out.println("[ERROR] "+exception.getMessage());
+            System.out.println("[ERROR] Config Error!");
+            System.out.println("[Info] Boot Failed!");
+            System.exit(0);
         }
     }
     public static void MyLinwin_Service(Socket socket,ExecutorService executorService) {
@@ -177,6 +190,7 @@ public class MyLinwin {
                     String md5_passwd = getRequests.substring(s_passwd+text_2.length(),s_command);
                     String command = getRequests.substring(s_command+text_3.length());
                     //System.out.println(logonUser+" "+md5_passwd+" "+command);
+                    MyLinwin.logService.outLog(" LOGIN="+logonUser+"  Command="+command+"  IP="+socket.getInetAddress());
 
                     if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
 
@@ -209,6 +223,7 @@ public class MyLinwin {
                 }
             }
         }catch (Exception exception){
+            //MyLinwin.logService.outLog("[ERR] "+exception.getMessage());
             exception.printStackTrace();
         }
     }

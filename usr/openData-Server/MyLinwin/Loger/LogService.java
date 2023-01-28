@@ -7,12 +7,10 @@ import java.io.File;
 
 public class LogService {
   private int NewFileWrite_Time = 1000 * 60 * 60;
-  private FileWriter fileWriter = null;
-  private String fileName = null;
-  private String setNAME;
-  public static void main(String[] args) {
-      
-  }
+  private FileWriter fileWriter;
+  public String fileName;
+  public String setNAME;
+  public String path;
   public LogService() {
   }
   public void print(String message) {
@@ -29,22 +27,26 @@ public class LogService {
   }
   public Boolean outLog(String logMessage) {
     try{
-      File file = new File(fileName);
+      File file = new File(this.fileName);
       if (!file.exists() || !file.isFile()) {
         file.createNewFile();
       }
-      fileWriter.write("{"+this.getNowTime()+"} "+logMessage);
-      fileWriter.flush();
+      this.fileWriter.write("{"+this.getNowTime()+"} "+logMessage+"\n");
+      this.fileWriter.flush();
       return true;
     }catch (Exception exception){
+      exception.printStackTrace();
       return false;
     }
   }
   public void setAutoNewLog(int time) {
     this.NewFileWrite_Time = time;
   }
+  public void setPath(String path) {
+    this.path = path;
+  }
   public void setFileName(String fileName) {
-    this.fileName = fileName + this.getNowTime() + ".log";
+    this.fileName = this.path + "/" + fileName + this.getNowTime() + ".log";
     this.setNAME = fileName;
   }
   public void run() {
@@ -59,12 +61,22 @@ public class LogService {
   private Runnable WriteRunnable() {
     while (true) {
       try{
-        this.fileWriter.close();
-        this.fileName = this.setNAME + this.getNowTime() + ".log";
+        if (this.fileWriter == null){
+          try{
+            this.fileName = this.path + "/" + this.setNAME + this.getNowTime() + ".log";
+            this.fileWriter = new FileWriter(this.fileName,true);
+            continue;
+          }catch (Exception exception){
+            exception.printStackTrace();
+          }
+        }
+        this.fileName = this.path + "/" + this.setNAME + this.getNowTime() + ".log";
         this.fileWriter = new FileWriter(this.fileName,true);
         Thread.sleep(this.NewFileWrite_Time);
       }catch (Exception exception){
         exception.printStackTrace();
+        System.out.println("[ERR] Config Error!");
+        System.exit(0);
       }
     }
   }

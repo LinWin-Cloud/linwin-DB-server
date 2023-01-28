@@ -2,8 +2,7 @@ package LinwinVOS;
 
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.Users.logon;
-import LinwinVOS.FileSystem.VosDatabase;
-
+import LogService.LogService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +12,7 @@ public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
     public static HashMap<String, UsersFileSystem> FileSystem = new HashMap<String, UsersFileSystem>();
     public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
+    public static LogService logService;
     public static String DatabasePath;
 
     public void BootSystem() {
@@ -43,5 +43,8 @@ public class LinwinVOS {
             y = y + usersFileSystem.getSize();
         }
         return y;
+    }
+    public void setLogService(LogService logService) {
+        LinwinVOS.logService = logService;
     }
 }
