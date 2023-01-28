@@ -53,11 +53,12 @@ public class Connect {
             inputStream.close();
             httpURLConnection.disconnect();
             this.Message = stringBuffer.toString();
-
-            long end = System.currentTimeMillis();
-            System.out.println(end-start+"ms");
+            return true;
         }catch (Exception exception){
             return false;
         }
+    }
+    public String getMessage() {
+        return this.Message;
     }
 }
