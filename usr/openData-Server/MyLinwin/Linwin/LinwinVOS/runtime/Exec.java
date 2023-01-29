@@ -23,10 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import LinwinVOS.runtime.lib.Index;
-import LinwinVOS.runtime.lib.Info;
-import LinwinVOS.runtime.lib.ReData;
-import LinwinVOS.runtime.lib.ReName;
+import LinwinVOS.runtime.lib.*;
 
 
 public class Exec {
@@ -500,6 +497,18 @@ public class Exec {
         return reData.reData(user,command);
     }
     public String Copy(String user,String command) {
-        return "";
+        /**
+         * 'copy' command:
+         * Copy other database's content to a database.
+         * If the target database is not exists then will create a new one.
+         *
+         * If the database was have the data in it.this optioning will add Data
+         * into database.
+         *
+         * This command is to copy all the data in the 'main' to 'hello'.
+         * [1] copy 'main' 'hello'
+         */
+        Copy copy = new Copy();
+        return copy.copy(user,command);
     }
 }

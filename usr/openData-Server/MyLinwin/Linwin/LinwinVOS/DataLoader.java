@@ -54,7 +54,7 @@ public class DataLoader {
                     vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
                     vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
                     vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
-                    vosDatabase.setSavePath("/");
+                    vosDatabase.setSavePath("/"+user+"/"+vosDatabase.getName());
 
                     /**
                      * Put the data to the database.

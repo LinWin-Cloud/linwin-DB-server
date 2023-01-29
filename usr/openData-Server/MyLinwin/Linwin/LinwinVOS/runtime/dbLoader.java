@@ -64,20 +64,11 @@ public class dbLoader {
                             String getModificationTime = getLine.substring(m + "&ModificationTime=".length(), Note);
                             String getNote = getLine.substring(Note + "&note=".length(), getLine.length());
 
-                            Data data = new Data();
-                            data.setName(getName);
-                            data.setCreateTime(getCreateTime);
-                            data.setSaveDatabase(name);
-                            data.setModificationTime(getModificationTime);
-                            data.setValue(getValue);
-                            data.setNote(getNote);
-                            list.add(data);
-                            /*
-                            int a1 = name.indexOf("'");
-                            int b1 = name.indexOf(";");
-                            int c1 = name.indexOf(".");
-                            int d1 = name.indexOf(")");
-                            int e1 = name.indexOf("(");
+                            int a1 = getName.indexOf("'");
+                            int b1 = getName.indexOf(";");
+                            int c1 = getName.indexOf(".");
+                            int d1 = getName.indexOf(")");
+                            int e1 = getName.indexOf("(");
 
                             if (a1 != -1 || b1 != -1 || c1 != -1 || d1 != -1 || e1 != -1) {
                                 continue;
@@ -91,7 +82,6 @@ public class dbLoader {
                                 data.setNote(getNote);
                                 list.add(data);
                             }
-                             */
                         }
                     }
                     return 0;

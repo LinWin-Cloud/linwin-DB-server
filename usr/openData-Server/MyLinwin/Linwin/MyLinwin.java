@@ -39,27 +39,33 @@ public class MyLinwin {
         System.out.println(" [Info ] Boot Successful!");
         MyLinwin.getServerSocketBoot();
 
-        try {
-            ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
-            ExecutorService executorService = Executors.newFixedThreadPool(2);
-            Future<Integer> integerFuture = null;
-            while (true) {
-                Socket socket = serverSocket.accept();
-                Future<Integer> future = executorService.submit(new Callable<Integer>() {
-                    @Override
-                    public Integer call() throws Exception {
-                        try{
-                            MyLinwin.MyLinwin_Service(socket,executorService);
-                        }catch (Exception exception){
-                            exception.printStackTrace();
-                        }
-                        return 0;
+        Thread HTTP_SERVICE = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
+                    ExecutorService executorService = Executors.newFixedThreadPool(2);
+                    Future<Integer> integerFuture = null;
+                    while (true) {
+                        Socket socket = serverSocket.accept();
+                        Future<Integer> future = executorService.submit(new Callable<Integer>() {
+                            @Override
+                            public Integer call() throws Exception {
+                                try{
+                                    MyLinwin.MyLinwin_Service(socket,executorService);
+                                }catch (Exception exception){
+                                    exception.printStackTrace();
+                                }
+                                return 0;
+                            }
+                        });
                     }
-                });
+                }catch (Exception exception){
+                    exception.printStackTrace();
+                }
             }
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
+        });
+        HTTP_SERVICE.start();
     }
     public static void RuntimeThread(LogService logService) {
         Thread runtime = new Thread(new Runnable() {
