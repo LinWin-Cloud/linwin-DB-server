@@ -511,4 +511,15 @@ public class Exec {
         Copy copy = new Copy();
         return copy.copy(user,command);
     }
+    public String View(String user,String command) {
+        /**
+         * 'view' command:
+         * This is a command to show all the data in the database the information
+         *
+         * Show all the data in 'main' database.
+         * [1] view 'main'
+         */
+        View view = new View();
+        return view.view(user,command);
+    }
 }

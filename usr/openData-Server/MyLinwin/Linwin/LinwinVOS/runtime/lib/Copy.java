@@ -36,6 +36,7 @@ public class Copy {
                         data.setModificationTime(Func.getNowTime());
                         TargetCopy.putData(data.getName(),data);
                     }
+                    usersFileSystem.putDatabase(target,TargetCopy);
                     return "Copy Successful!";
                 }
             }

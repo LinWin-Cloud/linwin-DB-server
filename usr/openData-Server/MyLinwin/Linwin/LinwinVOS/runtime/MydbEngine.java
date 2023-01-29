@@ -70,6 +70,9 @@ public class MydbEngine {
             else if (script.substring(0,4).equals("copy")) {
                 this.getFunction = exec.Copy(user,script);
             }
+            else if (script.substring(0,4).equals("view")) {
+
+            }
             else {
                 this.getFunction = "Error Command and Script";
             }
