@@ -494,8 +494,12 @@ public class Exec {
          *
          * (This command is to Re-modify the data cell 'hello''s value to 'hello world' from the database 'main')
          * [1] redata 'hello'.value 'hello world' in main
+         * [2] redata 'hello'.note 'hello world' in main
          */
         ReData reData = new ReData();
         return reData.reData(user,command);
+    }
+    public String Copy(String user,String command) {
+        return "";
     }
 }

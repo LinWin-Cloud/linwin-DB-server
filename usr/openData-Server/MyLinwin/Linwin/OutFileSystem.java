@@ -35,14 +35,16 @@ public class OutFileSystem {
                         HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                         for (VosDatabase vosDatabase:databases) {
                             String  DatabaseName = vosDatabase.getName();
-                            FileWriter fileWriter = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",true);
-                            FileWriter fw = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",false);
-                            fw.write("");
-                            fw.close();
+                            FileWriter fileWriter = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",false);
+                            //FileWriter fw = new FileWriter(LinwinVOS.DatabasePath+"/"+usersFileSystem.getUserName()+"/Database/"+DatabaseName+".mydb",false);
+                            //fw.write("");
+                            //fw.close();
+                            StringBuffer stringBuffer = new StringBuffer("");
                             for (Data data : vosDatabase.dataHashMap.values()) {
                                 String content = "Name="+data.getName()+"&Value="+data.getValue()+"&Type="+data.getType()+"&createTime="+data.getCreateTime()+"&ModificationTime="+data.getModificationTime()+"&note="+data.getNote()+"\n";
-                                fileWriter.write(content);
+                                stringBuffer.append(content);
                             }
+                            fileWriter.write(stringBuffer.toString());
                             fileWriter.close();
                         }
                     }catch (Exception exception){
