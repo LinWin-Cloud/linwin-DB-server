@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -39,37 +40,19 @@ public class ClientUI extends Application {
         primaryStage.setWidth(1000);
         primaryStage.setHeight(750);
 
-        try{
-            if (ReadFile.getLine("../../config/client/UIauto").replace(" ","").equals("true")) {
-                String port = Json.readJson("../../config/client/autoLogin.json","port");
-                String remote = Json.readJson("../../config/client/autoLogin.json","remote");
-                String user = Json.readJson("../../config/client/autoLogin.json","user");
-                String passwd = Json.readJson("../../config/client/autoLogin.json","passwd");
+        Label userL = new Label("Login User: "+ClientUI.userName);
+        Label remoteL = new Label("Remote Host: "+ClientUI.IP+":"+port);
+        userL.setPrefWidth(200);
+        remoteL.setPrefWidth(200);
 
-                System.out.println(port+" "+remote+" "+user+" "+passwd);
-                System.out.println(LoginAction.connectRemote(remote,user,port,passwd));
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setPrefWidth(300);
+        scrollPane.setPrefHeight(primaryStage.getHeight());
+        VBox scrollBox = new VBox();
+        scrollBox.setSpacing(5);
+        scrollBox.setPadding(new Insets(5));
+        scrollPane.setContent(scrollBox);
 
-                if (LoginAction.connectRemote(remote,user,port,passwd)) {
-                    ClientUI.userName = user;
-                    ClientUI.IP = remote;
-                    ClientUI.Passwd = passwd;
-                    ClientUI.port = port;
-
-                    primaryStage.show();
-                }else {
-                    Logon logon = new Logon();
-                    primaryStage.show();
-                    logon.start(new Stage());
-                }
-            }
-            else {
-                Logon logon = new Logon();
-                primaryStage.show();
-                logon.start(new Stage());
-            }
-        }catch (Exception exception){
-            exception.printStackTrace();
-        }
 
         GridPane gridPane = new GridPane();
         Scene scene = new Scene(gridPane);
@@ -99,47 +82,6 @@ public class ClientUI extends Application {
         project.getItems().addAll(OpenProject,Connect);
         help.getItems().addAll(doc,pro,about);
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefWidth(300);
-        scrollPane.setPrefHeight(primaryStage.getHeight());
-        VBox scrollBox = new VBox();
-        scrollBox.setSpacing(5);
-        scrollBox.setPadding(new Insets(5));
-        scrollPane.setContent(scrollBox);
-
-        Thread listDatabase = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Connect connect = new Connect();
-                        if (connect.sendMessage("list database",ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd))
-                        {
-                            String[] splitDatabase = connect.getMessage().split("\n");
-                            for (int i = 0 ; i <splitDatabase.length ; i++) {
-                                if (i == 0) {
-                                    ClientUI.dataNow = splitDatabase[i];
-                                }
-                                Button button = lib.buttonUI.button1("   "+splitDatabase[i]);
-                                button.setPrefHeight(35);
-                                button.setPrefWidth(290);
-                                button.setAlignment(Pos.BASELINE_LEFT);
-                                scrollBox.getChildren().addAll(button);
-                            }
-                        }else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Connect Error");
-                            alert.setHeaderText("Connect error");
-                            alert.setContentText("There is a error about connect to the Server");
-                            alert.showAndWait();
-                        }
-                    }
-                });
-            }
-        });
-        listDatabase.start();
-
         VBox box = new VBox();
         box.setPrefWidth(primaryStage.getWidth());
         HBox index = new HBox();
@@ -167,23 +109,97 @@ public class ClientUI extends Application {
         info.setStyle("-fx-background-color: #e2e2e2");
         info.setPadding(new Insets(10));
 
-        Label user = new Label("Login User: "+ClientUI.userName);
-        Label remote = new Label("Remote Host: "+ClientUI.IP+":"+port);
-        user.setPrefWidth(200);
-        remote.setPrefWidth(200);
-
         ScrollPane dataLoader = new ScrollPane();
         dataLoader.setPrefWidth(primaryStage.getWidth()-300);
         dataLoader.setPrefHeight(primaryStage.getHeight());
+        VBox dataBox = new VBox();
+        dataBox.setPadding(new Insets(5));
+        dataLoader.setContent(dataBox);
 
         dataPanel.getChildren().addAll(info,dataLoader);
-        info.getChildren().addAll(user,remote);
+        info.getChildren().addAll(userL,remoteL);
         toolBox.getChildren().addAll(reload,create);
         menuBar.getMenus().addAll(file,terminal,project,help);
         box.getChildren().addAll(menuBar,index);
         leftPanel.getChildren().addAll(toolBox,scrollPane);
         index.getChildren().addAll(leftPanel,dataPanel);
         gridPane.getChildren().addAll(box);
+
+        Thread listDatabase = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Connect connect = new Connect();
+                        if (connect.sendMessage("list database",ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd))
+                        {
+                            String[] splitDatabase = connect.getMessage().split("\n");
+                            for (int i = 0 ; i <splitDatabase.length ; i++) {
+                                if (i == 0) {
+                                    ClientUI.dataNow = splitDatabase[i];
+                                }
+                                Button button = lib.buttonUI.button1("   "+splitDatabase[i]);
+                                button.setPrefHeight(35);
+                                button.setPrefWidth(290);
+                                button.setAlignment(Pos.BASELINE_LEFT);
+                                button.setId(splitDatabase[i]);
+                                scrollBox.getChildren().addAll(button);
+
+                                int finalI = i;
+                                button.setOnAction((ActionEvent e) -> {
+                                    dataBox.getChildren().clear();
+                                    System.out.println(splitDatabase[finalI]);
+                                    ClientUI.dataLoader(dataBox,splitDatabase[finalI],primaryStage);
+                                });
+                            }
+                        }else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Connect Error");
+                            alert.setHeaderText("Connect error");
+                            alert.setContentText("There is a error about connect to the Server");
+                            alert.showAndWait();
+                        }
+                    }
+                });
+            }
+        });
+
+        try{
+            if (ReadFile.getLine("../../config/client/UIauto").replace(" ","").equals("true")) {
+                String port = Json.readJson("../../config/client/autoLogin.json","port");
+                String remote = Json.readJson("../../config/client/autoLogin.json","remote");
+                String user = Json.readJson("../../config/client/autoLogin.json","user");
+                String passwd = Json.readJson("../../config/client/autoLogin.json","passwd");
+
+                System.out.println(port+" "+remote+" "+user+" "+passwd);
+                System.out.println(LoginAction.connectRemote(remote,user,port,passwd));
+
+                if (LoginAction.connectRemote(remote,user,port,passwd)) {
+                    ClientUI.userName = user;
+                    ClientUI.IP = remote;
+                    ClientUI.Passwd = passwd;
+                    ClientUI.port = port;
+
+                    userL.setText("User: "+user);
+                    remoteL.setText("Remote Host: "+remote+":"+port);
+                    listDatabase.start();
+
+                    primaryStage.show();
+                }else {
+                    Logon logon = new Logon();
+                    primaryStage.show();
+                    logon.start(new Stage());
+                }
+            }
+            else {
+                Logon logon = new Logon();
+                primaryStage.show();
+                logon.start(new Stage());
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
 
         primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -206,5 +222,51 @@ public class ClientUI extends Application {
     }
     public static void main(String[] args) {
         ClientUI.launch();
+    }
+    public static void dataLoader(VBox box,String database,Stage stage) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Connect connect = new Connect();
+                        Boolean b1 = connect.sendMessage("ls "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
+                        Boolean b2 = connect.sendMessage("get *.value in "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
+                        if (b1 && b2) {
+                            String[] split = connect.getMessage().split("\n");
+                            for (int i = 0 ; i < split.length ; i++)
+                            {
+                                HBox hBox = new HBox();
+                                hBox.setPrefWidth(stage.getWidth());
+                                hBox.setStyle("" +
+                                        "-fx-border-color: black;" +
+                                        "-fx-border-width: 0.3");
+                                hBox.setMinHeight(28);
+                                hBox.setPadding(new Insets(10));
+                                hBox.setId(split[i]);
+
+                                Label name = new Label(split[i]);
+                                name.setPrefWidth(150);
+                                hBox.getChildren().addAll(name);
+
+                                VBox table1 = new VBox();
+                                VBox table2 = new VBox();
+                                VBox table3 = new VBox();
+
+                                box.getChildren().add(hBox);
+                            }
+                        }else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Connect Error");
+                            alert.setHeaderText("Connect error");
+                            alert.setContentText("There is a error about connect to the Server");
+                            alert.showAndWait();
+                        }
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 }
