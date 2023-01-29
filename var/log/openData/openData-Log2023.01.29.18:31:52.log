@@ -1,0 +1,6 @@
+{2023.01.29.18:32:07}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.01.29.18:32:10}  LOGIN=root  Command= ls 0  IP=/127.0.0.1
+{2023.01.29.18:32:51}  LOGIN=root  Command= info 0  IP=/127.0.0.1
+{2023.01.29.18:32:57}  LOGIN=root  Command= info '0'.size  IP=/127.0.0.1
+{2023.01.29.18:33:20}  LOGIN=root  Command= get 'data0'.value in 0  IP=/127.0.0.1
+{2023.01.29.18:33:45}  LOGIN=root  Command= redata 'data0'.value 'hello world' in 0  IP=/127.0.0.1
