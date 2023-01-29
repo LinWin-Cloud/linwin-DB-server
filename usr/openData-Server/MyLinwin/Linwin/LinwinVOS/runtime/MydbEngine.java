@@ -64,6 +64,9 @@ public class MydbEngine {
             }else if (script.substring(0,5).equals("index")) {
                 this.getFunction = exec.Index(user,script);
             }
+            else if(script.substring(0,7).equals("revalue")) {
+                this.getFunction = exec.ReData(user,script);
+            }
             else {
                 this.getFunction = "Error Command and Script";
             }

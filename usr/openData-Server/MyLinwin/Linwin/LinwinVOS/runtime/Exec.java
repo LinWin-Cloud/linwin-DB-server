@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 
 import LinwinVOS.runtime.lib.Index;
 import LinwinVOS.runtime.lib.Info;
+import LinwinVOS.runtime.lib.ReData;
 import LinwinVOS.runtime.lib.ReName;
 
 
@@ -338,6 +339,15 @@ public class Exec {
                 if (save == null) {
                     return "Do not find this database";
                 }else {
+                    int a1 = createName.indexOf("'");
+                    int b1 = createName.indexOf(";");
+                    int c1 = createName.indexOf(".");
+                    int d1 = createName.indexOf(")");
+                    int e1 = createName.indexOf("(");
+
+                    if (a1 != -1 || b1 != -1 || c1 != -1 || d1 != -1 || e1 != -1) {
+                        return "Mustn't have Special characters: ' ; . ( )";
+                    }
                     Data data = new Data();
                     data.setName(createName);
                     data.setCreateTime(Func.getNowTime());
@@ -473,5 +483,19 @@ public class Exec {
          */
         Index index = new Index();
         return index.IndexCommand(user,command);
+    }
+    public String ReData(String user,String command) {
+        /**
+         * 'redata' command:
+         * THis command is to revalue the data from the database.
+         * For example: you want to Re-modify the data content. You can use this command.
+         *
+         * How to use it:
+         *
+         * (This command is to Re-modify the data cell 'hello''s value to 'hello world' from the database 'main')
+         * [1] redata 'hello'.value 'hello world' in main
+         */
+        ReData reData = new ReData();
+        return reData.reData(user,command);
     }
 }

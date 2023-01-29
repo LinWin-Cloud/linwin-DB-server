@@ -25,8 +25,11 @@ public class VosDatabase {
         int charsetB = name.indexOf("\"");
         int charsetC = name.indexOf("/");
         int charsetD = name.indexOf(",");
+        int charsetE = name.indexOf("(");
+        int charsetF = name.indexOf(")");
+        int charsetG = name.indexOf(";");
 
-        if (charsetA != -1 || charsetB != -1 || charsetC != -1 || charsetD != -1){
+        if (charsetA != -1 || charsetB != -1 || charsetC != -1 || charsetD != -1 || charsetE != -1 || charsetF != -1 || charsetG != -1){
             return;
         }else {
             if (name.indexOf(" ") != -1) {
