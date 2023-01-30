@@ -71,7 +71,7 @@ public class MydbEngine {
                 this.getFunction = exec.Copy(user,script);
             }
             else if (script.substring(0,4).equals("view")) {
-
+                this.getFunction = exec.View(user,script);
             }
             else {
                 this.getFunction = "Error Command and Script";

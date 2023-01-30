@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -19,12 +20,16 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.effect.Glow;
 import javafx.scene.effect.Shadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javax.xml.bind.annotation.XmlElementDecl;
+import java.util.Arrays;
 
 
 public class ClientUI extends Application {
@@ -149,7 +154,6 @@ public class ClientUI extends Application {
                                 int finalI = i;
                                 button.setOnAction((ActionEvent e) -> {
                                     dataBox.getChildren().clear();
-                                    System.out.println(splitDatabase[finalI]);
                                     ClientUI.dataLoader(dataBox,splitDatabase[finalI],primaryStage);
                                 });
                             }
@@ -224,6 +228,7 @@ public class ClientUI extends Application {
         ClientUI.launch();
     }
     public static void dataLoader(VBox box,String database,Stage stage) {
+        box.setPadding(new Insets(20));
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -231,9 +236,41 @@ public class ClientUI extends Application {
                     @Override
                     public void run() {
                         Connect connect = new Connect();
-                        Boolean b1 = connect.sendMessage("ls "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
-                        Boolean b2 = connect.sendMessage("get *.value in "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
-                        if (b1 && b2) {
+                        Boolean b1 = connect.sendMessage("view "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
+
+                        Label title = new Label("Name");
+                        Label value = new Label("Value");
+                        Label type = new Label("Type");
+                        Label createTime = new Label("Create Time");
+                        Label updateTime = new Label("Update Time");
+                        Label note = new Label("Note");
+
+                        title.setMinWidth(80);
+                        value.setMinWidth(80);
+                        type.setMinWidth(80);
+                        createTime.setMinWidth(80);
+                        updateTime.setMinWidth(80);
+                        note.setMinWidth(80);
+
+                        HBox titleBox = new HBox();
+                        titleBox.getChildren().addAll(title,value,type,createTime,updateTime,note);
+                        box.getChildren().add(titleBox);
+                        box.setSpacing(5);
+
+                        stage.widthProperty().addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                titleBox.setPrefWidth(stage.getWidth());
+                                title.setPrefWidth((stage.getWidth()-320)/7);
+                                value.setPrefWidth((stage.getWidth()-320)/7);
+                                type.setPrefWidth((stage.getWidth()-320)/7);
+                                createTime.setPrefWidth((stage.getWidth()-320)/7);
+                                updateTime.setPrefWidth((stage.getWidth()-320)/7);
+                                note.setPrefWidth((stage.getWidth()-320)/7);
+                            }
+                        });
+
+                        if (b1) {
                             String[] split = connect.getMessage().split("\n");
                             for (int i = 0 ; i < split.length ; i++)
                             {
@@ -243,16 +280,29 @@ public class ClientUI extends Application {
                                         "-fx-border-color: black;" +
                                         "-fx-border-width: 0.3");
                                 hBox.setMinHeight(28);
-                                hBox.setPadding(new Insets(10));
+                                hBox.setPadding(new Insets(5));
                                 hBox.setId(split[i]);
 
-                                Label name = new Label(split[i]);
-                                name.setPrefWidth(150);
-                                hBox.getChildren().addAll(name);
-
-                                VBox table1 = new VBox();
-                                VBox table2 = new VBox();
-                                VBox table3 = new VBox();
+                                ClientUI.DataContentLoader(hBox,split[i],stage);
+                                stage.widthProperty().addListener(new ChangeListener<Number>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                        hBox.setPrefWidth(stage.getWidth());
+                                    }
+                                });
+                                Glow glow = new Glow();
+                                hBox.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        hBox.setEffect(glow);
+                                    }
+                                });
+                                hBox.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        hBox.setEffect(null);
+                                    }
+                                });
 
                                 box.getChildren().add(hBox);
                             }
@@ -268,5 +318,27 @@ public class ClientUI extends Application {
             }
         });
         thread.start();
+    }
+    public static void DataContentLoader(HBox box,String split,Stage stage) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String[] splitData = split.split("  |  ");
+
+                for (int j = 0 ; j < splitData.length ;j++) {
+                    Label data = new Label(splitData[j]);
+                    data.setMinWidth(50);
+
+                    stage.widthProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                            data.setPrefWidth((stage.getWidth()-320)/13);
+                        }
+                    });
+
+                    box.getChildren().add(data);
+                }
+            }
+        });
     }
 }
