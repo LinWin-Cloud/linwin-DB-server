@@ -1,0 +1,22 @@
+{2023.01.29.22:07:39}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.01.29.22:07:41}  LOGIN=root  Command= ls Love  IP=/127.0.0.1
+{2023.01.29.22:07:47}  LOGIN=root  Command= copy '1' 'Love'  IP=/127.0.0.1
+{2023.01.29.22:07:49}  LOGIN=root  Command= ls Love3  IP=/127.0.0.1
+{2023.01.29.22:07:52}  LOGIN=root  Command= ls Love  IP=/127.0.0.1
+{2023.01.29.22:08:04}  LOGIN=root  Command= ls  IP=/127.0.0.1
+{2023.01.29.22:08:08}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.01.29.22:08:26}  LOGIN=root  Command= copy '2' 'Love'  IP=/127.0.0.1
+{2023.01.29.22:08:30}  LOGIN=root  Command= ls Love  IP=/127.0.0.1
+{2023.01.29.22:08:44}  LOGIN=root  Command= delete database 'Love'  IP=/127.0.0.1
+{2023.01.29.22:08:50}  LOGIN=root  Command= delete datavase Love  IP=/127.0.0.1
+{2023.01.29.22:08:53}  LOGIN=root  Command= list databaser  IP=/127.0.0.1
+{2023.01.29.22:08:56}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.01.29.22:09:11}  LOGIN=root  Command= create database qiu  IP=/127.0.0.1
+{2023.01.29.22:09:18}  LOGIN=root  Command= create database 'qiu;  IP=/127.0.0.1
+{2023.01.29.22:09:26}  LOGIN=root  Command= create database 'qiu'  IP=/127.0.0.1
+{2023.01.29.22:09:30}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.01.29.22:09:33}  LOGIN=root  Command= ls qiu  IP=/127.0.0.1
+{2023.01.29.22:09:49}  LOGIN=root  Command= copy '0' 'qiu'  IP=/127.0.0.1
+{2023.01.29.22:09:51}  LOGIN=root  Command= ls qiu  IP=/127.0.0.1
+{2023.01.29.22:10:03}  LOGIN=root  Command= copy '2' 'qiu'  IP=/127.0.0.1
+{2023.01.29.22:10:07}  LOGIN=root  Command= ls qiu  IP=/127.0.0.1
