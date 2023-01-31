@@ -178,47 +178,6 @@ public class ClientUI extends Application {
 
         box.getChildren().addAll(outPutBox,bottomTool);
 
-        Thread listDatabase = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Connect connect = new Connect();
-                        if (connect.sendMessage("list database",ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd))
-                        {
-                            textArea.setText(textArea.getText()+"\nSuccessful Command={list database};");
-                            String[] splitDatabase = connect.getMessage().split("\n");
-                            for (int i = 0 ; i <splitDatabase.length ; i++) {
-                                if (i == 0) {
-                                    ClientUI.dataNow = splitDatabase[i];
-                                }
-                                Button button = lib.buttonUI.button1("   "+splitDatabase[i]);
-                                button.setPrefHeight(35);
-                                button.setPrefWidth(290);
-                                button.setAlignment(Pos.BASELINE_LEFT);
-                                button.setId(splitDatabase[i]);
-                                scrollBox.getChildren().addAll(button);
-
-                                int finalI = i;
-                                button.setOnAction((ActionEvent e) -> {
-                                    textArea.setText(textArea.getText()+"\nGet All Data From: "+splitDatabase[finalI]+"; ["+action.Func.getNowTime()+"]");
-                                    dataBox.getChildren().clear();
-                                    ClientUI.dataLoader(dataBox,splitDatabase[finalI],primaryStage);
-                                });
-                            }
-                        }else {
-                            textArea.setText(textArea.getText()+"\nConnect Error!");
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Connect Error");
-                            alert.setHeaderText("Connect error");
-                            alert.setContentText("There is a error about connect to the Server");
-                            alert.showAndWait();
-                        }
-                    }
-                });
-            }
-        });
 
         try{
             if (ReadFile.getLine("../../config/client/UIauto").replace(" ","").equals("true")) {
@@ -238,7 +197,7 @@ public class ClientUI extends Application {
 
                     userL.setText("User: "+user);
                     remoteL.setText("Remote Host: "+remote+":"+port);
-                    listDatabase.start();
+                    ClientUI.listDatabase(scrollBox,textArea,dataBox);
 
                     primaryStage.show();
                 }else {
@@ -275,10 +234,56 @@ public class ClientUI extends Application {
             }
         });
     }
+    public static void listDatabase(VBox scrollBox,TextArea textArea,VBox dataBox) {
+        Thread listDatabase = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Connect connect = new Connect();
+                        if (connect.sendMessage("list database",ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd))
+                        {
+                            textArea.setText(textArea.getText()+"\nSuccessful Command={list database};");
+                            String[] splitDatabase = connect.getMessage().split("\n");
+                            for (int i = 0 ; i <splitDatabase.length ; i++) {
+                                if (i == 0) {
+                                    ClientUI.dataNow = splitDatabase[i];
+                                }
+                                Button button = lib.buttonUI.button1("   "+splitDatabase[i]);
+                                button.setPrefHeight(35);
+                                button.setPrefWidth(290);
+                                button.setAlignment(Pos.BASELINE_LEFT);
+                                button.setId(splitDatabase[i]);
+                                scrollBox.getChildren().addAll(button);
+
+                                int finalI = i;
+                                button.setOnAction((ActionEvent e) -> {
+                                    scrollBox.getChildren().clear();
+                                    ClientUI.listDatabase(scrollBox,textArea,dataBox);
+                                    textArea.setText(textArea.getText()+"\nGet All Data From: "+splitDatabase[finalI]+"; ["+action.Func.getNowTime()+"]");
+                                    dataBox.getChildren().clear();
+                                    ClientUI.dataLoader(dataBox,splitDatabase[finalI],ClientUI.stage,textArea);
+                                });
+                            }
+                        }else {
+                            textArea.setText(textArea.getText()+"\nConnect Error!");
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Connect Error");
+                            alert.setHeaderText("Connect error");
+                            alert.setContentText("There is a error about connect to the Server");
+                            alert.showAndWait();
+                        }
+                    }
+                });
+            }
+        });
+        listDatabase.start();
+    }
     public static void main(String[] args) {
         ClientUI.launch();
     }
-    public static void dataLoader(VBox box,String database,Stage stage) {
+    public static void dataLoader(VBox box,String database,Stage stage,TextArea logOut) {
         box.setPadding(new Insets(20));
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -387,6 +392,8 @@ public class ClientUI extends Application {
                                                     "Note="+note);
 
                                             DataOptions dataOptions = new DataOptions();
+                                            dataOptions.setBox(hBox,logOut);
+                                            dataOptions.setDatabase(database);
                                             dataOptions.setData(name,type,update,createTime,value,note);
                                             dataOptions.setID(hBox.getId());
                                             dataOptions.start(new Stage());

@@ -1,12 +1,11 @@
 import action.Func;
+import connect.Connect;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,11 +20,17 @@ public class DataOptions extends Application {
     private String note;
     private String update;
     private String createTime;
+    private HBox boxPanel;
+    private String database;
+    private TextArea logOut;
     public void setID(String id) {
         this.dataID = id;
     }
     public String getDataID() {
         return this.dataID;
+    }
+    public void setDatabase(String database) {
+        this.database = database;
     }
     public void setData(String name,String type,String update,String createTime,String value,String note) {
         this.name = Func.replaceHead(name);
@@ -34,6 +39,10 @@ public class DataOptions extends Application {
         this.createTime = Func.replaceHead(createTime);
         this.value = Func.replaceHead(value);
         this.note = Func.replaceHead(note);
+    }
+    public void setBox(HBox hBox,TextArea logOut) {
+        this.boxPanel = hBox;
+        this.logOut = logOut;
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -83,6 +92,36 @@ public class DataOptions extends Application {
         bottomBtn.getChildren().addAll(exit,ok);
         bottomBtn.setSpacing(10);
 
+        exit.setOnAction((ActionEvent e) ->{
+            primaryStage.close();
+        });
+        ok.setOnAction((ActionEvent e)->{
+            String getName = nameText.getText();
+            String getValue = valueText.getText();
+            String getNote = noteText.getText();
+
+           if (getName.equals(this.name) && getValue.equals(this.value) && getNote.equals(this.note)) {
+               primaryStage.close();
+           }else if (getName.equals(this.name) && getValue.equals(this.value)) {
+                /**
+                 * Can reData the 'note';
+                 */
+               String command = "redata '"+this.name+"'.note '"+getNote+"' in "+this.database;
+                Connect connect = new Connect();
+                Boolean b = connect.sendMessage(command,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
+                if (b){
+                    //logOut.setText(logOut.getText()+"\nConnect to server successful [Update Data From: "+this.database+"]");
+                    logOut.setText(logOut.getText()+"\n"+"["+Func.getNowTime()+"] ["+this.database+"] "+connect.getMessage());
+                    primaryStage.close();
+                }else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Connect Error");
+                    alert.setHeaderText("Connect error");
+                    alert.setContentText("There is a error about connect to the Server");
+                    alert.showAndWait();
+                }
+           }
+        });
         name.getChildren().addAll(nameLabel,nameText);
         value.getChildren().addAll(valueLabel,valueText);
         note.getChildren().addAll(noteLabel,noteText);
