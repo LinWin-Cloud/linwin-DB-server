@@ -71,6 +71,7 @@ public class Logon extends Application {
                     String Port = LoginAction.port.getText();
 
                     if (LoginAction.connectRemote(remote,Login,Port,Passwd)) {
+
                         if (autoLogin.isSelected()) {
                             String json = "{\n" +
                                     "  \"port\" : \""+Port+"\",\n" +

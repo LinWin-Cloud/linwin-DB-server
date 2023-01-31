@@ -25,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -39,6 +40,7 @@ public class ClientUI extends Application {
     public static String IP = "";
     public static Stage stage;
     public static String dataNow = "";
+    public static TextArea logOut;
     @Override
     public void start(Stage primaryStage) throws Exception {
         ClientUI.stage = primaryStage;
@@ -121,7 +123,23 @@ public class ClientUI extends Application {
         dataBox.setPadding(new Insets(5));
         dataLoader.setContent(dataBox);
 
-        dataPanel.getChildren().addAll(info,dataLoader);
+        Label label = new Label("Select Database and next.");
+        label.setFont(Font.font(30));
+        label.setEffect(new Glow());
+        dataBox.getChildren().addAll(label);
+
+        HBox tableOption = new HBox();
+        tableOption.setPrefWidth(primaryStage.getWidth());
+        tableOption.setPadding(new Insets(10));
+        tableOption.setSpacing(10);
+
+        Button createData = lib.buttonUI.button1("Create the Data");
+        Button deleteData = lib.buttonUI.button1("Delete the Data");
+        Button reData = lib.buttonUI.button1("Modify the Data");
+
+        tableOption.getChildren().addAll(createData,deleteData,reData);
+
+        dataPanel.getChildren().addAll(info,tableOption,dataLoader);
         info.getChildren().addAll(userL,remoteL);
         toolBox.getChildren().addAll(reload,create);
         menuBar.getMenus().addAll(file,terminal,project,help);
@@ -129,6 +147,38 @@ public class ClientUI extends Application {
         leftPanel.getChildren().addAll(toolBox,scrollPane);
         index.getChildren().addAll(leftPanel,dataPanel);
         gridPane.getChildren().addAll(box);
+
+        VBox outPutBox = new VBox();
+        outPutBox.setPrefWidth(primaryStage.getWidth());
+        outPutBox.setPrefHeight(160);
+        outPutBox.setAlignment(Pos.CENTER);
+
+        TextArea textArea = new TextArea();
+        textArea.setPrefHeight(primaryStage.getWidth());
+        textArea.setMinHeight(130);
+        textArea.setStyle("" +
+                "-fx-border-color: black;" +
+                "-fx-border-width: 0.3;" +
+                "-fx-background-color: #ccc");
+        textArea.setEditable(false);
+        ClientUI.logOut = textArea;
+
+        outPutBox.getChildren().addAll(textArea);
+
+        HBox bottomTool = new HBox();
+        bottomTool.setPadding(new Insets(0,0,0,10));
+        bottomTool.setSpacing(10);
+
+        Button clear = lib.buttonUI.button1("Clean Log");
+        bottomTool.getChildren().addAll(clear);
+
+        clear.setOnAction((ActionEvent e) -> {
+            textArea.setText("== Clean ==");
+        });
+
+        textArea.setText(textArea.getText()+"\nLogin={"+ClientUI.userName+"} ; Remote={"+ClientUI.IP+":"+ClientUI.port+"}");
+
+        box.getChildren().addAll(outPutBox,bottomTool);
 
         Thread listDatabase = new Thread(new Runnable() {
             @Override
@@ -139,6 +189,7 @@ public class ClientUI extends Application {
                         Connect connect = new Connect();
                         if (connect.sendMessage("list database",ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd))
                         {
+                            textArea.setText(textArea.getText()+"\nSuccessful Command={list database};");
                             String[] splitDatabase = connect.getMessage().split("\n");
                             for (int i = 0 ; i <splitDatabase.length ; i++) {
                                 if (i == 0) {
@@ -153,11 +204,13 @@ public class ClientUI extends Application {
 
                                 int finalI = i;
                                 button.setOnAction((ActionEvent e) -> {
+                                    textArea.setText(textArea.getText()+"\nGet All Data From: "+splitDatabase[finalI]+"; ["+action.Func.getNowTime()+"]");
                                     dataBox.getChildren().clear();
                                     ClientUI.dataLoader(dataBox,splitDatabase[finalI],primaryStage);
                                 });
                             }
                         }else {
+                            textArea.setText(textArea.getText()+"\nConnect Error!");
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Connect Error");
                             alert.setHeaderText("Connect error");
@@ -238,11 +291,11 @@ public class ClientUI extends Application {
                         Connect connect = new Connect();
                         Boolean b1 = connect.sendMessage("view "+database,ClientUI.IP,Integer.valueOf(port),ClientUI.userName,ClientUI.Passwd);
 
-                        Label title = new Label("Name");
-                        Label value = new Label("Value");
-                        Label type = new Label("Type");
-                        Label createTime = new Label("Create Time");
-                        Label updateTime = new Label("Update Time");
+                        Label title = new Label("Name | ");
+                        Label value = new Label("Value | ");
+                        Label type = new Label("Type | ");
+                        Label createTime = new Label("Create Time | ");
+                        Label updateTime = new Label("Update Time | ");
                         Label note = new Label("Note");
 
                         title.setMinWidth(80);
@@ -278,7 +331,8 @@ public class ClientUI extends Application {
                                 hBox.setPrefWidth(stage.getWidth());
                                 hBox.setStyle("" +
                                         "-fx-border-color: black;" +
-                                        "-fx-border-width: 0.3");
+                                        "-fx-border-width: 0.3;" +
+                                        "-fx-background-color: white");
                                 hBox.setMinHeight(28);
                                 hBox.setPadding(new Insets(5));
                                 hBox.setId(split[i]);
@@ -295,12 +349,20 @@ public class ClientUI extends Application {
                                     @Override
                                     public void handle(MouseEvent event) {
                                         hBox.setEffect(glow);
+                                        hBox.setStyle("" +
+                                                "-fx-border-color: black;" +
+                                                "-fx-border-width: 0.3;"+
+                                                "-fx-background-color: #ccc");
                                     }
                                 });
                                 hBox.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent event) {
                                         hBox.setEffect(null);
+                                        hBox.setStyle("" +
+                                                "-fx-border-color: black;" +
+                                                "-fx-border-width: 0.3;"+
+                                                "-fx-background-color: white");
                                     }
                                 });
 
