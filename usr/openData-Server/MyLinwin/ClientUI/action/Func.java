@@ -16,5 +16,21 @@ public class Func {
             return "";
         }
     }
+    public static String replaceHead(String str) {
+        try{
+            int length = str.length();
+            String code = "";
+            for (int i = 0 ; i < length ; i++) {
+                String charset = str.substring(i,i+1);
+                if (!charset.equals(" ")) {
+                    code = str.substring(i);
+                    break;
+                }
+            }
+            return code;
+        }catch (Exception exception){
+            return str;
+        }
+    }
 }
 

@@ -30,7 +30,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.xml.bind.annotation.XmlElementDecl;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 
 public class ClientUI extends Application {
@@ -69,7 +72,6 @@ public class ClientUI extends Application {
         menuBar.setPrefWidth(primaryStage.getWidth());
         Menu file = new Menu("File");
         Menu terminal = new Menu("Terminal");
-        Menu project = new Menu("Project");
         Menu help = new Menu("Help");
 
         MenuItem close = new MenuItem("Exit");
@@ -77,16 +79,12 @@ public class ClientUI extends Application {
         MenuItem showTerminal = new MenuItem("New LinwinDB Terminal");
         MenuItem command = new MenuItem("Command");
 
-        MenuItem OpenProject = new MenuItem("Open Project");
-        MenuItem Connect = new MenuItem("Connect");
-
         MenuItem doc = new MenuItem("Document");
         MenuItem pro = new MenuItem("Linwin Data Server Project");
         MenuItem about = new MenuItem("About");
 
         file.getItems().addAll(close);
         terminal.getItems().addAll(showTerminal,command);
-        project.getItems().addAll(OpenProject,Connect);
         help.getItems().addAll(doc,pro,about);
 
         VBox box = new VBox();
@@ -142,7 +140,7 @@ public class ClientUI extends Application {
         dataPanel.getChildren().addAll(info,tableOption,dataLoader);
         info.getChildren().addAll(userL,remoteL);
         toolBox.getChildren().addAll(reload,create);
-        menuBar.getMenus().addAll(file,terminal,project,help);
+        menuBar.getMenus().addAll(file,terminal,help);
         box.getChildren().addAll(menuBar,index);
         leftPanel.getChildren().addAll(toolBox,scrollPane);
         index.getChildren().addAll(leftPanel,dataPanel);
@@ -335,7 +333,7 @@ public class ClientUI extends Application {
                                         "-fx-background-color: white");
                                 hBox.setMinHeight(28);
                                 hBox.setPadding(new Insets(5));
-                                hBox.setId(split[i]);
+                                hBox.setId(split[i].split("  |  ")[0]);
 
                                 ClientUI.DataContentLoader(hBox,split[i],stage);
                                 stage.widthProperty().addListener(new ChangeListener<Number>() {
@@ -363,6 +361,38 @@ public class ClientUI extends Application {
                                                 "-fx-border-color: black;" +
                                                 "-fx-border-width: 0.3;"+
                                                 "-fx-background-color: white");
+                                    }
+                                });
+                                int finalI = i;
+                                hBox.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        try{
+                                            System.out.println(split[finalI]);
+                                            String Data = split[finalI];
+                                            String[] splitData = Data.split("  |  ");
+
+                                            System.out.println(new ArrayList<String>(Arrays.asList(splitData)));
+                                            String name = splitData[0];
+                                            String value = splitData[2];
+                                            String type = splitData[4];
+                                            String createTime = splitData[6];
+                                            String update = splitData[8];
+                                            String note = splitData[10];
+                                            System.out.println("Name="+name+";\n" +
+                                                    "Value="+value+";\n" +
+                                                    "Type="+type+";\n" +
+                                                    "CreateTime="+createTime+";\n" +
+                                                    "Update="+update+";\n" +
+                                                    "Note="+note);
+
+                                            DataOptions dataOptions = new DataOptions();
+                                            dataOptions.setData(name,type,update,createTime,value,note);
+                                            dataOptions.setID(hBox.getId());
+                                            dataOptions.start(new Stage());
+                                        }catch (Exception exception){
+                                            exception.printStackTrace();
+                                        }
                                     }
                                 });
 
