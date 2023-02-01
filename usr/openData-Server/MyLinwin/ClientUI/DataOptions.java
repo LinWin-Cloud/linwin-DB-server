@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.util.Optional;
+
 public class DataOptions extends Application {
     private String dataID;
     private String name;
@@ -23,6 +25,7 @@ public class DataOptions extends Application {
     private HBox boxPanel;
     private String database;
     private TextArea logOut;
+    private VBox box;
     public void setID(String id) {
         this.dataID = id;
     }
@@ -33,24 +36,34 @@ public class DataOptions extends Application {
         this.database = database;
     }
     public void setData(String name,String type,String update,String createTime,String value,String note) {
+        /*
         this.name = Func.replaceHead(name);
         this.type = Func.replaceHead(type);
         this.update = Func.replaceHead(update);
         this.createTime = Func.replaceHead(createTime);
         this.value = Func.replaceHead(value);
         this.note = Func.replaceHead(note);
+         */
+        this.name = name;
+        this.type = type;
+        this.update = update;
+        this.createTime = createTime;
+        this.value = value;
+        this.note = note;
     }
-    public void setBox(HBox hBox,TextArea logOut) {
+    public void setBox(HBox hBox,TextArea logOut,VBox box) {
         this.boxPanel = hBox;
         this.logOut = logOut;
+        this.box = box;
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.initOwner(ClientUI.stage);
+        primaryStage.requestFocus();
         primaryStage.setWidth(380);
         primaryStage.setHeight(300);
         primaryStage.setTitle("Edit: "+this.dataID+" -");
         primaryStage.setResizable(false);
-        primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
 
         GridPane gridPane = new GridPane();
@@ -87,10 +100,39 @@ public class DataOptions extends Application {
 
         HBox bottomBtn = new HBox();
 
+        Button delete = lib.buttonUI.button1("Delete");
         Button exit = lib.buttonUI.button1("Cancel");
         Button ok = lib.buttonUI.button1("OK");
-        bottomBtn.getChildren().addAll(exit,ok);
+        bottomBtn.getChildren().addAll(delete,exit,ok);
         bottomBtn.setSpacing(10);
+
+        delete.setOnAction((ActionEvent e)->{
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Dialog!");
+            alert.setContentText("Do you want to delete: "+this.name);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                // ... user chose OK
+                Connect connect = new Connect();
+                Boolean b = connect.sendMessage("delete data '"+this.name+"' in "+this.database,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
+                if (b) {
+                    this.box.getChildren().clear();
+                    ClientUI.dataLoader(this.box,database,ClientUI.stage,this.logOut);
+                    this.logOut.setText(this.logOut.getText()+"\n"+"Successful! ["+Func.getNowTime()+"]");
+                    primaryStage.close();
+                }else {
+                    Alert alerts = new Alert(Alert.AlertType.ERROR);
+                    alerts.setTitle("Connect Error");
+                    alerts.setHeaderText("Connect error");
+                    alerts.setContentText("There is a error about connect to the Server");
+                    alerts.showAndWait();
+                }
+            } else {
+                // ... user chose CANCEL or closed the dialog
+            }
+        });
 
         exit.setOnAction((ActionEvent e) ->{
             primaryStage.close();
@@ -102,11 +144,11 @@ public class DataOptions extends Application {
 
            if (getName.equals(this.name) && getValue.equals(this.value) && getNote.equals(this.note)) {
                primaryStage.close();
-           }else if (getName.equals(this.name) && getValue.equals(this.value)) {
+           }else if (getName.equals(this.name) && getValue.equals(this.value) && !getNote.equals(this.note)) {
                 /**
                  * Can reData the 'note';
                  */
-               String command = "redata '"+this.name+"'.note '"+getNote+"' in "+this.database;
+                String command = "redata '"+this.name+"'.note '"+getNote+"' in "+this.database;
                 Connect connect = new Connect();
                 Boolean b = connect.sendMessage(command,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
                 if (b){
@@ -121,6 +163,62 @@ public class DataOptions extends Application {
                     alert.showAndWait();
                 }
            }
+           else if (getName.equals(this.name) && getNote.equals(this.note) && !getValue.equals(this.value)) {
+               String command = "redata '"+this.name+"'.value '"+getValue+"' in "+this.database;
+               Connect connect = new Connect();
+               Boolean b = connect.sendMessage(command,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
+               if (b){
+                   //logOut.setText(logOut.getText()+"\nConnect to server successful [Update Data From: "+this.database+"]");
+                   logOut.setText(logOut.getText()+"\n"+"["+Func.getNowTime()+"] ["+this.database+"] "+connect.getMessage());
+                   primaryStage.close();
+               }else {
+                   Alert alert = new Alert(Alert.AlertType.ERROR);
+                   alert.setTitle("Connect Error");
+                   alert.setHeaderText("Connect error");
+                   alert.setContentText("There is a error about connect to the Server");
+                   alert.showAndWait();
+               }
+           }
+           else if (!getName.equals(this.name) && getNote.equals(this.note) && getValue.equals(this.value)) {
+               String command = "rename data '"+this.name+"' '"+getName+"' in "+this.database;
+               Connect connect = new Connect();
+               Boolean b = connect.sendMessage(command,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
+               if (b){
+                   //logOut.setText(logOut.getText()+"\nConnect to server successful [Update Data From: "+this.database+"]");
+                   logOut.setText(logOut.getText()+"\n"+"["+Func.getNowTime()+"] ["+this.database+"] "+connect.getMessage());
+                   //ClientUI.dataLoader(box,dataID,ClientUI.stage,this.logOut);
+                   primaryStage.close();
+               }else {
+                   Alert alert = new Alert(Alert.AlertType.ERROR);
+                   alert.setTitle("Connect Error");
+                   alert.setHeaderText("Connect error");
+                   alert.setContentText("There is a error about connect to the Server");
+                   alert.showAndWait();
+               }
+           }else {
+               String command = "redata '" + this.name + "'.value '" + getValue + "' in " + this.database;
+               String command1 = "redata '" + this.name + "'.note '" + getNote + "' in " + this.database;
+               String command2 = "rename data '" + this.name + "' '" + getName + "' in " + this.database;
+               Connect connect = new Connect();
+               Connect connect1 = new Connect();
+               Connect connect2 = new Connect();
+               Boolean b = connect.sendMessage(command, ClientUI.IP, Integer.valueOf(ClientUI.port), ClientUI.userName, ClientUI.Passwd);
+               connect1.sendMessage(command1, ClientUI.IP, Integer.valueOf(ClientUI.port), ClientUI.userName, ClientUI.Passwd);
+               connect2.sendMessage(command2, ClientUI.IP, Integer.valueOf(ClientUI.port), ClientUI.userName, ClientUI.Passwd);
+               if (b) {
+                   //logOut.setText(logOut.getText()+"\nConnect to server successful [Update Data From: "+this.database+"]");
+                   logOut.setText(logOut.getText() + "\n" + "[" + Func.getNowTime() + "] [" + this.database + "] " + connect.getMessage());
+                   primaryStage.close();
+               } else {
+                   Alert alert = new Alert(Alert.AlertType.ERROR);
+                   alert.setTitle("Connect Error");
+                   alert.setHeaderText("Connect error");
+                   alert.setContentText("There is a error about connect to the Server");
+                   alert.showAndWait();
+               }
+           }
+           this.box.getChildren().clear();
+           ClientUI.dataLoader(this.box,this.database,ClientUI.stage,this.logOut);
         });
         name.getChildren().addAll(nameLabel,nameText);
         value.getChildren().addAll(valueLabel,valueText);

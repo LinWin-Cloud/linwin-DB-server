@@ -83,6 +83,13 @@ public class Logon extends Application {
                             ReadFile.writeFile("../../config/client/autoLogin.json",json);
                         }
                         primaryStage.close();
+                        ClientUI.stage.close();
+                        ClientUI clientUI = new ClientUI();
+                        try{
+                            clientUI.start(new Stage());
+                        }catch (Exception exception){
+                            exception.printStackTrace();
+                        }
                     }else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Login Error");

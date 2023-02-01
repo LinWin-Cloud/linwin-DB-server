@@ -12,7 +12,7 @@ public class ReName {
     public String reName(String user,String command) {
         /**
          * 'rename' command:
-         * This command is tor rename the database or the data.
+         * This command is to rename the database or the data.
          * For example: The database name cell 'hello' , you can use
          * this command rename it to 'world'.
          *

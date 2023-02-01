@@ -95,6 +95,23 @@ public class ClientUI extends Application {
         leftPanel.setPrefWidth(300);
         leftPanel.setStyle("-fx-background-color: #f7f7f7");
 
+        TextArea textArea = new TextArea();
+        textArea.setPrefHeight(primaryStage.getWidth());
+        textArea.setMinHeight(130);
+        textArea.setStyle("" +
+                "-fx-border-color: black;" +
+                "-fx-border-width: 0.3;" +
+                "-fx-background-color: #ccc");
+        textArea.setEditable(false);
+
+        ScrollPane dataLoader = new ScrollPane();
+        dataLoader.setPrefWidth(primaryStage.getWidth()-300);
+        dataLoader.setPrefHeight(primaryStage.getHeight());
+
+        VBox dataBox = new VBox();
+        dataBox.setPadding(new Insets(5));
+        dataLoader.setContent(dataBox);
+
         HBox toolBox =new HBox();
         toolBox.setPrefWidth(300);
         toolBox.setMinHeight(35);
@@ -106,6 +123,10 @@ public class ClientUI extends Application {
         Button reload = lib.buttonUI.button1("Reload");
         Button create = lib.buttonUI.button1("Create");
 
+        reload.setOnAction((ActionEvent e) -> {
+            ClientUI.listDatabase(scrollBox,textArea,dataBox);
+        });
+
         VBox dataPanel = new VBox();
         dataPanel.setPrefWidth(primaryStage.getWidth()-300);
         HBox info = new HBox();
@@ -114,30 +135,12 @@ public class ClientUI extends Application {
         info.setStyle("-fx-background-color: #e2e2e2");
         info.setPadding(new Insets(10));
 
-        ScrollPane dataLoader = new ScrollPane();
-        dataLoader.setPrefWidth(primaryStage.getWidth()-300);
-        dataLoader.setPrefHeight(primaryStage.getHeight());
-        VBox dataBox = new VBox();
-        dataBox.setPadding(new Insets(5));
-        dataLoader.setContent(dataBox);
-
         Label label = new Label("Select Database and next.");
         label.setFont(Font.font(30));
         label.setEffect(new Glow());
         dataBox.getChildren().addAll(label);
 
-        HBox tableOption = new HBox();
-        tableOption.setPrefWidth(primaryStage.getWidth());
-        tableOption.setPadding(new Insets(10));
-        tableOption.setSpacing(10);
-
-        Button createData = lib.buttonUI.button1("Create the Data");
-        Button deleteData = lib.buttonUI.button1("Delete the Data");
-        Button reData = lib.buttonUI.button1("Modify the Data");
-
-        tableOption.getChildren().addAll(createData,deleteData,reData);
-
-        dataPanel.getChildren().addAll(info,tableOption,dataLoader);
+        dataPanel.getChildren().addAll(info,dataLoader);
         info.getChildren().addAll(userL,remoteL);
         toolBox.getChildren().addAll(reload,create);
         menuBar.getMenus().addAll(file,terminal,help);
@@ -151,14 +154,6 @@ public class ClientUI extends Application {
         outPutBox.setPrefHeight(160);
         outPutBox.setAlignment(Pos.CENTER);
 
-        TextArea textArea = new TextArea();
-        textArea.setPrefHeight(primaryStage.getWidth());
-        textArea.setMinHeight(130);
-        textArea.setStyle("" +
-                "-fx-border-color: black;" +
-                "-fx-border-width: 0.3;" +
-                "-fx-background-color: #ccc");
-        textArea.setEditable(false);
         ClientUI.logOut = textArea;
 
         outPutBox.getChildren().addAll(textArea);
@@ -177,8 +172,6 @@ public class ClientUI extends Application {
         textArea.setText(textArea.getText()+"\nLogin={"+ClientUI.userName+"} ; Remote={"+ClientUI.IP+":"+ClientUI.port+"}");
 
         box.getChildren().addAll(outPutBox,bottomTool);
-
-
         try{
             if (ReadFile.getLine("../../config/client/UIauto").replace(" ","").equals("true")) {
                 String port = Json.readJson("../../config/client/autoLogin.json","port");
@@ -259,6 +252,7 @@ public class ClientUI extends Application {
 
                                 int finalI = i;
                                 button.setOnAction((ActionEvent e) -> {
+                                    ClientUI.dataNow = button.getId();
                                     scrollBox.getChildren().clear();
                                     ClientUI.listDatabase(scrollBox,textArea,dataBox);
                                     textArea.setText(textArea.getText()+"\nGet All Data From: "+splitDatabase[finalI]+"; ["+action.Func.getNowTime()+"]");
@@ -285,6 +279,28 @@ public class ClientUI extends Application {
     }
     public static void dataLoader(VBox box,String database,Stage stage,TextArea logOut) {
         box.setPadding(new Insets(20));
+
+        HBox tableOption = new HBox();
+        tableOption.setPrefWidth(stage.getWidth());
+        tableOption.setPadding(new Insets(10));
+        tableOption.setSpacing(10);
+
+        Button createData = lib.buttonUI.button1("Create the Data");
+        tableOption.getChildren().addAll(createData);
+
+        createData.setOnAction((ActionEvent e)-> {
+            CreateData createDataWin = new CreateData();
+            try{
+                System.out.println("Select="+ClientUI.dataNow);
+                createDataWin.setDatabase(ClientUI.dataNow);
+                createDataWin.setBox(logOut,box);
+                createDataWin.start(new Stage());
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
+
+        box.getChildren().add(tableOption);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -392,7 +408,7 @@ public class ClientUI extends Application {
                                                     "Note="+note);
 
                                             DataOptions dataOptions = new DataOptions();
-                                            dataOptions.setBox(hBox,logOut);
+                                            dataOptions.setBox(hBox,logOut,box);
                                             dataOptions.setDatabase(database);
                                             dataOptions.setData(name,type,update,createTime,value,note);
                                             dataOptions.setID(hBox.getId());
