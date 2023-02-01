@@ -26,10 +26,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.xml.bind.annotation.XmlElementDecl;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,21 +73,66 @@ public class ClientUI extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.setPrefWidth(primaryStage.getWidth());
         Menu file = new Menu("File");
-        Menu terminal = new Menu("Terminal");
         Menu help = new Menu("Help");
 
         MenuItem close = new MenuItem("Exit");
-
-        MenuItem showTerminal = new MenuItem("New LinwinDB Terminal");
-        MenuItem command = new MenuItem("Command");
 
         MenuItem doc = new MenuItem("Document");
         MenuItem pro = new MenuItem("Linwin Data Server Project");
         MenuItem about = new MenuItem("About");
 
         file.getItems().addAll(close);
-        terminal.getItems().addAll(showTerminal,command);
         help.getItems().addAll(doc,pro,about);
+
+        close.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                primaryStage.close();
+                System.exit(0);
+            }
+        });
+        about.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage aboutStage = new Stage();
+                aboutStage.setWidth(700);
+                aboutStage.setHeight(530);
+                aboutStage.setResizable(false);
+
+                GridPane gridPane1 = new GridPane();
+                Scene scene1 = new Scene(gridPane1);
+                aboutStage.setScene(scene1);
+
+                WebView webView = new WebView();
+                webView.getEngine().load("file://"+new File("../../default/about/about.html").getAbsolutePath());
+                webView.setPrefWidth(aboutStage.getWidth());
+                webView.setPrefHeight(aboutStage.getHeight());
+                gridPane1.getChildren().add(webView);
+
+                aboutStage.show();
+            }
+        });
+        doc.setOnAction((ActionEvent e) -> {
+
+        });
+        pro.setOnAction((ActionEvent e) -> {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(java.awt.Desktop.isDesktopSupported()){
+                        try{
+                            java.net.URI uri=java.net.URI.create("https://gitee.com/LinwinSoft/linwin-DB-server/");
+                            java.awt.Desktop dp=java.awt.Desktop.getDesktop();
+                            if(dp.isSupported(java.awt.Desktop.Action.BROWSE)){
+                                dp.browse(uri);
+                            }
+                        }catch (Exception exception){
+                            exception.printStackTrace();
+                        }
+                    }
+                }
+            });thread.start();
+        });
 
         VBox box = new VBox();
         box.setPrefWidth(primaryStage.getWidth());
@@ -124,7 +171,19 @@ public class ClientUI extends Application {
         Button create = lib.buttonUI.button1("Create");
 
         reload.setOnAction((ActionEvent e) -> {
+            scrollBox.getChildren().clear();
             ClientUI.listDatabase(scrollBox,textArea,dataBox);
+        });
+        create.setOnAction((ActionEvent e) -> {
+            CreateDatabase createDatabase = new CreateDatabase();
+            try{
+                createDatabase.setListDatabase(scrollBox,dataBox);
+                createDatabase.setDatabase(ClientUI.dataNow);
+                createDatabase.setBox(logOut,box);
+                createDatabase.start(new Stage());
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
         });
 
         VBox dataPanel = new VBox();
@@ -143,7 +202,7 @@ public class ClientUI extends Application {
         dataPanel.getChildren().addAll(info,dataLoader);
         info.getChildren().addAll(userL,remoteL);
         toolBox.getChildren().addAll(reload,create);
-        menuBar.getMenus().addAll(file,terminal,help);
+        menuBar.getMenus().addAll(file,help);
         box.getChildren().addAll(menuBar,index);
         leftPanel.getChildren().addAll(toolBox,scrollPane);
         index.getChildren().addAll(leftPanel,dataPanel);
@@ -292,7 +351,7 @@ public class ClientUI extends Application {
             CreateData createDataWin = new CreateData();
             try{
                 System.out.println("Select="+ClientUI.dataNow);
-                createDataWin.setDatabase(ClientUI.dataNow);
+                createDataWin.setDatabase(database);
                 createDataWin.setBox(logOut,box);
                 createDataWin.start(new Stage());
             }catch (Exception exception){

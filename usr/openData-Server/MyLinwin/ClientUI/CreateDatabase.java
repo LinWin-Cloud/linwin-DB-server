@@ -54,12 +54,20 @@ public class CreateDatabase extends Application {
         this.logOut = logOut;
         this.box = box;
     }
+
+    private VBox scrollBox;
+    private VBox dataBox;
+
+    public void setListDatabase(VBox scrollBox,VBox dataBox) {
+        this.scrollBox = scrollBox;
+        this.dataBox = dataBox;
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.initOwner(ClientUI.stage);
         primaryStage.setTitle("Create new Data");
         primaryStage.setWidth(380);
-        primaryStage.setHeight(240);
+        primaryStage.setHeight(180);
         primaryStage.setResizable(false);
         primaryStage.show();
 
@@ -80,20 +88,10 @@ public class CreateDatabase extends Application {
         HBox note = new HBox();
 
         Label nameLabel = new Label("Name: ");
-        Label valueLabel = new Label("Value: ");
-        Label noteLabel = new Label("Note: ");
-
         nameLabel.setPrefWidth(100);
-        valueLabel.setPrefWidth(100);
-        noteLabel.setPrefWidth(100);
 
         TextField nameText = new TextField();
-        TextField valueText = new TextField();
-        TextField noteText = new TextField();
-
         nameText.setPrefWidth(260);
-        valueText.setPrefWidth(260);
-        noteText.setPrefWidth(260);
 
         Button cancel = lib.buttonUI.button1("Cancel");
         Button ok = lib.buttonUI.button1("OK");
@@ -102,38 +100,28 @@ public class CreateDatabase extends Application {
         bottomBox.getChildren().addAll(cancel,ok);
 
         name.getChildren().addAll(nameLabel,nameText);
-        value.getChildren().addAll(valueLabel,valueText);
-        note.getChildren().addAll(noteLabel,noteText);
 
+        box.getChildren().addAll(label,name,value,note,bottomBox);
+        gridPane.getChildren().addAll(box);
+
+        cancel.setOnAction((ActionEvent e) -> {
+            primaryStage.close();
+        });
         ok.setOnAction((ActionEvent e) -> {
             String getName = nameText.getText();
-            String getValue = valueText.getText();
-            String getNote = noteText.getText();
-            if (getName.equals("") || getValue.equals("") || getNote.equals("")) {
-                CreateData.showFunc();
+            if (getName == null || getName.replace(" ","").equals("")) {
+                CreateDatabase.showFunc();
             }
-            if (getName == null || getValue == null || getNote == null){
-                CreateData.showFunc();
-            }else if (
-                    getName.replace(" ","").equals("")||
-                            getValue.replace(" ","").equals("")||
-                            getNote.replace(" ","").equals("")
-            )
-            {
-                CreateData.showFunc();
+            if (getName.indexOf(" ") != -1) {
+                CreateDatabase.showFunc();
             }
             else {
                 Connect connect = new Connect();
-                Boolean b = connect.sendMessage("create data '"+getName+"' setting('"+getValue+"','"+getNote+"') in "+this.database,ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
-                System.out.println("create data '"+getName+"' setting('"+getValue+"','"+getNote+"') in "+ClientUI.dataNow);
+                Boolean b = connect.sendMessage("create database '"+getName+"'",ClientUI.IP,Integer.valueOf(ClientUI.port),ClientUI.userName,ClientUI.Passwd);
                 if (b) {
-                    this.box.getChildren().clear();
-                    ClientUI.dataLoader(this.box,this.database,ClientUI.stage,this.logOut);
-                    this.logOut.setText(this.logOut.getText()+"\n"+"Successful ["+ Func.getNowTime()+"]");
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Information");
-                    alert.setContentText("Create Successful!");
-                    alert.showAndWait();
+                    this.logOut.setText(this.logOut.getText()+"\nResult="+connect.getMessage());
+                    this.scrollBox.getChildren().clear();
+                    ClientUI.listDatabase(this.scrollBox,this.logOut,this.dataBox);
                     primaryStage.close();
                 }else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -144,12 +132,6 @@ public class CreateDatabase extends Application {
                 }
             }
         });
-        cancel.setOnAction((ActionEvent e) -> {
-            primaryStage.close();
-        });
-
-        box.getChildren().addAll(label,name,value,note,bottomBox);
-        gridPane.getChildren().addAll(box);
     }
     public static void showFunc() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
