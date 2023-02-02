@@ -30,7 +30,7 @@ public class View {
                     stringBuffer.append("   |   ");
                     stringBuffer.append("\n");
                 }
-                return stringBuffer.toString();
+                return stringBuffer.toString()+"\n";
             }
         }catch (Exception exception){
             return "Command syntax error!";

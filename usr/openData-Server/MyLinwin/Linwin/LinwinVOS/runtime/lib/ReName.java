@@ -49,7 +49,7 @@ public class ReName {
                         data.setModificationTime(Func.getNowTime());
                         vosDatabase.removeData(lastName);
                         vosDatabase.putData(NewName,data);
-                        return "Rename Successful!";
+                        return "Rename Successful!\n";
                     }
                 }
             }else {
@@ -69,7 +69,7 @@ public class ReName {
                    vosDatabase.setModificationTime(Func.getNowTime());
                    usersFileSystem.deleteDataBase(NewWord);
                    usersFileSystem.putDatabase(NewWord,vosDatabase);
-                   return "Rename Successful!";
+                   return "Rename Successful!\n";
                }
             }
         }catch (Exception exception){

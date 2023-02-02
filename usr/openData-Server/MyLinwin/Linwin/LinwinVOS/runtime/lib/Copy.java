@@ -29,7 +29,7 @@ public class Copy {
                     vosDatabase.setModificationTime(Func.getNowTime());
                     usersFileSystem.putDatabase(target,vosDatabase);
 
-                    return "Copy Successful!";
+                    return "Copy Successful!\n";
                 }
                 else {
                     for (Data data : database.getListData()) {
@@ -37,7 +37,7 @@ public class Copy {
                         TargetCopy.putData(data.getName(),data);
                     }
                     usersFileSystem.putDatabase(target,TargetCopy);
-                    return "Copy Successful!";
+                    return "Copy Successful!\n";
                 }
             }
         }catch (Exception exception){

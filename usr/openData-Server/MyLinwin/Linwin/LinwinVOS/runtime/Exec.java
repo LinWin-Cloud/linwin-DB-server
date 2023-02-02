@@ -41,13 +41,17 @@ public class Exec {
          *
          * List all the databases on users group.
          */
-        String list = "";
+        StringBuffer list = new StringBuffer("");
         UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
         HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
         for (VosDatabase vosDatabase : databases) {
-            list = list + vosDatabase.getName() + "\n";
+            list.append(vosDatabase.getName());
+            list.append("\n");
         }
-        return list;
+        if (list.toString().equals("")) {
+            return list.toString()+"\n";
+        }
+        return list.toString();
     }
     public String Find(String user,String command) {
         /**
@@ -355,7 +359,7 @@ public class Exec {
                     LinwinVOS.FileSystem.get(user).get(saveDatabase).putData(createName,data);
                     LinwinVOS.FileSystem.get(user).get(saveDatabase).setModificationTime(Func.getNowTime());
 
-                    return "Create Successful!";
+                    return "Create Successful!\n";
                 }
             }catch (Exception exception){
                 return "Command syntax error!";
@@ -372,7 +376,7 @@ public class Exec {
 
                 usersFileSystem.putDatabase(createName,vosDatabase);
                 new File(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb").createNewFile();
-                return "Create Successful!";
+                return "Create Successful!\n";
             }catch (Exception exception){
                 return "Do not create new database in the Physical Path";
             }
@@ -421,7 +425,7 @@ public class Exec {
                         return "Do not have this database!";
                     } else {
                         vosDatabase.removeData(dataName);
-                        return "Delete Successful!";
+                        return "Delete Successful!\n";
                     }
                 } else {
                     String getName = splitCommand[2];
@@ -433,7 +437,7 @@ public class Exec {
                             usersFileSystem.deleteDataBase(getName);
                             File file = new File(LinwinVOS.DatabasePath + "/" + user + "/Database/" + getName + ".mydb");
                             if (file.delete()) {
-                                return "Delete Successful!";
+                                return "Delete Successful!\n";
                             } else {
                                 return "Do have Permissions to delete Target File";
                             }
