@@ -1,0 +1,17 @@
+{2023.02.02.15:54:04}  LOGIN=root  Command=list database  IP=/127.0.0.1
+{2023.02.02.15:54:18}  LOGIN=root  Command=list database  IP=/127.0.0.1
+{2023.02.02.15:55:29}  LOGIN=root  Command=list database  IP=/127.0.0.1
+{2023.02.02.15:56:04}  LOGIN=root  Command=list database  IP=/127.0.0.1
+{2023.02.02.15:56:27}  LOGIN=root  Command= create database 1  IP=/127.0.0.1
+{2023.02.02.15:56:43}  LOGIN=root  Command=create database 'qiuyuxuan'  IP=/127.0.0.1
+{2023.02.02.15:57:23}  LOGIN=root  Command=create database 'qiuyuxuan'  IP=/127.0.0.1
+{2023.02.02.15:58:41}  LOGIN=root  Command=create database 'name'  IP=/127.0.0.1
+{2023.02.02.15:58:49}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.02.02.15:58:53}  LOGIN=root  Command= delete 0  IP=/127.0.0.1
+{2023.02.02.15:58:55}  LOGIN=root  Command= delete &*  IP=/127.0.0.1
+{2023.02.02.15:58:58}  LOGIN=root  Command= delete *  IP=/127.0.0.1
+{2023.02.02.15:59:03}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.02.02.15:59:55}  LOGIN=root  Command= create database '1'  IP=/127.0.0.1
+{2023.02.02.15:59:57}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.02.02.16:00:45}  LOGIN=root  Command= delete *  IP=/127.0.0.1
+{2023.02.02.16:00:49}  LOGIN=root  Command=list database  IP=/127.0.0.1
