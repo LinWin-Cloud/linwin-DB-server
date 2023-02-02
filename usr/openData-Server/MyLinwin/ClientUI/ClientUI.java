@@ -113,7 +113,22 @@ public class ClientUI extends Application {
             }
         });
         doc.setOnAction((ActionEvent e) -> {
-
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if(java.awt.Desktop.isDesktopSupported()){
+                        try{
+                            java.net.URI uri=java.net.URI.create("https://gitee.com/LinwinSoft/Linwin-DB-Server/wikis");
+                            java.awt.Desktop dp=java.awt.Desktop.getDesktop();
+                            if(dp.isSupported(java.awt.Desktop.Action.BROWSE)){
+                                dp.browse(uri);
+                            }
+                        }catch (Exception exception){
+                            exception.printStackTrace();
+                        }
+                    }
+                }
+            });thread.start();
         });
         pro.setOnAction((ActionEvent e) -> {
             Thread thread = new Thread(new Runnable() {
@@ -344,8 +359,11 @@ public class ClientUI extends Application {
         tableOption.setPadding(new Insets(10));
         tableOption.setSpacing(10);
 
+        Label name = new Label("Database: "+database);
+        name.setFont(Font.font(20));
+
         Button createData = lib.buttonUI.button1("Create the Data");
-        tableOption.getChildren().addAll(createData);
+        tableOption.getChildren().addAll(createData,name);
 
         createData.setOnAction((ActionEvent e)-> {
             CreateData createDataWin = new CreateData();
