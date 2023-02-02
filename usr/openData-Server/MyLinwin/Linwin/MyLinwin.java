@@ -10,6 +10,7 @@ import ThreadSocket.ThreadSocket;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +24,8 @@ public class MyLinwin {
     public static LogService logService = new LogService();
     private static ThreadSocket IO_Socket = new ThreadSocket();
     public static LinwinVOS linwinVOS = new LinwinVOS();
+    public static int safeConnection = 500;
+    public static HashMap<String,Integer> safeVisit = new HashMap<String, Integer>();
     public static void main(String[] args)
     {
         /**
@@ -52,6 +55,17 @@ public class MyLinwin {
                             @Override
                             public Integer call() throws Exception {
                                 try{
+                                    Integer integer = MyLinwin.safeVisit.get(socket.getInetAddress().toString());
+                                    if (integer == null) {
+                                        MyLinwin.safeVisit.put(socket.getInetAddress().toString(),1);
+                                    }else {
+                                        int s = integer;
+                                        if (s >= MyLinwin.safeConnection) {
+                                            socket.close();
+                                            return 1;
+                                        }
+                                        MyLinwin.safeVisit.put(socket.getInetAddress().toString(),MyLinwin.safeVisit.get(socket.getInetAddress().toString())+1);
+                                    }
                                     MyLinwin.MyLinwin_Service(socket,executorService);
                                 }catch (Exception exception){
                                     exception.printStackTrace();
@@ -77,6 +91,21 @@ public class MyLinwin {
         runtime.start();
 
         String ioSocket = "false";
+
+        Thread safeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try{
+                        Thread.sleep(1000*15);
+                        MyLinwin.safeVisit.clear();
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
+            }
+        });
+        safeThread.start();
 
         Thread outData = new Thread(new Runnable() {
             @Override
@@ -152,12 +181,14 @@ public class MyLinwin {
                 String port = Json.readJson("../../config/service/Service.json","Service-Port");
                 String logPath = Json.readJson("../../config/service/Service.json","Log-Path");
                 String logUpdate = Json.readJson("../../config/service/Service.json","Update-Log");
+                String safeConnection = Json.readJson("../../config/service/Service.json","Connection Frequency");
 
                 MyLinwin.ServicePort = Integer.valueOf(port);
                 MyLinwin.logPath = logPath;
                 MyLinwin.updateLog = Integer.valueOf(logUpdate);
+                MyLinwin.safeConnection = Integer.valueOf(safeConnection);
             }else {
-                System.out.println("[ERROR] DO NOT FIND CONFIG FILE");
+                System.out.println("[ERROR] DO NOT FIND CONFIG FILE OF CONFIG FILE ERROR!");
             }
         }catch (Exception exception){
             System.out.println("[ERROR] "+exception.getMessage());

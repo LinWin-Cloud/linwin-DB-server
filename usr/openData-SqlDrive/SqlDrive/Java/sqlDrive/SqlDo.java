@@ -69,4 +69,31 @@ public class SqlDo {
             return null;
         }
     }
+    public boolean copyDatabase(String name,String target) {
+        return sqlDrive.sendCommand("copy '"+name+"' '"+target+"'");
+    }
+    public String infoDatabase(String name,String type) {
+        boolean b = sqlDrive.sendCommand("info '"+name+"'."+type);
+        if (b) {
+            return sqlDrive.getMessage().replace("\n","");
+        }else {
+            return null;
+        }
+    }
+    public String[] listDatabase() {
+        boolean b = sqlDrive.sendCommand("list database");
+        if (b) {
+            return sqlDrive.getMessage().split("\n");
+        }else {
+            return null;
+        }
+    }
+    public String[] getAllData_FromDatabase(String database) {
+        boolean b = sqlDrive.sendCommand("ls "+database);
+        if (b) {
+            return sqlDrive.getMessage().split("\n");
+        }else {
+            return null;
+        }
+    }
 }

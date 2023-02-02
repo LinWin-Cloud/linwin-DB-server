@@ -1,5 +1,6 @@
 {
   "Service-Port" : "8888",
   "Log-Path" : "../../../../var/log/openData/",
-  "Update-Log" : "3600000"
+  "Update-Log" : "3600000",
+  "Connection Frequency" : "500"
 }
