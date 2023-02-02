@@ -1,0 +1,4 @@
+#! /bin/bash
+
+cd /usr/openData-Server/MydbShell/Shell
+python3 MydbShell.py
