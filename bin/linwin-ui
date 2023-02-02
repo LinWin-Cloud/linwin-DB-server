@@ -1,0 +1,4 @@
+#! /bin/bash
+
+cd /usr/openData-Server/release/out/
+java -jar ClientUI.jar
