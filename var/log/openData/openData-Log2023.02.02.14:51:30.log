@@ -1,7 +1,0 @@
-{2023.02.02.14:52:05}  LOGIN=root  Command= list database  IP=/127.0.0.1
-{2023.02.02.14:52:13}  LOGIN=root  Command= ls helloworld  IP=/127.0.0.1
-{2023.02.02.14:56:52}  LOGIN=root  Command= create database 1  IP=/127.0.0.1
-{2023.02.02.14:56:56}  LOGIN=root  Command= create database '1'  IP=/127.0.0.1
-{2023.02.02.14:59:02}  LOGIN=root  Command= delete database 1  IP=/127.0.0.1
-{2023.02.02.14:59:06}  LOGIN=root  Command= list databaser  IP=/127.0.0.1
-{2023.02.02.14:59:09}  LOGIN=root  Command= list database  IP=/127.0.0.1
