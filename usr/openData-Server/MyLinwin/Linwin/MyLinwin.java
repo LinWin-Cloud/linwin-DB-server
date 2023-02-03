@@ -218,10 +218,6 @@ public class MyLinwin {
                 int s_passwd = getRequests.indexOf(text_2);
                 int s_command = getRequests.indexOf(text_3);
                // System.out.println(s_logon+" "+s_command+" "+s_passwd);
-                printWriter.println("HTTP/1.1 200 OK");
-                printWriter.println("Content-Type: text/html");
-                printWriter.println();
-                printWriter.flush();
                 if (s_logon != -1 && s_passwd != -1 && s_command != -1 && s_passwd > s_logon && s_passwd < s_command) {
                     String logonUser = getRequests.substring(s_logon+text_1.length(),s_passwd);
                     String md5_passwd = getRequests.substring(s_passwd+text_2.length(),s_command);
@@ -231,27 +227,68 @@ public class MyLinwin {
 
                     if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
 
+                        /**
+                         * Shutdown the LinwinSQL
+                         */
+                        if (command.equals("shutdown") && logonUser.equals("root")) {
+                            printWriter.println("HTTP/1.1 200 OK");
+                            printWriter.println("Content-Type: text/plain");
+                            printWriter.println();
+                            printWriter.println("Shutdown Successful!");
+                            printWriter.flush();
+                            socket.close();
+                            System.exit(0);
+                        }else if (command.equals("shutdown") && !logonUser.equals("root")) {
+                            printWriter.println("HTTP/1.1 400 OK");
+                            printWriter.println("Content-Type: text/plain");
+                            printWriter.println();
+                            printWriter.println("Only 'root' user can shutdown the Sql System");
+                            printWriter.flush();
+                            socket.close();
+                            return;
+                        }
+                        printWriter.println("HTTP/1.1 200 OK");
+                        printWriter.println("Content-Type: text/plain");
+                        printWriter.println();
+                        printWriter.flush();
+
                         MydbEngine mydbEngine = new MydbEngine();
                         mydbEngine.setUser(logonUser);
                         mydbEngine.execLdbScript(command,logonUser);
                         mydbEngine.setExecutorService(executorService);
 
                         if (mydbEngine.getReturn() == null) {
+                            printWriter.println("HTTP/1.1 200 OK");
+                            printWriter.println("Content-Type: text/plain");
+                            printWriter.println();
+                            printWriter.flush();
                             printWriter.println("Error Command and Script");
                             outputStream.flush();
                             socket.close();
                         }else {
+                            printWriter.println("HTTP/1.1 200 OK");
+                            printWriter.println("Content-Type: text/plain");
+                            printWriter.println();
+                            printWriter.flush();
                             printWriter.println(mydbEngine.getReturn());
                             printWriter.flush();
                             socket.close();
                             printWriter.close();
                         }
                     }else {
+                        printWriter.println("HTTP/1.1 200 OK");
+                        printWriter.println("Content-Type: text/plain");
+                        printWriter.println();
+                        printWriter.flush();
                         printWriter.println("Passwd Or UserName Error!");
                         printWriter.flush();
                         socket.close();
                     }
                 }else {
+                    printWriter.println("HTTP/1.1 200 OK");
+                    printWriter.println("Content-Type: text/plain");
+                    printWriter.println();
+                    printWriter.flush();
                     printWriter.println("Send Message Error");
                     printWriter.flush();
                     printWriter.close();
