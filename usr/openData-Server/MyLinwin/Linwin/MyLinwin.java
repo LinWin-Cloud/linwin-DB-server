@@ -258,25 +258,17 @@ public class MyLinwin {
                         mydbEngine.setExecutorService(executorService);
 
                         if (mydbEngine.getReturn() == null) {
-                            printWriter.println("HTTP/1.1 200 OK");
-                            printWriter.println("Content-Type: text/plain");
-                            printWriter.println();
-                            printWriter.flush();
                             printWriter.println("Error Command and Script");
                             outputStream.flush();
                             socket.close();
                         }else {
-                            printWriter.println("HTTP/1.1 200 OK");
-                            printWriter.println("Content-Type: text/plain");
-                            printWriter.println();
-                            printWriter.flush();
                             printWriter.println(mydbEngine.getReturn());
                             printWriter.flush();
                             socket.close();
                             printWriter.close();
                         }
                     }else {
-                        printWriter.println("HTTP/1.1 200 OK");
+                        printWriter.println("HTTP/1.1 400 OK");
                         printWriter.println("Content-Type: text/plain");
                         printWriter.println();
                         printWriter.flush();
@@ -285,10 +277,9 @@ public class MyLinwin {
                         socket.close();
                     }
                 }else {
-                    printWriter.println("HTTP/1.1 200 OK");
+                    printWriter.println("HTTP/1.1 400 OK");
                     printWriter.println("Content-Type: text/plain");
                     printWriter.println();
-                    printWriter.flush();
                     printWriter.println("Send Message Error");
                     printWriter.flush();
                     printWriter.close();
