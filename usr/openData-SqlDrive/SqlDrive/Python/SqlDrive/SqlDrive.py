@@ -46,4 +46,37 @@ class SQL_DO(object):
     def deleteData(self,name:str,database:str) -> bool:
         return self.sendMysScript("delete data '"+str(name)+"' in "+database)
 
+    def reNameDatabase(self,name:str,NewName:str) -> bool:
+        return self.sendMysScript("rename database '"+name+"' '"+NewName+"'")
     
+    def reNameData(self,name:str,NewName:str,database:str) -> bool:
+        return self.sendMysScript("rename data '"+name+"' '"+NewName+"' in "+database)
+
+    def createDatabase(self,name:str) -> bool:
+        return self.sendMysScript("create database '"+name+"'")
+
+    def createData(self,name:str,database:str) -> bool:
+        return self.sendMysScript("create data '"+name+"' in "+database)
+
+    def findDatabase(self,index:str) -> list[str]:
+        self.sendMysScript("find database "+index)
+        return self.getMessage().split("\n")
+
+    def findData(self,index:str) -> list[str]:
+        self.sendMysScript("find data "+index)
+        return self.getMessage().split("\n")
+
+    def getData(self,dataName:str,type:str,database:str) -> str:
+        self.sendMysScript("get '"+dataName+"'."+type+" in"+database)
+        return self.getMessage().replace("\n","")
+
+    def indexData(self,index:str,database:str) -> list[str]:
+        self.sendMysScript("index '"+index+"' in "+database)
+        return self.getMessage().split("\n")
+
+    def copyDatabase(self,name:str,target:str) -> bool:
+        return self.sendMysScript("copy '"+name+"' '"+target+"'")
+
+    def getAlldata_FromDatabase(self,database:str) -> list[str]:
+        self.sendMysScript("ls "+database)
+        return self.getMessage().split("\n")
