@@ -21,7 +21,7 @@ public class LogService {
     this.print("{"+type+"} Message= "+message+" ;["+this.getNowTime()+"]");
   }
   public String getNowTime() {
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     java.util.Date date = new Date(System.currentTimeMillis());
     return simpleDateFormat.format(date);
   }
