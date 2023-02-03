@@ -4,7 +4,7 @@ Priority: standard
 Depends: tar
 Suggests:
 Architecture: amd64
-Installed-Size: 4096
+Installed-Size: 88166
 Maintainer: LinwinSoft
 Section: utils
 Description: LinwinSoft openData Server SQL
