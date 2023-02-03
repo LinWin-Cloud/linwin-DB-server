@@ -18,6 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/release" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-SqlDrive/SqlDrive/Java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Loger" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/BootLinwinSQL" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/usr/openData-Server/out" />
     </content>
