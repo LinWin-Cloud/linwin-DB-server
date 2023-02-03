@@ -12,9 +12,9 @@ Login = {
 
 /**
  * 
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! hello
+ * hello , this is a comment
  */
 
-var a = 'list database'
+var a = 'helloDB'
 
-
+create database '$a'
