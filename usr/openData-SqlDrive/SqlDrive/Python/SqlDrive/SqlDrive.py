@@ -1,4 +1,5 @@
 import requests
+import time
 import hashlib
 
 class SQL_DO(object):
@@ -16,12 +17,15 @@ class SQL_DO(object):
         #print(str(self.Remote)+"/?Logon="+str(self.userName)+"?Passwd="+str(self.add_MD5(self.Passwd))+"?Command="+script)
         r = requests.get(str(self.Remote)+"/?Logon="+str(self.userName)+"?Passwd="+str(self.add_MD5(self.Passwd))+"?Command="+script)
         getText = r.text
-        split = getText.split("\n")
+        split:list[str] = getText.split("\n")
         message:str = ""
         j = 0
+        splitADD:list[str] = []
         for i in split:
-            j = j + 1
-            message = message + str(i) + "\n"
+            j += 1
+            splitADD.append(str(i)+"\n")
+
+        message = message.join(splitADD)
         
         j = j - 1
         self.Message = message

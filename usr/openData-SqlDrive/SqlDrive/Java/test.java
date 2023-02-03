@@ -7,9 +7,9 @@ public class test {
         sqlDrive.setPasswd("123456");
         sqlDrive.setUserName("root");
         SqlDo sqlDo = new SqlDo(sqlDrive);
-        String[] a = sqlDo.listDatabase();
-        for (String i : a) {
-            System.out.println(" - "+i);
-        }
+        long s = System.currentTimeMillis();
+        System.out.println(sqlDo.findData("d").length);
+        long e = System.currentTimeMillis();
+        System.out.println(e-s);
     }
 }
