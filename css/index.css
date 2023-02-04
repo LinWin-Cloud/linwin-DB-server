@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.view {
+    height: 30px;
+    box-shadow: 0px 0px 5px black;
+    border: none;
+    background-color: white;
+    transition: all 0.3s ease;
+    margin: 10px;
+}
+.view:hover{
+    box-shadow: 0px 10px 20px black;
+}
+.logo{
+    width: 430px;
+    height: 150px;
+    background-image: url(../img/logo1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+.v{
+    width: 330px;
+    height: 330px;
+    box-shadow: 0px 0px 5px black;
+    background-color: white;
+    border: none;
+    margin: 10px;
+    transition: all 0.3s ease;
+}
+.v:hover{
+    box-shadow: 0px 0px 10px black;
+}
