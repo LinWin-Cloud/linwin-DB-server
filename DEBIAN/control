@@ -1,0 +1,12 @@
+Package: com.openData-Server.LinwinSoft
+Version: 1.0-2023.2.1
+Priority: standard
+Depends: tar
+Suggests:
+Architecture: amd64
+Installed-Size: 88166
+Maintainer: LinwinSoft
+Section: utils
+Description: LinwinSoft openData Server SQL
+
+

@@ -1,0 +1,20 @@
+Login = {
+ "remote" : "127.0.0.1",
+ "port" : "8888",
+ "user" : "root",
+ "passwd" : "123456"
+}
+/**
+ *
+ * hello world
+
+//list database
+
+/**
+ * 
+ * hello , this is a comment
+ */
+
+var a = 'helloDB'
+
+create database '$a'

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Data" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/MyLinwin/Linwin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MyLinwin/client" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/release" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/MyLinwin/ClientUI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MyLinwin/Mys-Script" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SqlDrive/Java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/Data" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/ClientUI" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Linwin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Mys-Script" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/client" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/release" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-SqlDrive/SqlDrive/Java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/Loger" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/MyLinwin/BootLinwinSQL" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/usr/openData-Server/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

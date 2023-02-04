@@ -1,0 +1,4 @@
+#! /bin/bash
+
+cd /usr/openData-Server/MydbShell/Shell/
+python3 linwinsql.py $1 $2 $3 $4
