@@ -73,6 +73,25 @@ public class MydbEngine {
             else if (script.substring(0,4).equals("view")) {
                 this.getFunction = exec.View(user,script);
             }
+            else if (script.substring(0,8).equals("shutdown")) {
+                if (exec.shutdownDatabase(user)) {
+                    this.getFunction = "Shutdown successful";
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Thread.sleep(500);
+                                System.exit(0);
+                            }catch (Exception exception){
+                                exception.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                }else {
+                    this.getFunction = "Only root user can shutdown the database";
+                }
+            }
             else {
                 this.getFunction = "Error Command and Script";
             }

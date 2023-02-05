@@ -227,27 +227,9 @@ public class MyLinwin {
 
                     if (logon.Logon_LinwinVOS(logonUser,md5_passwd)) {
 
-                        /**
-                         * Shutdown the LinwinSQL
-                         */
-                        if (command.equals("shutdown") && logonUser.equals("root")) {
-                            printWriter.println("HTTP/1.1 200 OK");
-                            printWriter.println("Content-Type: text/plain");
-                            printWriter.println();
-                            printWriter.println("Shutdown Successful!");
-                            printWriter.flush();
-                            socket.close();
-                            System.exit(0);
-                        }else if (command.equals("shutdown") && !logonUser.equals("root")) {
-                            printWriter.println("HTTP/1.1 400 OK");
-                            printWriter.println("Content-Type: text/plain");
-                            printWriter.println();
-                            printWriter.println("Only 'root' user can shutdown the Sql System");
-                            printWriter.flush();
-                            socket.close();
-                            return;
-                        }
                         printWriter.println("HTTP/1.1 200 OK");
+                        printWriter.println("Access-Control-Allow-Headers: *");
+                        printWriter.println("Access-Control-Allow-Origin: *");
                         printWriter.println("Content-Type: text/plain");
                         printWriter.println();
                         printWriter.flush();
@@ -269,6 +251,8 @@ public class MyLinwin {
                         }
                     }else {
                         printWriter.println("HTTP/1.1 400 OK");
+                        printWriter.println("Access-Control-Allow-Headers: *");
+                        printWriter.println("Access-Control-Allow-Origin: *");
                         printWriter.println("Content-Type: text/plain");
                         printWriter.println();
                         printWriter.flush();
@@ -278,6 +262,8 @@ public class MyLinwin {
                     }
                 }else {
                     printWriter.println("HTTP/1.1 400 OK");
+                    printWriter.println("Access-Control-Allow-Headers: *");
+                    printWriter.println("Access-Control-Allow-Origin: *");
                     printWriter.println("Content-Type: text/plain");
                     printWriter.println();
                     printWriter.println("Send Message Error");

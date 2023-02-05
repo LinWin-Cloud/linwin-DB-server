@@ -35,6 +35,16 @@ public class Exec {
     public void setFuture(ExecutorService executorService) {
         this.executorService = executorService;
     }
+    public boolean shutdownDatabase(String user) {
+        /**
+         * Shutdown the LinwinSQL
+         */
+        if (user.equals("root")) {
+            return true;
+        }else {
+            return false;
+        }
+    }
     public String listDatabase(String user) {
         /**
          * 'list database' Command:
