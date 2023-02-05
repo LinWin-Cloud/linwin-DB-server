@@ -1,0 +1,10 @@
+{2023.02.04.05.40.10}  LOGIN=root  Command=list databse  IP=/172.31.128.1
+{2023.02.04.05.40.15}  LOGIN=root  Command=list database  IP=/172.31.128.1
+{2023.02.04.05.40.41}  LOGIN=root  Command=create database 'linwin'  IP=/172.31.128.1
+{2023.02.04.05.40.45}  LOGIN=root  Command=list database  IP=/172.31.128.1
+{2023.02.04.05.56.57}  LOGIN=root  Command=create database 'linwin'  IP=/172.31.128.1
+{2023.02.04.05.57.18}  LOGIN=root  Command=list database  IP=/172.31.128.1
+{2023.02.04.05.58.21}  LOGIN=root  Command=create data 'asdf' setting('value','somenote') in linwin  IP=/172.31.128.1
+{2023.02.04.05.58.42}  LOGIN=root  Command=ls linwin  IP=/172.31.128.1
+{2023.02.04.05.58.54}  LOGIN=root  Command=copy linwin zmh  IP=/172.31.128.1
+{2023.02.04.05.59.03}  LOGIN=root  Command=create database 'zmh'  IP=/172.31.128.1
