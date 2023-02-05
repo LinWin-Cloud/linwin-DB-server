@@ -154,7 +154,7 @@ public class MyLinwin {
                 }
             }
         });
-        outData.start();
+        //outData.start();
     }
     public static void getServerSocketBoot() {
         try{

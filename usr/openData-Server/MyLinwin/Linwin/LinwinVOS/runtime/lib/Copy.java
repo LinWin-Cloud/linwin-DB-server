@@ -4,6 +4,7 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
+import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.Func;
 public class Copy {
     public String copy(String user,String command) {
@@ -29,6 +30,7 @@ public class Copy {
                     vosDatabase.setModificationTime(Func.getNowTime());
                     usersFileSystem.putDatabase(target,vosDatabase);
 
+                    OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                     return "Copy Successful!\n";
                 }
                 else {
@@ -37,6 +39,7 @@ public class Copy {
                         TargetCopy.putData(data.getName(),data);
                     }
                     usersFileSystem.putDatabase(target,TargetCopy);
+                    OutPutFileSystem.writeDatabase(TargetCopy.getName(),user);
                     return "Copy Successful!\n";
                 }
             }

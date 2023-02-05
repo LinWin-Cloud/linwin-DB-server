@@ -4,6 +4,7 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
+import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.Func;
 
 public class ReData {
@@ -30,10 +31,12 @@ public class ReData {
                     if (type.equals("value")) {
                         getData.setValue(content);
                         getData.setModificationTime(Func.getNowTime());
+                        OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Successful!\n";
                     }if (type.equals("note")) {
                         getData.setNote(content);
                         getData.setModificationTime(Func.getNowTime());
+                        OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Successful!\n";
                     }else {
                         return "Error Type!";

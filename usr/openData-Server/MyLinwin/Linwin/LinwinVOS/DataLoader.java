@@ -8,6 +8,7 @@ import LinwinVOS.runtime.dbLoader;
 import LinwinVOS.data.base;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,30 +50,29 @@ public class DataLoader {
                     /**
                      * Use asynchronous to load all the users' databases.
                      */
-                    VosDatabase vosDatabase = new VosDatabase();
-                    vosDatabase.setUser(user);
-                    vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
-                    vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
-                    vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
-                    vosDatabase.setSavePath("/"+user+"/"+vosDatabase.getName());
+                    try{
+                        VosDatabase vosDatabase = new VosDatabase();
+                        vosDatabase.setUser(user);
+                        vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
+                        vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
+                        vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
+                        vosDatabase.setSavePath("/Database/"+user+"/"+vosDatabase.getName());
 
-                    /**
-                     * Put the data to the database.
-                     */
-                    Thread LoadDatabaseThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dbLoader loader = new dbLoader();
-                            List<Data> list = loader.LoadDB(listDataBase[I].getAbsolutePath());
-                            for (int j = 0 ; j < list.size() ; j++){
-                                //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
-                                vosDatabase.putData(list.get(j).getName(),list.get(j));
-                            }
-                            String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
-                            usersFileSystem.putDatabase(name,vosDatabase);
+                        LinwinVOS.outPutMap.put(vosDatabase.getName(),new FileWriter(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb",true));
+                        /**
+                         * Put the data to the database.
+                         */
+                        dbLoader loader = new dbLoader();
+                        List<Data> list = loader.LoadDB(listDataBase[I].getAbsolutePath(),vosDatabase.getSavePath());
+                        for (int j = 0 ; j < list.size() ; j++){
+                            //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
+                            vosDatabase.putData(list.get(j).getName(),list.get(j));
                         }
-                    });
-                    LoadDatabaseThread.start();
+                        String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
+                        usersFileSystem.putDatabase(name,vosDatabase);
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
                 }
                 continue;
             }

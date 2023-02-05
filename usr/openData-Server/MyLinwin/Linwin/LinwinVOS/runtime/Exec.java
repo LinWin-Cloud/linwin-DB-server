@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.lib.*;
 
 
@@ -369,6 +370,10 @@ public class Exec {
                     LinwinVOS.FileSystem.get(user).get(saveDatabase).putData(createName,data);
                     LinwinVOS.FileSystem.get(user).get(saveDatabase).setModificationTime(Func.getNowTime());
 
+                    StringBuffer writePath = new StringBuffer(LinwinVOS.DatabasePath+"/"+user+"/Database/"+createName+".mydb");
+                    //LinwinVOS.outPutMap.put(createName,new FileWriter(writePath.toString(),false));
+                    OutPutFileSystem.writeDatabase(saveDatabase,user);
+
                     return "Create Successful!\n";
                 }
             }catch (Exception exception){
@@ -386,6 +391,7 @@ public class Exec {
 
                 usersFileSystem.putDatabase(createName,vosDatabase);
                 new File(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb").createNewFile();
+                LinwinVOS.outPutMap.put(createName,new FileWriter(LinwinVOS.DatabasePath+"/"+user+"/Database/"+createName+".mydb"));
                 return "Create Successful!\n";
             }catch (Exception exception){
                 return "Do not create new database in the Physical Path";
@@ -435,6 +441,7 @@ public class Exec {
                         return "Do not have this database!";
                     } else {
                         vosDatabase.removeData(dataName);
+                        OutPutFileSystem.writeDatabase(dataName,user);
                         return "Delete Successful!\n";
                     }
                 } else {
@@ -447,6 +454,7 @@ public class Exec {
                             usersFileSystem.deleteDataBase(getName);
                             File file = new File(LinwinVOS.DatabasePath + "/" + user + "/Database/" + getName + ".mydb");
                             if (file.delete()) {
+                                LinwinVOS.outPutMap.remove(vosDatabase.getName());
                                 return "Delete Successful!\n";
                             } else {
                                 return "Do have Permissions to delete Target File";

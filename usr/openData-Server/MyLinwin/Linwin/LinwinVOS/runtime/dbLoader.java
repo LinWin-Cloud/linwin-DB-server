@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class dbLoader {
-    public List<Data> LoadDB(String name) {
+    public List<Data> LoadDB(String name,String saveDatabase) {
         List<Data> list = new ArrayList<>();
 
         try {
@@ -76,7 +76,7 @@ public class dbLoader {
                                 Data data = new Data();
                                 data.setName(getName);
                                 data.setCreateTime(getCreateTime);
-                                data.setSaveDatabase(name);
+                                data.setSaveDatabase(saveDatabase);
                                 data.setModificationTime(getModificationTime);
                                 data.setValue(getValue);
                                 data.setNote(getNote);

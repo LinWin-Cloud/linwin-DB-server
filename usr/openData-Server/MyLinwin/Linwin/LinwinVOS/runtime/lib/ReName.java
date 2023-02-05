@@ -4,6 +4,7 @@ import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
+import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.Func;
 
 import java.security.SecureRandom;
@@ -49,6 +50,7 @@ public class ReName {
                         data.setModificationTime(Func.getNowTime());
                         vosDatabase.removeData(lastName);
                         vosDatabase.putData(NewName,data);
+                        OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Rename Successful!\n";
                     }
                 }

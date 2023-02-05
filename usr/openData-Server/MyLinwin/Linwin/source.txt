@@ -17,6 +17,7 @@
 ./LinwinVOS/data/base.java
 ./LinwinVOS/data/Json.java
 ./LinwinVOS/Index.java
+./LinwinVOS/outPut/OutPutFileSystem.java
 ./LinwinVOS/Users/Users.java
 ./LinwinVOS/Users/UsersFileSystem.java
 ./LinwinVOS/Users/logon.java

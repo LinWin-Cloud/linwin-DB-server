@@ -3,6 +3,8 @@ package LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.Users.logon;
 import LogService.LogService;
+
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
     public static HashMap<String, UsersFileSystem> FileSystem = new HashMap<String, UsersFileSystem>();
     public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
+    public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;
 
