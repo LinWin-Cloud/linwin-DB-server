@@ -19,6 +19,11 @@
 ```commandline
 npm test
 ```
+### 编译 typescript
+```commandline
+tsc drive.ts
+```
+
 ### 示例
 *example.**ts***
 ```typescript
