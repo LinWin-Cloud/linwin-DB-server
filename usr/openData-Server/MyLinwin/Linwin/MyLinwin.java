@@ -233,6 +233,8 @@ public class MyLinwin {
                         if (command.equals("shutdown") && logonUser.equals("root")) {
                             printWriter.println("HTTP/1.1 200 OK");
                             printWriter.println("Content-Type: text/plain");
+                            printWriter.println("Access-Control-Allow-Origin: *");
+                            printWriter.println("Access-Control-Allow-Headers: *");
                             printWriter.println();
                             printWriter.println("Shutdown Successful!");
                             printWriter.flush();
@@ -241,6 +243,8 @@ public class MyLinwin {
                         }else if (command.equals("shutdown") && !logonUser.equals("root")) {
                             printWriter.println("HTTP/1.1 400 OK");
                             printWriter.println("Content-Type: text/plain");
+                            printWriter.println("Access-Control-Allow-Origin: *");
+                            printWriter.println("Access-Control-Allow-Headers: *");
                             printWriter.println();
                             printWriter.println("Only 'root' user can shutdown the Sql System");
                             printWriter.flush();
@@ -249,6 +253,8 @@ public class MyLinwin {
                         }
                         printWriter.println("HTTP/1.1 200 OK");
                         printWriter.println("Content-Type: text/plain");
+                        printWriter.println("Access-Control-Allow-Origin: *");
+                        printWriter.println("Access-Control-Allow-Headers: *");
                         printWriter.println();
                         printWriter.flush();
 
@@ -270,6 +276,8 @@ public class MyLinwin {
                     }else {
                         printWriter.println("HTTP/1.1 400 OK");
                         printWriter.println("Content-Type: text/plain");
+                        printWriter.println("Access-Control-Allow-Origin: *");
+                        printWriter.println("Access-Control-Allow-Headers: *");
                         printWriter.println();
                         printWriter.flush();
                         printWriter.println("Passwd Or UserName Error!");
@@ -279,6 +287,8 @@ public class MyLinwin {
                 }else {
                     printWriter.println("HTTP/1.1 400 OK");
                     printWriter.println("Content-Type: text/plain");
+                    printWriter.println("Access-Control-Allow-Origin: *");
+                    printWriter.println("Access-Control-Allow-Headers: *");
                     printWriter.println();
                     printWriter.println("Send Message Error");
                     printWriter.flush();
