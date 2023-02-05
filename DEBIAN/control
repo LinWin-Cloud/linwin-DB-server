@@ -1,8 +1,7 @@
 Package: com.openData-Server.LinwinSoft
-Version: 1.0-2023.2.1
+Version: 1.1-2023.2.4
 Priority: standard
-Depends: tar
-Suggests:
+Depends: tar,python3
 Architecture: amd64
 Installed-Size: 88166
 Maintainer: LinwinSoft
