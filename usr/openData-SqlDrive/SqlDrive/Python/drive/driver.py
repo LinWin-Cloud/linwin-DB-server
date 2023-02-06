@@ -95,3 +95,9 @@ class Driver(object):
 
     def listDataFromDatabase(self, database: str) -> List[str]:
         return self.execute(f"ls {database}").split("\n")
+
+    def createNewUser(self, userName: str) -> bool:
+        return self.execute("sudo createUser '"+userName+"'")
+
+    def deleteUser(self, userName: str , passwd: str) -> bool:
+        return self.execute("sudo deleteUser '"+userName+"' '"+passwd+"'")

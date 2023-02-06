@@ -49,3 +49,7 @@ LinwinDB-Mydb Shell $
 LinwinDB-Mydb Shell $ quit
 
 ```
+
+### Update更新API
+1. createUser(userName:str) 以非root授权形式创建一个数据库用户
+2. deleteUser(userName:str , passwd: str) 以非root授权形式删除一个数据库用户，需要被删除用户的密码授权.

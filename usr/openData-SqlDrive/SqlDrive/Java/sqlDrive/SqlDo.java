@@ -96,4 +96,10 @@ public class SqlDo {
             return null;
         }
     }
+    public boolean createNewUser(String name) {
+        return sqlDrive.sendCommand("sudo createUser '"+name+"'");
+    }
+    public boolean deleteUser(String name,String passwd) {
+        return sqlDrive.sendCommand("sudo deleteUser '"+name+"' '"+passwd+"'");
+    }
 }
