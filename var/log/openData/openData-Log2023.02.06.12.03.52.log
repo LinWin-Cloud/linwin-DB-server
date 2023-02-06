@@ -1,0 +1,4 @@
+{2023.02.06.12.04.05}  LOGIN=root  Command= delete user '123' '10487'  IP=/127.0.0.1
+{2023.02.06.12.04.26}  LOGIN=root  Command= sudo deleteUser '123' '10487'  IP=/127.0.0.1
+{2023.02.06.12.05.17}  LOGIN=root  Command= sudo  IP=/127.0.0.1
+{2023.02.06.12.05.33}  LOGIN=root  Command= sudo deleteUser '123' '10478'  IP=/127.0.0.1

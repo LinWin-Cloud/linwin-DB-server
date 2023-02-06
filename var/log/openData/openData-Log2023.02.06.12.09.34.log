@@ -1,0 +1,3 @@
+{2023.02.06.12.09.37}  LOGIN=root  Command= LinwinVOS.DatabasePath / getName /  IP=/127.0.0.1
+{2023.02.06.12.09.42}  LOGIN=root  Command= LinwinVOS.DatabasePath / getName /  IP=/127.0.0.1
+{2023.02.06.12.09.44}  LOGIN=root  Command= sudo deleteUser '123' '10487'  IP=/127.0.0.1
