@@ -17,4 +17,4 @@ Login = {
 
 var a = 'helloDB'
 
-create database '$a'
+list database
