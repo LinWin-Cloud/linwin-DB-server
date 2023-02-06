@@ -43,29 +43,21 @@ public class Connect {
             StringBuffer stringBuffer = new StringBuffer("");
             while ((line = bufferedReader.readLine()) != null)
             {
-                if (line.equals("Send Message Error") || line.equals("Passwd Or UserName Error!")) {
-                    stringBuffer.delete(0,stringBuffer.length());
-                    stringBuffer.append("\n");
-                    stringBuffer.append(line);
-                    return false;
-                }
-                if (line.equals("Error Command and Script")) {
-                    return false;
-                }
-                stringBuffer.append(" -- ");
+                i = i + 1;
+                stringBuffer.append(" (--> ");
                 stringBuffer.append(line);
                 stringBuffer.append("\n");
             }
             this.getRunMessage = stringBuffer.toString();
-            System.out.println("Result Number: "+(i-1));
-            System.out.println("=============================");
             bufferedReader.close();
             inputStream.close();
             httpURLConnection.disconnect();
-            System.out.println();
 
-            long end = System.currentTimeMillis();
-            System.out.println(end-start+"ms");
+            if ((i - 1) == 0) {
+                return false;
+            }else {
+                return true;
+            }
         }catch (Exception exception){
             return false;
         }

@@ -17,7 +17,7 @@ public class Mys {
         int commandLength = args.length;
         //System.out.println(args[0]);
         if (commandLength == 0) {
-            System.out.println(Mys.getFileContent("../../config/help/MysInfo.txt"));
+            System.out.println(Mys.getFileContent("/usr/openData-Server/config/help/MysInfo.txt"));
             System.exit(0);
         }
         if (commandLength == 1) {
@@ -32,7 +32,7 @@ public class Mys {
                 System.exit(0);
             }
         }else {
-            System.out.println(Mys.getFileContent("../../config/help/MysInfo.txt"));
+            System.out.println(Mys.getFileContent("/usr/openData-Server/config/help/MysInfo.txt"));
         }
     }
     public static String getFileContent(String name) {
@@ -115,6 +115,7 @@ public class Mys {
                             System.exit(0);
                         }
                         System.out.print(connect.getMessage());
+                        System.out.println();
                         if (run == true) {
                             continue;
                         }else {
