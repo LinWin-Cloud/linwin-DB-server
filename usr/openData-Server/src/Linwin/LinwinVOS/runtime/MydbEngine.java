@@ -1,6 +1,7 @@
 package LinwinVOS.runtime;
 import LinwinVOS.FileSystem.*;
 import LinwinVOS.LinwinVOS;
+import LinwinVOS.Users.api.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -73,6 +74,11 @@ public class MydbEngine {
             else if (script.substring(0,4).equals("view")) {
                 this.getFunction = exec.View(user,script);
             }
+            else if (script.substring(0,4).equals("sudo")) {
+                Sudo sudo = new Sudo();
+                this.getFunction = sudo.dealCommand(script);
+            }
+
             else if (script.substring(0,8).equals("shutdown")) {
                 if (exec.shutdownDatabase(user)) {
                     this.getFunction = "Shutdown successful";

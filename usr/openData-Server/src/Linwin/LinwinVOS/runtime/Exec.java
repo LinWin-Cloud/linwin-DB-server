@@ -441,7 +441,7 @@ public class Exec {
                         return "Do not have this database!";
                     } else {
                         vosDatabase.removeData(dataName);
-                        OutPutFileSystem.writeDatabase(dataName,user);
+                        OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Delete Successful!\n";
                     }
                 } else {
