@@ -6,6 +6,7 @@
 ./LinwinVOS/runtime/Exec.java
 ./LinwinVOS/runtime/lib/Copy.java
 ./LinwinVOS/runtime/lib/ReData.java
+./LinwinVOS/runtime/lib/Move.java
 ./LinwinVOS/runtime/lib/View.java
 ./LinwinVOS/runtime/lib/Index.java
 ./LinwinVOS/runtime/lib/ReName.java

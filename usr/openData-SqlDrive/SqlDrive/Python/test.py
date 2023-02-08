@@ -9,7 +9,8 @@ driver = driver.Driver(
 
 # tip: Linwin DB Database ip 节流, 短时间内请求次数请不要设置过多
 
-driver.createDatabase("Linwin")
-driver.createData("Data", "Linwin")
+# driver.createDatabase("Linwin")
+#driver.createData("Data", "Linwin")
+print(len(driver.findData("d")))
 
-print("qps:", 1/timeit('driver.findData("d")', globals=globals(), number=1))
+# print("qps:", 1/timeit('driver.findData("d")', globals=globals(), number=1))

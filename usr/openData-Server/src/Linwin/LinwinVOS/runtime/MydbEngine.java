@@ -74,6 +74,9 @@ public class MydbEngine {
             else if (script.substring(0,4).equals("view")) {
                 this.getFunction = exec.View(user,script);
             }
+            else if (script.substring(0,4).equals("move")){
+                this.getFunction = exec.Move(user,script);
+            }
             else if (script.substring(0,4).equals("sudo")) {
                 Sudo sudo = new Sudo();
                 this.getFunction = sudo.dealCommand(script);

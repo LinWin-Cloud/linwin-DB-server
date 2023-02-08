@@ -544,4 +544,17 @@ public class Exec {
         View view = new View();
         return view.view(user,command);
     }
+    public String Move(String user,String command) {
+        /**
+         * 'move' command:
+         * Move all the data from database to target database.
+         *
+         * This command mean move the database name 'resource' to target database 'target'.
+         * IF the target database is not exists, then will create a new.
+         * [1] move 'resource' 'target'
+         *
+         */
+        Move move = new Move();
+        return move.move(user,command);
+    }
 }

@@ -10,8 +10,10 @@ import LinwinVOS.data.base;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class DataLoader {
 
@@ -42,40 +44,53 @@ public class DataLoader {
         }
     }
     public static void UsersLoad(File[] listDataBase, UsersFileSystem usersFileSystem, String user) {
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        Future<Integer> future = null;
         for (int i = 0 ; i < listDataBase.length ; i++)
         {
             int I = i;
-            if (listDataBase[i].isFile()) {
-                if (DataLoader.getLastname(listDataBase[i].getName()).equals(".mydb")) {
-                    /**
-                     * Use asynchronous to load all the users' databases.
-                     */
-                    try{
-                        VosDatabase vosDatabase = new VosDatabase();
-                        vosDatabase.setUser(user);
-                        vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
-                        vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
-                        vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
-                        vosDatabase.setSavePath("/Database/"+user+"/"+vosDatabase.getName());
+            future = executorService.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    if (listDataBase[I].isFile()) {
+                        if (DataLoader.getLastname(listDataBase[I].getName()).equals(".mydb")) {
+                            /**
+                             * Use asynchronous to load all the users' databases.
+                             */
+                            try{
+                                VosDatabase vosDatabase = new VosDatabase();
+                                vosDatabase.setUser(user);
+                                vosDatabase.setName(listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf(".")));
+                                vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
+                                vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
+                                vosDatabase.setSavePath("/Database/"+user+"/"+vosDatabase.getName());
 
-                        LinwinVOS.outPutMap.put(vosDatabase.getName(),new FileWriter(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb",true));
-                        /**
-                         * Put the data to the database.
-                         */
-                        dbLoader loader = new dbLoader();
-                        List<Data> list = loader.LoadDB(listDataBase[I].getAbsolutePath(),vosDatabase.getSavePath());
-                        for (int j = 0 ; j < list.size() ; j++){
-                            //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
-                            vosDatabase.putData(list.get(j).getName(),list.get(j));
+                                LinwinVOS.outPutMap.put(vosDatabase.getName(),new FileWriter(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb",true));
+                                /**
+                                 * Put the data to the database.
+                                 */
+                                dbLoader loader = new dbLoader();
+                                List<Data> list = loader.LoadDB(listDataBase[I].getAbsolutePath(),vosDatabase.getSavePath());
+                                for (int j = 0 ; j < list.size() ; j++){
+                                    //System.out.println("Name="+list.get(j).getName()+" ; Value="+list.get(j).getValue());
+                                    vosDatabase.putData(list.get(j).getName(),list.get(j));
+                                }
+                                String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
+                                usersFileSystem.putDatabase(name,vosDatabase);
+                            }catch (Exception exception){
+                                exception.printStackTrace();
+                            }
                         }
-                        String name = listDataBase[I].getName().substring(0,listDataBase[I].getName().lastIndexOf("."));
-                        usersFileSystem.putDatabase(name,vosDatabase);
-                    }catch (Exception exception){
-                        exception.printStackTrace();
                     }
+                    return 0;
                 }
-                continue;
-            }
+            });
+        }
+        try{
+            future.get();
+            executorService.shutdown();
+        }catch (Exception exception){
+
         }
     }
     public static String getLastname(String name) {
