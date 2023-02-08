@@ -12,11 +12,21 @@ import java.util.List;
 
 public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
-    public static HashMap<String, UsersFileSystem> FileSystem = new HashMap<String, UsersFileSystem>();
+    public static HashMap<String, UsersFileSystem> FileSystem;
     public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
     public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;
+
+    public LinwinVOS() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LinwinVOS.FileSystem = new HashMap<String, UsersFileSystem>();
+            }
+        });
+        thread.start();
+    }
 
     public void BootSystem() {
         logon.setPath = System.getProperty("user.dir");
@@ -31,7 +41,7 @@ public class LinwinVOS {
         {
             String[] userList = logon.UsersList.toArray(new String[logon.UsersList.size()]);
             String userName = userList[i];
-            LinwinVOS.UsersNowPath.put(userName,"/");
+            LinwinVOS.UsersNowPath.put(userName,"/user/");
         }
         //System.out.println();
         DataLoader.loadData();

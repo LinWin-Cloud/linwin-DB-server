@@ -86,26 +86,13 @@ public class VosDatabase {
     }
     public StringBuffer findData(String index) {
         StringBuffer stringBuffer = new StringBuffer("");
-        ExecutorService executorService = Executors.newFixedThreadPool(1);
-        Future<Integer> future = null;
         for (Data data : this.dataHashMap.values()) {
-            future = executorService.submit(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    int s = data.getName().indexOf(index);
-                    if (s != -1) {
-                        stringBuffer.append(data.getName());
-                        stringBuffer.append("\n");
-                    }
-                    return 0;
-                }
-            });
+            int s = data.getName().indexOf(index);
+            if (s != -1) {
+                stringBuffer.append(data.getName());
+                stringBuffer.append("\n");
+            }
         }
-        try{
-            future.get();
-        }catch (Exception exception){
-        }
-        executorService.shutdown();
         return stringBuffer;
     }
 }

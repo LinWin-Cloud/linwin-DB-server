@@ -187,6 +187,7 @@ public class MyLinwin {
                 MyLinwin.logPath = logPath;
                 MyLinwin.updateLog = Integer.valueOf(logUpdate);
                 MyLinwin.safeConnection = Integer.valueOf(safeConnection);
+
             }else {
                 System.out.println("[ERROR] DO NOT FIND CONFIG FILE OF CONFIG FILE ERROR!");
             }
@@ -236,8 +237,8 @@ public class MyLinwin {
 
                         MydbEngine mydbEngine = new MydbEngine();
                         mydbEngine.setUser(logonUser);
-                        mydbEngine.execLdbScript(command,logonUser);
                         mydbEngine.setExecutorService(executorService);
+                        mydbEngine.execLdbScript(command,logonUser);
 
                         if (mydbEngine.getReturn() == null) {
                             printWriter.println("Error Command and Script");

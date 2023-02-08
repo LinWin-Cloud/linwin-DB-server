@@ -6,18 +6,15 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class dbLoader {
-    public List<Data> LoadDB(String name,String saveDatabase) {
-        List<Data> list = new ArrayList<>();
+    public HashSet<Data> LoadDB(String name, String saveDatabase, ExecutorService executorService) {
+        HashSet<Data> list = new HashSet<>();
 
         try {
             ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
@@ -45,50 +42,42 @@ public class dbLoader {
             }
             String[] lines = fileContent.toString().split("\n");
             HashSet<String> hashSet = new HashSet<String>(Arrays.asList(lines));
-            ExecutorService executorService = Executors.newFixedThreadPool(1);
-            Future<Integer> future = executorService.submit(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    for (String getLine : hashSet) {
-                        int n = getLine.indexOf("Name=");
-                        int v = getLine.indexOf("&Value=");
-                        int t = getLine.lastIndexOf("&Type=");
-                        int c = getLine.lastIndexOf("&createTime=");
-                        int m = getLine.lastIndexOf("&ModificationTime=");
-                        int Note = getLine.lastIndexOf("&note=");
-                        if (n != -1 && v != -1 && t != -1 & c != -1 && m != -1 && Note != -1) {
-                            String getName = getLine.substring(n + "Name=".length(), v);
-                            String getValue = getLine.substring(v + "&Value=".length(), t);
-                            String getType = getLine.substring(t + "&Type=".length(), c);
-                            String getCreateTime = getLine.substring(c + "&createTime=".length(), m);
-                            String getModificationTime = getLine.substring(m + "&ModificationTime=".length(), Note);
-                            String getNote = getLine.substring(Note + "&note=".length(), getLine.length());
 
-                            int a1 = getName.indexOf("'");
-                            int b1 = getName.indexOf(";");
-                            int c1 = getName.indexOf(".");
-                            int d1 = getName.indexOf(")");
-                            int e1 = getName.indexOf("(");
+            for (String getLine : hashSet) {
+                int n = getLine.indexOf("Name=");
+                int v = getLine.indexOf("&Value=");
+                int t = getLine.lastIndexOf("&Type=");
+                int c = getLine.lastIndexOf("&createTime=");
+                int m = getLine.lastIndexOf("&ModificationTime=");
+                int Note = getLine.lastIndexOf("&note=");
+                if (n != -1 && v != -1 && t != -1 & c != -1 && m != -1 && Note != -1) {
+                    String getName = getLine.substring(n + "Name=".length(), v);
+                    String getValue = getLine.substring(v + "&Value=".length(), t);
+                    String getType = getLine.substring(t + "&Type=".length(), c);
+                    String getCreateTime = getLine.substring(c + "&createTime=".length(), m);
+                    String getModificationTime = getLine.substring(m + "&ModificationTime=".length(), Note);
+                    String getNote = getLine.substring(Note + "&note=".length(), getLine.length());
 
-                            if (a1 != -1 || b1 != -1 || c1 != -1 || d1 != -1 || e1 != -1) {
-                                continue;
-                            }else {
-                                Data data = new Data();
-                                data.setName(getName);
-                                data.setCreateTime(getCreateTime);
-                                data.setSaveDatabase(saveDatabase);
-                                data.setModificationTime(getModificationTime);
-                                data.setValue(getValue);
-                                data.setNote(getNote);
-                                list.add(data);
-                            }
-                        }
+                    int a1 = getName.indexOf("'");
+                    int b1 = getName.indexOf(";");
+                    int c1 = getName.indexOf(".");
+                    int d1 = getName.indexOf(")");
+                    int e1 = getName.indexOf("(");
+
+                    if (a1 != -1 || b1 != -1 || c1 != -1 || d1 != -1 || e1 != -1) {
+                        continue;
+                    }else {
+                        Data data = new Data();
+                        data.setName(getName);
+                        data.setCreateTime(getCreateTime);
+                        data.setSaveDatabase(saveDatabase);
+                        data.setModificationTime(getModificationTime);
+                        data.setValue(getValue);
+                        data.setNote(getNote);
+                        list.add(data);
                     }
-                    return 0;
                 }
-            });
-            executorService.shutdownNow();
-            future.get();
+            }
         } catch (Exception exception) {}
         return list;
     }

@@ -82,8 +82,6 @@ public class Exec {
          */
         String[] getCommand = command.split(" ");
 
-        String FindResult = "";
-
         if (getCommand.length >= 3) {
             String findType = getCommand[1];
             String findIndex = "";
@@ -91,37 +89,49 @@ public class Exec {
             if (getCommand.length == 3) {
                 findIndex = getCommand[2];
             }else {
+                StringBuffer stringBuffer = new StringBuffer("");
                 for (int j = 0 ; j < getCommand.length ; j++) {
                     //System.out.println(j+" "+getCommand[j]);
                     if (j >= 2 ) {
-                        if(findIndex.equals("")) {
-                            continue;
-                        }else {
-                            findIndex = findIndex + " "+getCommand[j];
-                        }
+                        stringBuffer.append(getCommand[j]);
+                        stringBuffer.append(" ");
                     }
                 }
+                findIndex = stringBuffer.toString().substring(0,stringBuffer.toString().length()-1);
             }
             if (findType.equals("database")) {
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
+                StringBuffer stringBuffer = new StringBuffer("");
                 for (VosDatabase vosDatabase : databases) {
                     String databaseName = vosDatabase.getName();
                     int s = databaseName.indexOf(findIndex);
                     if (s != -1) {
-                        FindResult = FindResult + databaseName + "\n";
+                        stringBuffer.append(databaseName);
+                        stringBuffer.append("\n");
                     }
                 }
-                return FindResult;
+                return stringBuffer.toString();
             }else if (findType.equals("data")) {
                 StringBuffer stringBuffer = new StringBuffer("");
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
                 ExecutorService executorService = Executors.newFixedThreadPool(1);
+                Future<Integer> future = null;
                 for (VosDatabase vosDatabase : databases) {
-                    stringBuffer.append(vosDatabase.findData(findIndex));
+                    String index = findIndex;
+                    future = executorService.submit(new Callable<Integer>() {
+                        @Override
+                        public Integer call() throws Exception {
+                            stringBuffer.append(vosDatabase.findData(index));
+                            return 0;
+                        }
+                    });
                 }
+                try{
+                    future.get();
+                }catch (Exception exception){}
                 executorService.shutdownNow();
                 return stringBuffer.toString();
             }else {
@@ -482,6 +492,7 @@ public class Exec {
         File[] listDataBase = usersDatabase.listFiles();
 
         LinwinVOS.FileSystem.get(user).setLoadOK(false);
+        LinwinVOS.FileSystem.get(user).removeAll();
         long start = System.currentTimeMillis();
         DataLoader.UsersLoad(listDataBase,LinwinVOS.FileSystem.get(user),user);
         long end = System.currentTimeMillis();

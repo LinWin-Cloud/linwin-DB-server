@@ -45,9 +45,6 @@ public class UsersFileSystem {
         this.userDatabase.remove(dataName);
     }
     public void removeAll() {
-        for (VosDatabase vosDatabase : this.getDatabase()) {
-            String name = vosDatabase.getName();
-            this.userDatabase.remove(name);
-        }
+        this.userDatabase.clear();
     }
 }
