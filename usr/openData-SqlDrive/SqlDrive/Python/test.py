@@ -1,6 +1,6 @@
 from drive import driver
 from timeit import timeit
-
+import time
 driver = driver.Driver(
     host="127.0.0.1",
     username="root",
@@ -11,6 +11,9 @@ driver = driver.Driver(
 
 # driver.createDatabase("Linwin")
 #driver.createData("Data", "Linwin")
+s = time.time()
 print(len(driver.findData("d")))
+e = time.time()
+print(e-s)
 
 # print("qps:", 1/timeit('driver.findData("d")', globals=globals(), number=1))
