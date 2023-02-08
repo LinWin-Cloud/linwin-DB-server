@@ -1,7 +1,7 @@
 import os
 
 os.system("rm -f *.mydb")
-for i in range(1000):
+for i in range(100):
     os.system("touch "+str(i)+".mydb")
     with open(str(i)+".mydb","a") as a:
         a.write("""
