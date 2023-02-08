@@ -1,0 +1,5 @@
+{2023.02.07.16.05.35}  LOGIN=root  Command= list database  IP=/127.0.0.1
+{2023.02.07.16.05.48}  LOGIN=root  Command= list  IP=/127.0.0.1
+{2023.02.07.16.05.58}  LOGIN=root  Command= redata  IP=/127.0.0.1
+{2023.02.07.16.06.30}  LOGIN=root  Command= redata 'data'.value 'helloworld' in 0  IP=/127.0.0.1
+{2023.02.07.16.07.05}  LOGIN=root  Command= redata 'data8'.value 'helloworld' in 0  IP=/127.0.0.1
