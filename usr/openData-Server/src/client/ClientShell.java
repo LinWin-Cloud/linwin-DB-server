@@ -36,21 +36,20 @@ public class ClientShell {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            int i = 0 ;
+            int i = 1 ;
             while ((line = bufferedReader.readLine()) != null)
             {
+                if (line.equals("")) {
+                    continue;
+                }
                 i = i + 1;
-                System.out.println(" - "+line+"");
+                System.out.println(" ("+(i-1)+")-|  "+line+"");
             }
-            System.out.println("Result Number: "+(i-1));
-            System.out.println("=============================");
+            long end = System.currentTimeMillis();
+            System.out.println("Result Number: "+(i-1)+" Use time: "+(end-start)+"ms");
             bufferedReader.close();
             inputStream.close();
             httpURLConnection.disconnect();
-            System.out.println();
-
-            long end = System.currentTimeMillis();
-            System.out.println(end-start+"ms");
         }catch (Exception exception){
             exception.printStackTrace();
         }
