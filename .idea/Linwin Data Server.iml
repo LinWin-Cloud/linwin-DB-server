@@ -19,6 +19,7 @@
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/Loger" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/Mys-Script" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/client" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/Distributed_Database" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/usr/openData-Server/out" />
     </content>
