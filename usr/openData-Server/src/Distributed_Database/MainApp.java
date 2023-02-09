@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import Data.Json;
 import remote.Loader;
 import remote.Users;
@@ -14,7 +13,6 @@ public class MainApp {
     public static int boot = 0;
     public static String logPath;
     public static int update = 3600000;
-    public static HashMap<String, Users> usersHashMap = new HashMap<>();
 
     public static void main(String[] args) {
         /**
