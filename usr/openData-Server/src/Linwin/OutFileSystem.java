@@ -23,6 +23,53 @@ public class OutFileSystem {
     public void setLinwinVOS(LinwinVOS linwinVOS) {
         this.linwinVOS = linwinVOS;
     }
+    public OutFileSystem() {
+        Thread outData = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OutFileSystem outFileSystem = new OutFileSystem();
+                outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
+                while (true){
+                    try{
+                        Thread.sleep(100);
+                        if (outFileSystem.getAllUserLoad_STATUS()) {
+                            break;
+                        }
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
+                int getSleepTime = 0;
+                while (true) {
+                    try{
+                        int getDataSize = MyLinwin.linwinVOS.getDataSize();
+                        if (getDataSize <= 100) {
+                            getSleepTime = 150;
+                        }else if (getDataSize > 100 && getDataSize <= 500) {
+                            getSleepTime = 250;
+                        }else if(getDataSize > 500 && getDataSize <=1000) {
+                            getSleepTime = 1000;
+                        }else if(getDataSize > 1000 && getDataSize <=1000) {
+                            getSleepTime = 2000;
+                        }else if(getDataSize > 1000 && getDataSize <= 10000) {
+                            getSleepTime = 40000;
+                        }else if (getDataSize > 10000 && getDataSize <= 100000) {
+                            getSleepTime = 120000;
+                        }else if (getDataSize > 100000 && getDataSize <= 1000000) {
+                            getSleepTime = 240000;
+                        }else if (getDataSize > 1000000) {
+                            getSleepTime = 300000;
+                        }
+
+                        outFileSystem.run();
+                        Thread.sleep(getSleepTime);
+                    }catch (Exception exception){
+                        exception.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
     public void run() {
         HashSet<UsersFileSystem> hashSet = this.linwinVOS.getUserFileSystem();
         for (UsersFileSystem usersFileSystem : hashSet)

@@ -47,32 +47,9 @@ public class MyLinwin {
             public void run() {
                 try {
                     ServerSocket serverSocket = new ServerSocket(MyLinwin.ServicePort);
-                    ExecutorService executorService = Executors.newFixedThreadPool(2);
-                    Future<Integer> integerFuture = null;
+                    ExecutorService executorService = Executors.newFixedThreadPool(1000);
                     while (true) {
-                        Socket socket = serverSocket.accept();
-                        Future<Integer> future = executorService.submit(new Callable<Integer>() {
-                            @Override
-                            public Integer call() throws Exception {
-                                try{
-                                    Integer integer = MyLinwin.safeVisit.get(socket.getInetAddress().toString());
-                                    if (integer == null) {
-                                        MyLinwin.safeVisit.put(socket.getInetAddress().toString(),1);
-                                    }else {
-                                        int s = integer;
-                                        if (s >= MyLinwin.safeConnection) {
-                                            socket.close();
-                                            return 1;
-                                        }
-                                        MyLinwin.safeVisit.put(socket.getInetAddress().toString(),MyLinwin.safeVisit.get(socket.getInetAddress().toString())+1);
-                                    }
-                                    MyLinwin.MyLinwin_Service(socket,executorService);
-                                }catch (Exception exception){
-                                    exception.printStackTrace();
-                                }
-                                return 0;
-                            }
-                        });
+                        MyLinwin.HTTP_SERVICE(executorService,serverSocket);
                     }
                 }catch (Exception exception){
                     exception.printStackTrace();
@@ -80,6 +57,36 @@ public class MyLinwin {
             }
         });
         HTTP_SERVICE.start();
+    }
+    public static void HTTP_SERVICE(ExecutorService executorService,ServerSocket serverSocket) throws Exception {
+        Socket socket = serverSocket.accept();
+        executorService.submit(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                MyLinwin.HTTP_DEAL(socket,executorService);
+                return 0;
+            }
+        });
+    }
+    public static void HTTP_DEAL(Socket socket,ExecutorService executorService) {
+        try{
+            Integer integer = MyLinwin.safeVisit.get(socket.getInetAddress().toString());
+            if (integer == null) {
+                MyLinwin.safeVisit.put(socket.getInetAddress().toString(),1);
+            }else {
+                int s = integer;
+                if (s >= MyLinwin.safeConnection) {
+                    socket.close();
+                    return;
+                }
+                String getIP = socket.getInetAddress().toString();
+                MyLinwin.safeVisit.put(getIP,MyLinwin.safeVisit.get(getIP)+1);
+            }
+
+            MyLinwin.MyLinwin_Service(socket,executorService);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
     }
     public static void RuntimeThread(LogService logService) {
         Thread runtime = new Thread(new Runnable() {
@@ -107,53 +114,7 @@ public class MyLinwin {
         });
         safeThread.start();
 
-        Thread outData = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OutFileSystem outFileSystem = new OutFileSystem();
-                outFileSystem.setLinwinVOS(MyLinwin.linwinVOS);
-                outFileSystem.setThreadSocket(IO_Socket);
-                while (true){
-                    try{
-                        Thread.sleep(100);
-                        if (outFileSystem.getAllUserLoad_STATUS()) {
-                            break;
-                        }
-                    }catch (Exception exception){
-                        exception.printStackTrace();
-                    }
-                }
-                int getSleepTime = 0;
-                while (true) {
-                    try{
-                        int getDataSize = MyLinwin.linwinVOS.getDataSize();
-                        if (getDataSize <= 100) {
-                            getSleepTime = 150;
-                        }else if (getDataSize > 100 && getDataSize <= 500) {
-                            getSleepTime = 250;
-                        }else if(getDataSize > 500 && getDataSize <=1000) {
-                            getSleepTime = 1000;
-                        }else if(getDataSize > 1000 && getDataSize <=1000) {
-                            getSleepTime = 2000;
-                        }else if(getDataSize > 1000 && getDataSize <= 10000) {
-                            getSleepTime = 40000;
-                        }else if (getDataSize > 10000 && getDataSize <= 100000) {
-                            getSleepTime = 120000;
-                        }else if (getDataSize > 100000 && getDataSize <= 1000000) {
-                            getSleepTime = 240000;
-                        }else if (getDataSize > 1000000) {
-                            getSleepTime = 300000;
-                        }
 
-                        IO_Socket.sendMessage(ioSocket);
-                        outFileSystem.run();
-                        Thread.sleep(getSleepTime);
-                    }catch (Exception exception){
-                        exception.printStackTrace();
-                    }
-                }
-            }
-        });
         //outData.start();
     }
     public static void getServerSocketBoot() {
