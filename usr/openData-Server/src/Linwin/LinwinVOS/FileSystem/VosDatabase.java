@@ -17,8 +17,15 @@ public class VosDatabase {
     private String ModificationTime;
     private String value;
     public HashMap<String,Data> dataHashMap = new HashMap<String,Data>();
+    private boolean isRemoteDatabase = false;
     public VosDatabase() {
 
+    }
+    public boolean isRemoteDatabase() {
+        return this.isRemoteDatabase;
+    }
+    public void setRemoteDatabase(boolean b) {
+        this.isRemoteDatabase = b;
     }
     public void setName(String name) {
         int charsetA = name.indexOf("'");

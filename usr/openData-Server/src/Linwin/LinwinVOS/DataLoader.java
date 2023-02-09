@@ -72,6 +72,7 @@ public class DataLoader {
                                 vosDatabase.setCreateTime(base.getFileCreateTime(listDataBase[I].getAbsolutePath()));
                                 vosDatabase.setModificationTime(Json.readJson(listDataBase[I].getAbsolutePath(),"Update"));
                                 vosDatabase.setSavePath("/Database/"+user+"/"+vosDatabase.getName());
+                                vosDatabase.setRemoteDatabase(false);
 
                                 LinwinVOS.outPutMap.put(vosDatabase.getName(),new FileWriter(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb",true));
                                 /**

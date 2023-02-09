@@ -70,8 +70,22 @@ public class MainApp {
 
                 PrintWriter printWriter = new PrintWriter(outputStream);
                 getRequests = java.net.URLDecoder.decode(getRequests,"UTF-8");
+                getRequests = getRequests.substring(getRequests.indexOf(" ")+1, getRequests.lastIndexOf("HTTP/") -1 );
 
-                String requests
+                String keyWord_1 = "?Mirror=";
+                String keyWord_2 = "?Key=";
+                String keyWord_3 = "?Command=";
+
+                int s_1 = getRequests.indexOf(keyWord_1);
+                int s_2 = getRequests.lastIndexOf(keyWord_2);
+                int s_3 = getRequests.lastIndexOf(keyWord_3);
+
+                String getMirror = getRequests.substring(s_1+keyWord_1.length(),s_2);
+                String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
+                String getCommand = getRequests.substring(s_3+keyWord_3.length());
+
+
+
                 return 0;
             }
         };
