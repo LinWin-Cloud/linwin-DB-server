@@ -1,20 +1,20 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import Data.Json;
-import LinwinVOS.outPut.OutPutFileSystem;
-import sun.awt.X11.XSystemTrayPeer;
+import remote.Loader;
+import remote.Users;
 
 public class MainApp {
     public static int boot = 0;
     public static String logPath;
     public static int update = 3600000;
+    public static HashMap<String, Users> usersHashMap = new HashMap<>();
 
     public static void main(String[] args) {
         /**
@@ -37,8 +37,22 @@ public class MainApp {
                 System.out.println("CONFIG ERROR: CAN NOT FIND TARGET LOG PATH");
                 System.exit(0);
             }
-            ServerSocket serverSocket = MainApp.getServerSocket(Integer.valueOf(ServerPort));
-            MainApp.Distributed_SERVICE(serverSocket);
+            Thread LOAD_REMOTE = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Loader loader = new Loader();
+
+                }
+            });
+            LOAD_REMOTE.start();
+            Thread HTTP_THREAD = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ServerSocket serverSocket = MainApp.getServerSocket(Integer.valueOf(ServerPort));
+                    MainApp.Distributed_SERVICE(serverSocket);
+                }
+            });
+            HTTP_THREAD.start();
 
         } catch (Exception exception){
             exception.printStackTrace();
