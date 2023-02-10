@@ -2,7 +2,11 @@ package LinwinVOS.Mirror;
 
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.data.Json;
+
+import javax.naming.ldap.SortKey;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class LoadMirror
 {
@@ -13,22 +17,23 @@ public class LoadMirror
         {
             for (File target : file.listFiles())
             {
+                if (target.isDirectory())
+                {
+                    continue;
+                }
                 String getRemoteHost = Json.readJson(target.getAbsolutePath(),"Remote");
                 String getKey = Json.readJson(target.getAbsolutePath(),"Key");
-                String getSave = Json.readJson(target.getAbsolutePath(),"Save");
 
-                if (getRemoteHost == null || getKey == null || getSave == null)
+                if (getRemoteHost == null || getKey == null)
                 {
-                    System.out.println("CONFIG FILE ERROR");
-                    System.exit(0);
+                    System.out.println("CONFIG FILE ERROR: "+target.getName());
+                    continue;
                 }
                 else
                 {
-                    MirrorHost mirrorHost = new MirrorHost();
-                    mirrorHost.setName(LoadMirror.getFrontName(target.getName()));
-                    mirrorHost.setKey(getKey);
-
-                    LinwinVOS.mirrorHostHashSet.add(mirrorHost);
+                    LoadMirror.loadReal_Mirror(
+                            getRemoteHost,getKey,LoadMirror.getFrontName(
+                                    target.getName()));
                 }
             }
         }
@@ -47,7 +52,26 @@ public class LoadMirror
             return str;
         }
     }
-    private static void loadReal_Mirror(String remote,String key) {
+    private static void loadReal_Mirror(String remote,String key,String name) {
+        /**
+         * First, we must Confirm the remote host and key to connect.
+         * Then, the Software can connect and share the data.
+         */
+        try
+        {
+            URL url = new URL(remote+"/?");
+            HttpURLConnection urlConnection =
 
+                    MirrorHost mirrorHost = new MirrorHost();
+            mirrorHost.setName(name);
+            mirrorHost.setKey(key);
+            mirrorHost.setRemote(remote);
+            LinwinVOS.mirrorHostHashSet.add(mirrorHost);
+        }
+        catch (Exception exception)
+        {
+            System.out.println("");
+            return;
+        }
     }
 }
