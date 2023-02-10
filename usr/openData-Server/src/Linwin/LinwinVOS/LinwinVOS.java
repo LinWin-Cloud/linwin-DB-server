@@ -56,6 +56,7 @@ public class LinwinVOS {
          *
          */
         LoadMirror loadMirror = new LoadMirror();
+        loadMirror.load();
     }
     public HashSet<UsersFileSystem> getUserFileSystem() {
         return new HashSet<UsersFileSystem>(LinwinVOS.FileSystem.values());

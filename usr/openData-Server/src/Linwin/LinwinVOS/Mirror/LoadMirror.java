@@ -3,9 +3,6 @@ package LinwinVOS.Mirror;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.data.Json;
 import java.io.File;
-import java.security.SecureRandom;
-
-import LinwinVOS.DataLoader;
 
 public class LoadMirror
 {
@@ -49,5 +46,8 @@ public class LoadMirror
         catch (Exception exception){
             return str;
         }
+    }
+    private static void loadReal_Mirror(String remote,String key) {
+
     }
 }
