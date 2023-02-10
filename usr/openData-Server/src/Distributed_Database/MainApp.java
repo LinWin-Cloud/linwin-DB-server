@@ -89,15 +89,13 @@ public class MainApp {
                         getRequests = java.net.URLDecoder.decode(getRequests,"UTF-8");
                         getRequests = getRequests.substring(getRequests.indexOf(" ")+1, getRequests.lastIndexOf("HTTP/") -1 );
 
-                        String keyWord_1 = "?Mirror=";
                         String keyWord_2 = "?Key=";
                         String keyWord_3 = "?Command=";
 
-                        int s_1 = getRequests.indexOf(keyWord_1);
                         int s_2 = getRequests.lastIndexOf(keyWord_2);
                         int s_3 = getRequests.lastIndexOf(keyWord_3);
 
-                        if (s_1 == -1 || s_2 == -1 || s_3 == -1)
+                        if (s_2 == -1 || s_3 == -1)
                         {
                             printWriter.println("HTTP/1.1 400 OK");
                             MainApp.sendTitle(printWriter);
@@ -108,12 +106,11 @@ public class MainApp {
                         }
                         try
                         {
-                            String getMirror = getRequests.substring(s_1+keyWord_1.length(),s_2);
                             String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
                             String getCommand = getRequests.substring(s_3+keyWord_3.length());
                             printWriter.println("HTTP/1.1 200 OK");
                             MainApp.sendTitle(printWriter);
-                            printWriter.println(getMirror+" "+getKey+" "+getCommand);
+
                             printWriter.flush();
                             socket.close();
                             return 0;
