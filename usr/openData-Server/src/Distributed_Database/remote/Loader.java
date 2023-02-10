@@ -18,27 +18,9 @@ public class Loader {
             File[] listDir = file.listFiles();
             for (File target : listDir)
             {
-                if (target.isDirectory())
+                if (target.isFile() && Loader.getLastName(target.getName()).equals(".mydb"))
                 {
-                    File userCONFIG = new File(target.getAbsoluteFile()+"/user.json");
-                    File userData = new File(target.getAbsoluteFile()+"/Data");
-
-                    boolean user = userCONFIG.isFile() && userCONFIG.exists();
-                    boolean data = userData.isDirectory() && userData.exists();
-                    if (user && data)
-                    {
-                        String key = Json.readJson(userCONFIG.getAbsolutePath(),"Key");
-                        Users users = new Users();
-                        users.setKey(key);
-                        users.setMirrorName(target.getName());
-
-                        UserRemote.usersHashMap.put(target.getName(),users);
-                        Loader.loadData(userData.getAbsolutePath(),users.getMirrorName());
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    Loader.loadData(target.getAbsolutePath());
                 }
             }
         }
@@ -48,7 +30,7 @@ public class Loader {
             System.exit(0);
         }
     }
-    public static void loadData(String path,String user)
+    public static void loadData(String path)
     {
         File[] listMydb = new File(path).listFiles();
         for (File file: listMydb)
@@ -56,6 +38,11 @@ public class Loader {
             String getLastName = Loader.getLastName(file.getName());
             if (getLastName.equals(".mydb"))
             {
+                Database database = new Database();
+                database.setRemoteDatabase(true);
+                database.setName(file.getName());
+                database.setCreateTime(Json.readJson(file.getAbsolutePath(),Json.getFileUpdateTime(file.getAbsolutePath())));
+                database.setModificationTime(Json.readJson(file.getAbsolutePath(),"Update"));
                 try {
                     ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
                     FileInputStream fileInputStream = new FileInputStream(path);
@@ -113,7 +100,7 @@ public class Loader {
                                 data.setModificationTime(getModificationTime);
                                 data.setValue(getValue);
                                 data.setNote(getNote);
-                                UserRemote.usersHashMap.get(user).putData(getName,data);
+
                             }
                         }
                     }

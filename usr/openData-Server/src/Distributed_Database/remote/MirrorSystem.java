@@ -2,10 +2,10 @@ package remote;
 
 import java.util.HashMap;
 
-public class Users {
+public class MirrorSystem {
     private String key;
     private String MirrorName;
-    private HashMap<String,Data> dataHashMap = new HashMap<>();
+    private HashMap<String,Database> databaseHashMap = new HashMap<>();
 
     public void setKey(String key) {
         this.key = key;
@@ -19,11 +19,14 @@ public class Users {
     public String getMirrorName() {
         return this.MirrorName;
     }
-    public void putData(String mirrorName,Data data) {
+    public void putDatabase(String mirrorName,Database database) {
         try{
-            this.dataHashMap.put(mirrorName,data);
+            this.databaseHashMap.put(mirrorName,database);
         }catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+    public Database getData(String name) {
+        return this.databaseHashMap.get(name);
     }
 }
