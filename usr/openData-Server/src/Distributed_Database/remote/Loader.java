@@ -33,7 +33,7 @@ public class Loader {
                         users.setMirrorName(target.getName());
 
                         UserRemote.usersHashMap.put(target.getName(),users);
-                        Loader.loadData(userData.getAbsolutePath());
+                        Loader.loadData(userData.getAbsolutePath(),users.getMirrorName());
                     }
                     else
                     {
@@ -48,7 +48,7 @@ public class Loader {
             System.exit(0);
         }
     }
-    public static void loadData(String path)
+    public static void loadData(String path,String user)
     {
         File[] listMydb = new File(path).listFiles();
         for (File file: listMydb)
@@ -113,6 +113,7 @@ public class Loader {
                                 data.setModificationTime(getModificationTime);
                                 data.setValue(getValue);
                                 data.setNote(getNote);
+                                UserRemote.usersHashMap.get(user).putData(getName,data);
                             }
                         }
                     }

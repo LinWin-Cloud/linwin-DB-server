@@ -66,47 +66,78 @@ public class MainApp {
             return MainApp.getServerSocket(port);
         }
     }
-    public static void Distributed_SERVICE(ServerSocket serverSocket) {
+    public static void Distributed_SERVICE(ServerSocket serverSocket)
+    {
 
         ExecutorService executorService = Executors.newFixedThreadPool(500);
-        Socket socket = null;
-        Socket finalSocket = socket;
-        Callable<Integer> callable = new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                InputStream inputStream = finalSocket.getInputStream();
-                OutputStream outputStream = finalSocket.getOutputStream();
 
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String getRequests = bufferedReader.readLine();
-
-                PrintWriter printWriter = new PrintWriter(outputStream);
-                getRequests = java.net.URLDecoder.decode(getRequests,"UTF-8");
-                getRequests = getRequests.substring(getRequests.indexOf(" ")+1, getRequests.lastIndexOf("HTTP/") -1 );
-
-                String keyWord_1 = "?Mirror=";
-                String keyWord_2 = "?Key=";
-                String keyWord_3 = "?Command=";
-
-                int s_1 = getRequests.indexOf(keyWord_1);
-                int s_2 = getRequests.lastIndexOf(keyWord_2);
-                int s_3 = getRequests.lastIndexOf(keyWord_3);
-
-                String getMirror = getRequests.substring(s_1+keyWord_1.length(),s_2);
-                String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
-                String getCommand = getRequests.substring(s_3+keyWord_3.length());
-
-
-
-                return 0;
-            }
-        };
         while (true) {
             try{
-                socket = serverSocket.accept();
+                Socket socket = serverSocket.accept();
+                Callable<Integer> callable = new Callable<Integer>()
+                {
+                    @Override
+                    public Integer call() throws Exception
+                    {
+                        InputStream inputStream = socket.getInputStream();
+                        OutputStream outputStream = socket.getOutputStream();
+
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                        String getRequests = bufferedReader.readLine();
+
+                        PrintWriter printWriter = new PrintWriter(outputStream);
+                        getRequests = java.net.URLDecoder.decode(getRequests,"UTF-8");
+                        getRequests = getRequests.substring(getRequests.indexOf(" ")+1, getRequests.lastIndexOf("HTTP/") -1 );
+
+                        String keyWord_1 = "?Mirror=";
+                        String keyWord_2 = "?Key=";
+                        String keyWord_3 = "?Command=";
+
+                        int s_1 = getRequests.indexOf(keyWord_1);
+                        int s_2 = getRequests.lastIndexOf(keyWord_2);
+                        int s_3 = getRequests.lastIndexOf(keyWord_3);
+
+                        if (s_1 == -1 || s_2 == -1 || s_3 == -1)
+                        {
+                            printWriter.println("HTTP/1.1 400 OK");
+                            MainApp.sendTitle(printWriter);
+                            printWriter.println("Send Message Error");
+                            printWriter.flush();
+                            socket.close();
+                            return 1;
+                        }
+                        try
+                        {
+                            String getMirror = getRequests.substring(s_1+keyWord_1.length(),s_2);
+                            String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
+                            String getCommand = getRequests.substring(s_3+keyWord_3.length());
+                            printWriter.println("HTTP/1.1 200 OK");
+                            MainApp.sendTitle(printWriter);
+                            printWriter.println(getMirror+" "+getKey+" "+getCommand);
+                            printWriter.flush();
+                            socket.close();
+                            return 0;
+                        }
+                        catch (Exception exception)
+                        {
+                            printWriter.println("HTTP/1.1 400 OK");
+                            MainApp.sendTitle(printWriter);
+                            printWriter.println("Send Message Error");
+                            printWriter.flush();
+                            socket.close();
+                            return 1;
+                        }
+                    }
+                };
                 executorService.submit(callable);
             }
             catch (Exception exception){}
         }
+    }
+    public static void sendTitle(PrintWriter printWriter) {
+        printWriter.println("Access-Control-Allow-Headers: *");
+        printWriter.println("Access-Control-Allow-Origin: *");
+        printWriter.println("Content-Type: text/plain");
+        printWriter.println();
     }
 }
