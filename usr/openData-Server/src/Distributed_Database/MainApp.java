@@ -5,7 +5,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import Data.Json;
+import MirrorRuntime.Engine;
+import javafx.scene.layout.ConstraintsBase;
 import remote.Loader;
+import remote.UserRemote;
 
 public class MainApp {
     public static int boot = 0;
@@ -25,9 +28,11 @@ public class MainApp {
             String ServerPort = Json.readJson(CONFIG_FILE.getAbsolutePath(),"Service-Port");
             String LogPath = Json.readJson(CONFIG_FILE.getAbsolutePath(),"Log-Path");
             String update = Json.readJson(CONFIG_FILE.getAbsolutePath(),"Update-Log");
+            String key = Json.readJson(CONFIG_FILE.getAbsolutePath(),"Key");
 
             MainApp.logPath = LogPath;
             MainApp.update = Integer.valueOf(update);
+            UserRemote.MirrorKey_md5 = UserRemote.md5(key);
 
             if (!new File(logPath).exists() && !new File(logPath).isDirectory()) {
                 System.out.println("CONFIG ERROR: CAN NOT FIND TARGET LOG PATH");
@@ -37,7 +42,7 @@ public class MainApp {
                 @Override
                 public void run() {
                     Loader loader = new Loader();
-
+                    loader.loadUser();
                 }
             });
             LOAD_REMOTE.start();
@@ -108,9 +113,17 @@ public class MainApp {
                             String getCommand = getRequests.substring(s_3+keyWord_3.length());
                             printWriter.println("HTTP/1.1 200 OK");
                             MainApp.sendTitle(printWriter);
-
-                            printWriter.flush();
-                            socket.close();
+                            if (UserRemote.MirrorKey_md5.equals(getKey)) {
+                                Engine engine  = new Engine();
+                                engine.exec(getCommand);
+                                printWriter.println(engine.getMessage());
+                                printWriter.flush();
+                                socket.close();
+                            }else {
+                                printWriter.println("Key Error");
+                                printWriter.flush();
+                                socket.close();
+                            }
                             return 0;
                         }
                         catch (Exception exception)
@@ -129,7 +142,8 @@ public class MainApp {
             catch (Exception exception){}
         }
     }
-    public static void sendTitle(PrintWriter printWriter) {
+    public static void sendTitle(PrintWriter printWriter)
+    {
         printWriter.println("Access-Control-Allow-Headers: *");
         printWriter.println("Access-Control-Allow-Origin: *");
         printWriter.println("Content-Type: text/plain");
