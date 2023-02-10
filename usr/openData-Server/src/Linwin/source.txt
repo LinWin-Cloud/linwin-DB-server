@@ -15,6 +15,8 @@
 ./LinwinVOS/FileSystem/VosDatabase.java
 ./LinwinVOS/FileSystem/Data.java
 ./LinwinVOS/LinwinVOS.java
+./LinwinVOS/Mirror/MirrorHost.java
+./LinwinVOS/Mirror/LoadMirror.java
 ./LinwinVOS/data/base.java
 ./LinwinVOS/data/Json.java
 ./LinwinVOS/Index.java

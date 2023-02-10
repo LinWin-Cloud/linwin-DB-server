@@ -81,6 +81,9 @@ public class MydbEngine {
                 Sudo sudo = new Sudo();
                 this.getFunction = sudo.dealCommand(script);
             }
+            else if(script.substring(0,15).equals("test connection")) {
+                this.getFunction = "Successful Connection";
+            }
 
             else if (script.substring(0,8).equals("shutdown")) {
                 if (exec.shutdownDatabase(user)) {

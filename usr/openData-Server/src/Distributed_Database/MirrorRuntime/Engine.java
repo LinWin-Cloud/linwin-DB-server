@@ -10,6 +10,10 @@ public class Engine {
                 this.message = mirrorExec.Show_Database();
                 return;
             }
+            else if (command.equals("test connection"))
+            {
+                this.message = "Successful Connection";
+            }
         }
         catch (Exception exception)
         {

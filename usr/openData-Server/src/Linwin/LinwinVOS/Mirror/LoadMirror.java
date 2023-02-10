@@ -4,9 +4,14 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.data.Json;
 
 import javax.naming.ldap.SortKey;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 public class LoadMirror
 {
@@ -31,9 +36,15 @@ public class LoadMirror
                 }
                 else
                 {
-                    LoadMirror.loadReal_Mirror(
-                            getRemoteHost,getKey,LoadMirror.getFrontName(
-                                    target.getName()));
+                    LinwinVOS.executorService.submit(new Callable<Integer>() {
+                        @Override
+                        public Integer call() throws Exception {
+                            LoadMirror.loadReal_Mirror(
+                                    getRemoteHost,getKey,LoadMirror.getFrontName(
+                                            target.getName()));
+                            return 0;
+                        }
+                    });
                 }
             }
         }
@@ -59,18 +70,33 @@ public class LoadMirror
          */
         try
         {
-            URL url = new URL(remote+"/?");
-            HttpURLConnection urlConnection =
-
-                    MirrorHost mirrorHost = new MirrorHost();
-            mirrorHost.setName(name);
+            MirrorHost mirrorHost = new MirrorHost();
             mirrorHost.setKey(key);
+            mirrorHost.setName(name);
             mirrorHost.setRemote(remote);
-            LinwinVOS.mirrorHostHashSet.add(mirrorHost);
+
+            URL url = new URL(remote+"/?Key="+mirrorHost.getMd5Key()+"?Command=test connection");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(3000);
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String getMessage = bufferedReader.readLine();
+
+            if (getMessage.equals("Successful Connection"))
+            {
+                LinwinVOS.mirrorHostHashSet.add(mirrorHost);
+            }
+            else
+            {
+                System.out.println("[!] ERROR CONNECT TO TARGET: "+remote);    
+            }
         }
         catch (Exception exception)
         {
-            System.out.println("");
+            System.out.println("Load Mirror Host Error: "+exception.getMessage());
             return;
         }
     }

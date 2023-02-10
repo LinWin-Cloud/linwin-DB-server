@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
@@ -19,6 +21,7 @@ public class LinwinVOS {
     public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;
+    public static ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     public static HashSet<MirrorHost> mirrorHostHashSet = new HashSet<>();
 
