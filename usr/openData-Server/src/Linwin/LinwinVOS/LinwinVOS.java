@@ -1,5 +1,7 @@
 package LinwinVOS;
 
+import LinwinVOS.Mirror.LoadMirror;
+import LinwinVOS.Mirror.MirrorHost;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.Users.logon;
 import LogService.LogService;
@@ -17,6 +19,8 @@ public class LinwinVOS {
     public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;
+
+    public static HashSet<MirrorHost> mirrorHostHashSet = new HashSet<>();
 
     public LinwinVOS() {
         Thread thread = new Thread(new Runnable() {
@@ -45,6 +49,13 @@ public class LinwinVOS {
         }
         //System.out.println();
         DataLoader.loadData();
+
+        /**
+         * Add the Mirror Host from Config File.
+         *
+         *
+         */
+        LoadMirror loadMirror = new LoadMirror();
     }
     public HashSet<UsersFileSystem> getUserFileSystem() {
         return new HashSet<UsersFileSystem>(LinwinVOS.FileSystem.values());
