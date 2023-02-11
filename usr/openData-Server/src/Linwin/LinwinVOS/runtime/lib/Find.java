@@ -58,11 +58,10 @@ public class Find {
 
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
-                ExecutorService executorService = Executors.newFixedThreadPool(1);
                 Future<Integer> future = null;
                 for (VosDatabase vosDatabase : databases) {
                     String index = findIndex;
-                    future = executorService.submit(new Callable<Integer>() {
+                    future = LinwinVOS.executorService.submit(new Callable<Integer>() {
                         @Override
                         public Integer call() throws Exception {
                             stringBuffer.append(vosDatabase.findData(index));
@@ -73,10 +72,9 @@ public class Find {
                 try{
                     future.get();
                 }catch (Exception exception){}
-                executorService.shutdownNow();
                 return stringBuffer.toString();
             }else {
-                return "Do Not Find The Target {Error='Send Type Error'}";
+                return "Can Not Find The Target {Error='Send Type Error'}";
             }
         }else {
             return "Command Value Error!";

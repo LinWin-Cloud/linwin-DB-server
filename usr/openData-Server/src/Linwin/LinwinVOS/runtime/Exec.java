@@ -185,12 +185,12 @@ public class Exec {
                             break;
                         }
                     }else {
-                        return "Do not find target data.";
+                        return "Can not find target data.";
                     }
                 }
             }
             if (!findDatabase) {
-                return "Do not find database.";
+                return "Can not find database.";
             }else {
                 return Result;
             }
@@ -207,7 +207,7 @@ public class Exec {
          *
          * How to use:
          * [This command is to list all the data in database name 'default']
-         * ls 'default'
+         * ls default
          */
         try{
             String listDatabase = command.substring(3,command.length());
@@ -226,7 +226,7 @@ public class Exec {
             }
             String result = stringBuffer.toString();
             if (result.equals("")) {
-                return "Do not have data in the database.";
+                return "Can not have data in the database.";
             }else {
                 return result;
             }
