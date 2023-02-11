@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class LinwinVOS {
     public static HashMap<String,String> UsersNowPath = new HashMap<String,String>();
     public static HashMap<String, UsersFileSystem> FileSystem;
-    //public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
+    public static List<UsersFileSystem> usersFileSystems = new ArrayList<UsersFileSystem>();
     public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;

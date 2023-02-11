@@ -4,6 +4,7 @@
 ./LinwinVOS/runtime/MydbEngine.java
 ./LinwinVOS/runtime/Func.java
 ./LinwinVOS/runtime/Exec.java
+./LinwinVOS/runtime/lib/ListDatabase.java
 ./LinwinVOS/runtime/lib/Copy.java
 ./LinwinVOS/runtime/lib/ReData.java
 ./LinwinVOS/runtime/lib/Move.java

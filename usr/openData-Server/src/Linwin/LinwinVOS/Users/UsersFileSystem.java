@@ -54,4 +54,7 @@ public class UsersFileSystem {
     {
         this.mirrorHosts.add(mirrorHost);
     }
+    public HashSet<MirrorHost> getMirrorHosts() {
+        return this.mirrorHosts;
+    }
 }

@@ -16,9 +16,7 @@ import LinwinVOS.DataLoader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.SplittableRandom;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,19 +51,8 @@ public class Exec {
          *
          * List all the databases on users group.
          */
-        StringBuffer list = new StringBuffer("");
-        UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-        HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
-        for (VosDatabase vosDatabase : databases) {
-            list.append(vosDatabase.getName());
-            list.append("\n");
-            for (MirrorHost mirrorHost : LinwinVOS.mirrorHostHashSet) {
-            }
-        }
-        if (list.toString().equals("")) {
-            return list.toString()+"\n";
-        }
-        return list.toString();
+        ListDatabase listDatabase = new ListDatabase();
+        return listDatabase.listDatabase(user);
     }
     public String Find(String user,String command) {
         /**
