@@ -46,4 +46,7 @@ public class MirrorHost {
         }
         return md5code;
     }
+    public String sendComamnd() {
+
+    }
 }

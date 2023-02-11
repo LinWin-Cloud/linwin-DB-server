@@ -9,6 +9,7 @@ package LinwinVOS.runtime;
 import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
+import LinwinVOS.Mirror.MirrorHost;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.DataLoader;
 
@@ -58,6 +59,8 @@ public class Exec {
         for (VosDatabase vosDatabase : databases) {
             list.append(vosDatabase.getName());
             list.append("\n");
+            for (MirrorHost mirrorHost : LinwinVOS.mirrorHostHashSet) {
+            }
         }
         if (list.toString().equals("")) {
             return list.toString()+"\n";
