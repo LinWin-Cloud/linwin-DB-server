@@ -40,6 +40,9 @@ public class Info {
             if (getType.equals("update")) {
                 return vosDatabase.getModificationTime()+"\n";
             }
+            if (getType.equals("remote")) {
+                return String.valueOf(vosDatabase.isRemoteDatabase())+"\n";
+            }
             else {
                 return "Command syntax error!";
             }

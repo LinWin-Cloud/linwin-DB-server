@@ -21,7 +21,7 @@ public class LinwinVOS {
     public static HashMap<String, FileWriter> outPutMap = new HashMap<>();
     public static LogService logService;
     public static String DatabasePath;
-    public static ExecutorService executorService = Executors.newFixedThreadPool(100);
+    public static ExecutorService executorService = Executors.newFixedThreadPool(500);
 
 
     public LinwinVOS() {
