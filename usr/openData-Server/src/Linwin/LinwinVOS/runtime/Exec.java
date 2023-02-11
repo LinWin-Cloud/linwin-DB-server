@@ -209,30 +209,8 @@ public class Exec {
          * [This command is to list all the data in database name 'default']
          * ls default
          */
-        try{
-            String listDatabase = command.substring(3,command.length());
-            UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-            VosDatabase vosDatabase = usersFileSystem.get(listDatabase);
-
-            StringBuffer stringBuffer = new StringBuffer("");
-
-            if (vosDatabase == null){
-                return "Do not find target database";
-            }else {
-                for (Data data : vosDatabase.dataHashMap.values()) {
-                    stringBuffer.append(data.getName());
-                    stringBuffer.append("\n");
-                }
-            }
-            String result = stringBuffer.toString();
-            if (result.equals("")) {
-                return "Can not have data in the database.";
-            }else {
-                return result;
-            }
-        }catch (Exception exception) {
-            return "Command syntax error!";
-        }
+        Ls ls = new Ls();
+        return ls.ls(user,command);
     }
     public String create(String user,String command) {
         /**

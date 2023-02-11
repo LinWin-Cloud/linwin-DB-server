@@ -18,7 +18,7 @@ public class Engine {
             }
             else if (command.substring(0,2).equals("ls"))
             {
-
+                this.message = mirrorExec.LS_Database(command);
             }
         }
         catch (Exception exception)
