@@ -75,7 +75,6 @@ public class MirrorHost {
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
             return null;
         }
     }

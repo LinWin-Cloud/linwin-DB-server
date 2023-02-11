@@ -20,6 +20,10 @@ public class Engine {
             {
                 this.message = mirrorExec.LS_Database(command);
             }
+            else if (command.substring(0,8).equals("findData"))
+            {
+                this.message = mirrorExec.findData(command);
+            }
         }
         catch (Exception exception)
         {

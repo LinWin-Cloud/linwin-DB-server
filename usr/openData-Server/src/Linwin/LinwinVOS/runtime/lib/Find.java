@@ -7,10 +7,7 @@ import LinwinVOS.Users.UsersFileSystem;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class Find {
     public String find(String command,String user)
@@ -72,11 +69,35 @@ public class Find {
                 /**
                  * Find the remote data.
                  */
-
-
+                Future<Integer> integerFuture = null;
+                for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+                {
+                    String Index = findIndex;
+                    integerFuture = LinwinVOS.executorService.submit(new Callable<Integer>() {
+                        @Override
+                        public Integer call() throws Exception {
+                            String message = mirrorHost.sendCommand("findData "+Index);
+                            String[] findData = message.split("\n");
+                            for (String i : findData)
+                            {
+                                stringBuffer.append(i);
+                                stringBuffer.append("\n");
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                try {
+                    integerFuture.get();
+                }catch (Exception exception){}
                 try{
                     future.get();
                 }catch (Exception exception){}
+
+                if (stringBuffer.toString().replace("\n","").equals("")) {
+                    return " Error : No Result!";
+                }
+
                 return stringBuffer.toString();
             }else {
                 return "Can Not Find The Target {Error='Send Type Error'}";

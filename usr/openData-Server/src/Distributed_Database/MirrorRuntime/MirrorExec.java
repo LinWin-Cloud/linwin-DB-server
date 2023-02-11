@@ -39,4 +39,25 @@ public class MirrorExec {
             return "Command syntax error!";
         }
     }
+    public String findData(String command) {
+        try {
+            StringBuffer stringBuffer = new StringBuffer("");
+            String findIndex = command.substring(command.indexOf(" ")+1);
+
+            for (Database database : UserRemote.usersHashMap.values())
+            {
+                for (Data data : database.getListData())
+                {
+                    if (data.getName().indexOf(findIndex) != -1) {
+                        stringBuffer.append(data.getName());
+                        stringBuffer.append("\n");
+                    }
+                }
+            }
+            return stringBuffer.toString();
+        }
+        catch (Exception exception){
+            return "Command syntax error!";
+        }
+    }
 }
