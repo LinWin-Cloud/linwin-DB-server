@@ -70,66 +70,8 @@ public class Exec {
          * [This is a command to find all the data from user's database.]
          * find data 1
          */
-        String[] getCommand = command.split(" ");
-
-        if (getCommand.length >= 3) {
-            String findType = getCommand[1];
-            String findIndex = "";
-
-            if (getCommand.length == 3) {
-                findIndex = getCommand[2];
-            }else {
-                StringBuffer stringBuffer = new StringBuffer("");
-                for (int j = 0 ; j < getCommand.length ; j++) {
-                    //System.out.println(j+" "+getCommand[j]);
-                    if (j >= 2 ) {
-                        stringBuffer.append(getCommand[j]);
-                        stringBuffer.append(" ");
-                    }
-                }
-                findIndex = stringBuffer.toString().substring(0,stringBuffer.toString().length()-1);
-            }
-            if (findType.equals("database")) {
-                UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-                HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
-                StringBuffer stringBuffer = new StringBuffer("");
-                for (VosDatabase vosDatabase : databases) {
-                    String databaseName = vosDatabase.getName();
-                    int s = databaseName.indexOf(findIndex);
-                    if (s != -1) {
-                        stringBuffer.append(databaseName);
-                        stringBuffer.append("\n");
-                    }
-                }
-                return stringBuffer.toString();
-            }else if (findType.equals("data")) {
-                StringBuffer stringBuffer = new StringBuffer("");
-
-                UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
-                HashSet<VosDatabase> databases = usersFileSystem.getDatabase();
-                ExecutorService executorService = Executors.newFixedThreadPool(1);
-                Future<Integer> future = null;
-                for (VosDatabase vosDatabase : databases) {
-                    String index = findIndex;
-                    future = executorService.submit(new Callable<Integer>() {
-                        @Override
-                        public Integer call() throws Exception {
-                            stringBuffer.append(vosDatabase.findData(index));
-                            return 0;
-                        }
-                    });
-                }
-                try{
-                    future.get();
-                }catch (Exception exception){}
-                executorService.shutdownNow();
-                return stringBuffer.toString();
-            }else {
-                return "Do Not Find The Target {Error='Send Type Error'}";
-            }
-        }else {
-            return "Command Value Error!";
-        }
+        Find find = new Find();
+        return find.find(command,user);
     }
     public String Get(String user,String command)
     {
