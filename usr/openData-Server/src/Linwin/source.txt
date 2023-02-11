@@ -10,6 +10,7 @@
 ./LinwinVOS/runtime/lib/Find.java
 ./LinwinVOS/runtime/lib/Move.java
 ./LinwinVOS/runtime/lib/View.java
+./LinwinVOS/runtime/lib/Get.java
 ./LinwinVOS/runtime/lib/Ls.java
 ./LinwinVOS/runtime/lib/Index.java
 ./LinwinVOS/runtime/lib/ReName.java

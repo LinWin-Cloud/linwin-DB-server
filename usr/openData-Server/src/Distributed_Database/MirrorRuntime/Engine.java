@@ -24,6 +24,13 @@ public class Engine {
             {
                 this.message = mirrorExec.findData(command);
             }
+            else if (command.substring(0,3).equals("get"))
+            {
+                this.message = mirrorExec.get(command);
+            }
+            else {
+                this.message = "Error command and shell";
+            }
         }
         catch (Exception exception)
         {

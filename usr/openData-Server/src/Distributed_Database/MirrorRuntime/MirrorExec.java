@@ -1,5 +1,6 @@
 package MirrorRuntime;
 
+import MirrorRuntime.lib.Get;
 import remote.Data;
 import remote.Database;
 import remote.UserRemote;
@@ -59,5 +60,9 @@ public class MirrorExec {
         catch (Exception exception){
             return "Command syntax error!";
         }
+    }
+    public String get(String command) {
+        Get get = new Get();
+        return get.get(command);
     }
 }
