@@ -28,8 +28,9 @@ public class LoadMirror
                 }
                 String getRemoteHost = Json.readJson(target.getAbsolutePath(),"Remote");
                 String getKey = Json.readJson(target.getAbsolutePath(),"Key");
+                String getSave = Json.readJson(target.getAbsolutePath(),"Save");
 
-                if (getRemoteHost == null || getKey == null)
+                if (getRemoteHost == null || getKey == null || getSave == null)
                 {
                     System.out.println("CONFIG FILE ERROR: "+target.getName());
                     continue;
@@ -39,9 +40,13 @@ public class LoadMirror
                     LinwinVOS.executorService.submit(new Callable<Integer>() {
                         @Override
                         public Integer call() throws Exception {
+                            if (LinwinVOS.FileSystem.get(getSave) == null) {
+                                System.out.println("CAN NOT FIND TARGET SAVE USER: "+getSave);
+                                return 1;
+                            }
                             LoadMirror.loadReal_Mirror(
                                     getRemoteHost,getKey,LoadMirror.getFrontName(
-                                            target.getName()));
+                                            target.getName()),getSave);
                             return 0;
                         }
                     });
@@ -63,7 +68,7 @@ public class LoadMirror
             return str;
         }
     }
-    private static void loadReal_Mirror(String remote,String key,String name) {
+    private static void loadReal_Mirror(String remote,String key,String name,String save) {
         /**
          * First, we must Confirm the remote host and key to connect.
          * Then, the Software can connect and share the data.
@@ -87,7 +92,13 @@ public class LoadMirror
 
             if (getMessage.equals("Successful Connection"))
             {
-                LinwinVOS.mirrorHostHashSet.add(mirrorHost);
+                try
+                {
+                    LinwinVOS.FileSystem.get(save).addMirrorHost(mirrorHost);
+                }catch (Exception exception)
+                {
+                    return;
+                }
             }
             else
             {

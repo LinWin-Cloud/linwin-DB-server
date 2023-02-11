@@ -2,6 +2,7 @@ package LinwinVOS.Users;
 
 import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
+import LinwinVOS.Mirror.MirrorHost;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public class UsersFileSystem {
     private String userName;
     private HashMap<String, VosDatabase> userDatabase = new HashMap<String,VosDatabase>();
     private Boolean loadOK = false;
+    private HashSet<MirrorHost> mirrorHosts = new HashSet<>();
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -46,5 +48,10 @@ public class UsersFileSystem {
     }
     public void removeAll() {
         this.userDatabase.clear();
+    }
+
+    public void addMirrorHost(MirrorHost mirrorHost)
+    {
+        this.mirrorHosts.add(mirrorHost);
     }
 }
