@@ -38,6 +38,7 @@ public class Get {
                 if (data != null) {
                     if (getDataValue.equals("value")) {
                         Get.Result.append(data.getValue());
+                        Get.Result.append("\n");
                         continue;
                     }
                     if (getDataValue.equals("type")) {
@@ -46,14 +47,17 @@ public class Get {
                     }
                     if (getDataValue.equals("update")) {
                         Get.Result.append(data.getModificationTime());
+                        Get.Result.append("\n");
                         continue;
                     }
                     if (getDataValue.equals("createTime")) {
                         Get.Result.append(data.getCreateTime());
+                        Get.Result.append("\n");
                         continue;
                     }
                     if (getDataValue.equals("note")) {
                         Get.Result.append(data.getNote());
+                        Get.Result.append("\n");
                         continue;
                     }else {
                         return "Error command Type.";
