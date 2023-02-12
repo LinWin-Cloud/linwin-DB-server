@@ -17,8 +17,6 @@ public class ReData {
             String content = TMP.substring(TMP.indexOf("'")+1,TMP.lastIndexOf("'"));
             String database = TMP.substring(TMP.lastIndexOf("in ")+3);
 
-            System.out.println(type+" "+content+" "+database);
-
             Database vosDatabase = UserRemote.usersHashMap.get(database);
             if (vosDatabase != null) {
                 Data getData = vosDatabase.getData(data);

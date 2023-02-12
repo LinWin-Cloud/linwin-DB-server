@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import Data.Json;
 import MirrorRuntime.Engine;
-import javafx.scene.layout.ConstraintsBase;
 import remote.Loader;
 import remote.UserRemote;
 
@@ -98,43 +97,48 @@ public class MainApp {
                         int s_2 = getRequests.lastIndexOf(keyWord_2);
                         int s_3 = getRequests.lastIndexOf(keyWord_3);
 
-                        if (s_2 == -1 || s_3 == -1)
-                        {
+                        if (s_2 == -1 || s_3 == -1) {
                             printWriter.println("HTTP/1.1 400 OK");
                             MainApp.sendTitle(printWriter);
                             printWriter.println("Send Message Error");
                             printWriter.flush();
                             socket.close();
-                            return 1;
                         }
-                        try
-                        {
-                            String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
-                            String getCommand = getRequests.substring(s_3+keyWord_3.length());
-                            printWriter.println("HTTP/1.1 200 OK");
-                            MainApp.sendTitle(printWriter);
-                            if (UserRemote.MirrorKey_md5.equals(getKey)) {
-                                Engine engine  = new Engine();
-                                engine.exec(getCommand);
-                                printWriter.println(engine.getMessage());
-                                printWriter.flush();
-                                socket.close();
-                            }else {
-                                printWriter.println("Key Error");
-                                printWriter.flush();
-                                socket.close();
+                        else {
+                            try
+                            {
+                                String getKey = getRequests.substring(s_2+keyWord_2.length(),s_3);
+                                String getCommand = getRequests.substring(s_3+keyWord_3.length());
+                                printWriter.println("HTTP/1.1 200 OK");
+                                MainApp.sendTitle(printWriter);
+                                if (UserRemote.MirrorKey_md5.equals(getKey)) {
+                                    String[] splitCommand = getCommand.split("/n");
+                                    for (String i : splitCommand) {
+                                        System.out.println(i);
+                                        Engine engine  = new Engine();
+                                        engine.exec(i);
+                                        printWriter.println(engine.getMessage());
+                                        printWriter.flush();
+                                    }
+                                    socket.close();
+                                }else {
+                                    printWriter.println("Key Error");
+                                    printWriter.flush();
+                                    socket.close();
+                                }
+                                return 0;
                             }
-                            return 0;
+                            catch (Exception exception)
+                            {
+                                printWriter.println("HTTP/1.1 400 OK");
+                                MainApp.sendTitle(printWriter);
+                                printWriter.println("Send Message Error");
+                                printWriter.flush();
+                                socket.close();
+                                return 1;
+                            }
                         }
-                        catch (Exception exception)
-                        {
-                            printWriter.println("HTTP/1.1 400 OK");
-                            MainApp.sendTitle(printWriter);
-                            printWriter.println("Send Message Error");
-                            printWriter.flush();
-                            socket.close();
-                            return 1;
-                        }
+                        return 0;
                     }
                 };
                 executorService.submit(callable);
@@ -147,6 +151,7 @@ public class MainApp {
         printWriter.println("Access-Control-Allow-Headers: *");
         printWriter.println("Access-Control-Allow-Origin: *");
         printWriter.println("Content-Type: text/plain");
+        printWriter.println("Server: Linwin-DB-server");
         printWriter.println();
     }
 }
