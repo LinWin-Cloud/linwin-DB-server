@@ -3,11 +3,14 @@ package LinwinVOS.runtime.lib;
 import LinwinVOS.FileSystem.Data;
 import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
+import LinwinVOS.Mirror.MirrorHost;
 import LinwinVOS.Users.UsersFileSystem;
 
 import java.io.File;
 import java.nio.file.FileSystem;
 import java.util.HashSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 public class Get {
     public String get(String user,String command)
@@ -82,28 +85,60 @@ public class Get {
                 Data data = vosDatabase.getData(getDataName);
                 if (data != null){
                     if (getDataValue.equals("value")) {
-                        Result = data.getValue() + "\n";
+                        return data.getValue() + "\n";
                     }
                     if (getDataValue.equals("type")) {
-                        Result = data.getType() + "\n";
+                        return data.getType() + "\n";
                     }
                     if (getDataValue.equals("update")) {
-                        Result = data.getModificationTime();
+                        return data.getModificationTime();
                     }
                     if (getDataValue.equals("createTime")) {
-                        Result = data.getCreateTime() + "\n";
+                        return data.getCreateTime() + "\n";
                     }
                     if (getDataValue.equals("note")) {
-                        Result = data.getNote() + "\n";
+                        return data.getNote() + "\n";
                     }else {
-                        Result = "Command Value Error!";
+                        return "Command Value Error!";
                     }
                 }else {
                     return "Can not find target data.";
                 }
             }
-
-            return Result;
+            else if (vosDatabase == null) {
+                Future<Integer> future = null;
+                for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+                {
+                    String name = getDataName;
+                    String value = getDataValue;
+                    String finalR = Result;
+                    //String find = getFIND_DATABASE;
+                    future = LinwinVOS.executorService.submit(new Callable<Integer>() {
+                        @Override
+                        public Integer call() throws Exception {
+                            String finalRusult = finalR;
+                            String message = mirrorHost.sendCommand("get '"+name+"'."+value+" in "+getFIND_DATABASE);
+                            if (message.equals("Do not find data") || message.equals("Command Value Error")) {
+                                return 1;
+                            }
+                            String[] split = message.split("\n");
+                            for (String i : split)
+                            {
+                                System.out.println(i);
+                                finalRusult = finalRusult + i + "\n";
+                            }
+                            return 0;
+                        }
+                    });
+                }
+                try{
+                    future.get();
+                }catch (Exception exception){}
+                return Result;
+            }
+            else {
+                return "Can not find target database.";
+            }
         }else {
             return "Command Value Error! Error="+command;
         }

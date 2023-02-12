@@ -8,6 +8,7 @@ import java.util.HashSet;
 public class Get {
     public String get(String command)
     {
+        System.out.println(command);
         String[] getCommand = command.split(" ");
         int commandLength = getCommand.length;
         String Result = "";
@@ -48,13 +49,13 @@ public class Get {
                         Result = Result + data.getNote() + "\n";
                         continue;
                     }else {
-                        Result = "Command Value Error ! Error="+command;
+                        Result = "Command Value Error";
                         break;
                     }
                 }
             }
             if (Result.equals("")) {
-                return "Do not find datas";
+                return "Do not find data";
             }else {
                 return Result;
             }
