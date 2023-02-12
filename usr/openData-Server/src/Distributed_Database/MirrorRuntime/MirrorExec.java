@@ -65,4 +65,7 @@ public class MirrorExec {
         Get get = new Get();
         return get.get(command);
     }
+    public String ReData(String command) {
+
+    }
 }
