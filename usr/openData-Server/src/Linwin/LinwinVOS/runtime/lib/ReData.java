@@ -54,7 +54,7 @@ public class ReData {
                     future = LinwinVOS.executorService.submit(new Callable<Integer>() {
                         @Override
                         public Integer call() throws Exception {
-                            String message = mirrorHost.sendCommand("redata '"+data+"'."+type+" in "+database);
+                            String message = mirrorHost.sendCommand("redata '"+data+"'."+type+" '"+content+"' in "+database);
                             if (message.equals("Error Type") || message.equals("Can not find target database") || message.equals("Can not find target data"))
                             {
                                 return 1;

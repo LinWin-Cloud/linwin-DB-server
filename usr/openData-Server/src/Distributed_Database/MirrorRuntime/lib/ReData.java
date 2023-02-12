@@ -1,5 +1,6 @@
 package MirrorRuntime.lib;
 
+import MirrorRuntime.outPut.OutPutFileSystem;
 import remote.Data;
 import remote.Database;
 import remote.UserRemote;
@@ -16,6 +17,8 @@ public class ReData {
             String content = TMP.substring(TMP.indexOf("'")+1,TMP.lastIndexOf("'"));
             String database = TMP.substring(TMP.lastIndexOf("in ")+3);
 
+            System.out.println(type+" "+content+" "+database);
+
             Database vosDatabase = UserRemote.usersHashMap.get(database);
             if (vosDatabase != null) {
                 Data getData = vosDatabase.getData(data);
@@ -23,16 +26,14 @@ public class ReData {
                     return "Can not find target data";
                 }else {
                     if (type.equals("value")) {
-                        getData.setValue(content);
-                        getData.setModificationTime(Func.getNowTime());
-                        vosDatabase.putData(data,getData);
-                        UserRemote.usersHashMap.put(database,vosDatabase);
+                        vosDatabase.getData(data).setValue(content);
+                        vosDatabase.getData(data).setModificationTime(Func.getNowTime());
+                        OutPutFileSystem.writeDatabase(database);
                         return "Successful!\n";
                     }if (type.equals("note")) {
-                        getData.setNote(content);
-                        getData.setModificationTime(Func.getNowTime());
-                        vosDatabase.putData(data,getData);
-                        UserRemote.usersHashMap.put(database,vosDatabase);
+                        vosDatabase.getData(data).setNote(content);
+                        vosDatabase.getData(data).setModificationTime(Func.getNowTime());
+                        OutPutFileSystem.writeDatabase(database);
                         return "Successful!\n";
                     }else {
                         return "Error Type";
