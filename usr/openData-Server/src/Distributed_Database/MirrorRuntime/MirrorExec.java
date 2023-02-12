@@ -1,6 +1,7 @@
 package MirrorRuntime;
 
 import MirrorRuntime.lib.Get;
+import MirrorRuntime.lib.ReData;
 import remote.Data;
 import remote.Database;
 import remote.UserRemote;
@@ -65,7 +66,8 @@ public class MirrorExec {
         Get get = new Get();
         return get.get(command);
     }
-    public String ReData(String command) {
-
+    public String reData(String command) {
+        ReData reData = new ReData();
+        return reData.reData(command);
     }
 }

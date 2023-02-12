@@ -28,6 +28,10 @@ public class Engine {
             {
                 this.message = mirrorExec.get(command);
             }
+            else if (command.substring(0,6).equals("redata"))
+            {
+                this.message = mirrorExec.reData(command);
+            }
             else {
                 this.message = "Error command and shell";
             }

@@ -4,12 +4,8 @@ import remote.Data;
 import remote.Database;
 import remote.UserRemote;
 
-import java.awt.image.DataBuffer;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
 public class ReData {
-    public String reData(String user, String command) {
+    public String reData(String command) {
         try{
             String TMP = command;
             TMP = TMP.replace("  ","");
@@ -29,12 +25,14 @@ public class ReData {
                     if (type.equals("value")) {
                         getData.setValue(content);
                         getData.setModificationTime(Func.getNowTime());
-
+                        vosDatabase.putData(data,getData);
+                        UserRemote.usersHashMap.put(database,vosDatabase);
                         return "Successful!\n";
                     }if (type.equals("note")) {
                         getData.setNote(content);
                         getData.setModificationTime(Func.getNowTime());
-
+                        vosDatabase.putData(data,getData);
+                        UserRemote.usersHashMap.put(database,vosDatabase);
                         return "Successful!\n";
                     }else {
                         return "Error Type";

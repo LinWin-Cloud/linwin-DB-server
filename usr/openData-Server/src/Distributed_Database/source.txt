@@ -1,4 +1,6 @@
 ./MainApp.java
+./MirrorRuntime/lib/Func.java
+./MirrorRuntime/lib/ReData.java
 ./MirrorRuntime/lib/Get.java
 ./MirrorRuntime/Engine.java
 ./MirrorRuntime/MirrorExec.java
