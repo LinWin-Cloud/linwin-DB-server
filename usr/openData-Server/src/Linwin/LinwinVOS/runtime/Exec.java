@@ -151,6 +151,7 @@ public class Exec {
             }
             createName = splitCommand[2];
             createName = createName.substring(createName.indexOf("'")+1,createName.lastIndexOf("'"));
+
         }catch (Exception exception){
             return "Command syntax error!";
         }
@@ -166,9 +167,8 @@ public class Exec {
 
                 String saveDatabase = command.substring(command.lastIndexOf("in ")+3,command.length());
                 VosDatabase save = LinwinVOS.FileSystem.get(user).get(saveDatabase);
-                if (save == null) {
-                    return "Do not find this database";
-                }else {
+
+                if (save != null) {
                     int a1 = createName.indexOf("'");
                     int b1 = createName.indexOf(";");
                     int c1 = createName.indexOf(".");
@@ -193,6 +193,17 @@ public class Exec {
                     OutPutFileSystem.writeDatabase(saveDatabase,user);
 
                     return "Create Successful!\n";
+                }else {
+                    String getResult = "Can not find target database";
+                    for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+                    {
+                        //System.out.println(mirrorHost.sendCommand("existdatabase "+saveDatabase).replace("\n","")+";");
+                        if (mirrorHost.sendCommand("existdatabase "+saveDatabase).replace("\n","").equals("true")) {
+                            getResult = mirrorHost.sendCommand("create data '"+createName+"' setting('"+value+"','"+note+"') in "+saveDatabase);
+                            break;
+                        }
+                    }
+                    return getResult;
                 }
             }catch (Exception exception){
                 return "Command syntax error!";

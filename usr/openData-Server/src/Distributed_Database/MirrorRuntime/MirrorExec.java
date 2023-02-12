@@ -1,5 +1,6 @@
 package MirrorRuntime;
 
+import MirrorRuntime.lib.Create;
 import MirrorRuntime.lib.Get;
 import MirrorRuntime.lib.ReData;
 import remote.Data;
@@ -69,5 +70,23 @@ public class MirrorExec {
     public String reData(String command) {
         ReData reData = new ReData();
         return reData.reData(command);
+    }
+    public String existDatabase(String command) {
+        try
+        {
+            String name = command.substring(command.indexOf(" ")+1);
+            Database database = UserRemote.usersHashMap.get(name);
+            if (database == null) {
+                return  "false";
+            }else {
+                return "true";
+            }
+        }catch (Exception exception){
+            return "Command syntax error!";
+        }
+    }
+    public String create(String command) {
+        Create create = new Create();
+        return create.create(command);
     }
 }

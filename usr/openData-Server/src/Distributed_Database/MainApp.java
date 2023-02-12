@@ -114,7 +114,6 @@ public class MainApp {
                                 if (UserRemote.MirrorKey_md5.equals(getKey)) {
                                     String[] splitCommand = getCommand.split("/n");
                                     for (String i : splitCommand) {
-                                        System.out.println(i);
                                         Engine engine  = new Engine();
                                         engine.exec(i);
                                         printWriter.println(engine.getMessage());

@@ -32,6 +32,13 @@ public class Engine {
             {
                 this.message = mirrorExec.reData(command);
             }
+            else if (command.substring(0,6).equals("create"))
+            {
+                this.message = mirrorExec.create(command);
+            }
+            else if (command.substring(0,"existDatabase".length()).equals("existdatabase")) {
+                this.message = mirrorExec.existDatabase(command);
+            }
             else {
                 this.message = "Error command and shell";
             }
