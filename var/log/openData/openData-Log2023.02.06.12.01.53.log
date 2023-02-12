@@ -1,2 +1,0 @@
-{2023.02.06.12.01.57}  LOGIN=root  Command= LinwinVOS.DatabasePath / userName  IP=/127.0.0.1
-{2023.02.06.12.02.01}  LOGIN=root  Command= sudo createUser 'helloworld'  IP=/127.0.0.1

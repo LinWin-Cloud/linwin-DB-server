@@ -1,4 +1,0 @@
-{2023.02.06.11.51.53}  LOGIN=root  Command= list database  IP=/127.0.0.1
-{2023.02.06.11.51.58}  LOGIN=root  Command= api  IP=/127.0.0.1
-{2023.02.06.11.51.59}  LOGIN=root  Command= sudo  IP=/127.0.0.1
-{2023.02.06.11.52.12}  LOGIN=root  Command= sudo createUser 'helloworld'  IP=/127.0.0.1

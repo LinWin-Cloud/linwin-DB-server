@@ -1,9 +1,0 @@
-{2023.02.05.19.55.40}  LOGIN=root  Command= list datbase  IP=/127.0.0.1
-{2023.02.05.19.55.45}  LOGIN=root  Command= list database  IP=/127.0.0.1
-{2023.02.05.19.55.47}  LOGIN=root  Command= ls 0  IP=/127.0.0.1
-{2023.02.05.19.55.49}  LOGIN=root  Command= ls 1  IP=/127.0.0.1
-{2023.02.05.19.55.53}  LOGIN=root  Command= ls 1  IP=/127.0.0.1
-{2023.02.05.19.55.53}  LOGIN=root  Command= ls  IP=/127.0.0.1
-{2023.02.05.19.55.57}  LOGIN=root  Command= ls  IP=/127.0.0.1
-{2023.02.05.19.55.58}  LOGIN=root  Command= dir  IP=/127.0.0.1
-{2023.02.05.19.56.00}  LOGIN=root  Command= ls 3  IP=/127.0.0.1
