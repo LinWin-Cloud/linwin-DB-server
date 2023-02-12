@@ -6,9 +6,7 @@ import remote.Data;
 import java.util.HashSet;
 
 public class Get {
-    public String get(String command)
-    {
-        System.out.println(command);
+    public String get(String command) {
         String[] getCommand = command.split(" ");
         int commandLength = getCommand.length;
         String Result = "";
@@ -17,11 +15,11 @@ public class Get {
             String getWillGET = getCommand[1];
             String getDataName = "";
             String getDataValue = "";
-            try{
-                getDataName = getWillGET.substring(getWillGET.indexOf("'")+1,getWillGET.lastIndexOf("'"));
-                getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".")+1,getWillGET.length());
-                getDataValue = getDataValue.replace(" ","");
-            }catch (Exception exception){
+            try {
+                getDataName = getWillGET.substring(getWillGET.indexOf("'") + 1, getWillGET.lastIndexOf("'"));
+                getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".") + 1, getWillGET.length());
+                getDataValue = getDataValue.replace(" ", "");
+            } catch (Exception exception) {
                 return "Command Value Error!";
             }
             HashSet<Database> databases = new HashSet<>(UserRemote.usersHashMap.values());
@@ -48,7 +46,7 @@ public class Get {
                     if (getDataValue.equals("note")) {
                         Result = Result + data.getNote() + "\n";
                         continue;
-                    }else {
+                    } else {
                         Result = "Command Value Error";
                         break;
                     }
@@ -56,63 +54,52 @@ public class Get {
             }
             if (Result.equals("")) {
                 return "Do not find data";
-            }else {
+            } else {
                 return Result;
             }
-        }else if(commandLength == 4) {
+        } else if (commandLength == 4) {
             String getWillGET = getCommand[1];
             String getFIND_DATABASE = getCommand[3];
             String getDataName = "";
             String getDataValue = "";
-            try{
-                getDataName = getWillGET.substring(getWillGET.indexOf("'")+1,getWillGET.lastIndexOf("'"));
-                getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".")+1,getWillGET.length());
-                getDataValue = getDataValue.replace(" ","");
-            }catch (Exception exception){
-                return "Command Value Error! Error=1";
+            try {
+                getDataName = getWillGET.substring(getWillGET.indexOf("'") + 1, getWillGET.lastIndexOf("'"));
+                getDataValue = getWillGET.substring(getWillGET.lastIndexOf(".") + 1, getWillGET.length());
+                getDataValue = getDataValue.replace(" ", "");
+            } catch (Exception exception) {
+                return "Command Value Error!";
             }
-            Boolean findDatabase = false;
-            for (Database vosDatabase : UserRemote.usersHashMap.values()){
-                String name = vosDatabase.getName();
-                if (name.equals(getFIND_DATABASE)) {
-                    findDatabase = true;
-                    Data data = vosDatabase.getData(getDataName);
-                    if (data != null){
-                        if (getDataValue.equals("value")) {
-                            Result = data.getValue() + "\n";
-                            break;
-                        }
-                        if (getDataValue.equals("type")) {
-                            Result = data.getType() + "\n";
-                            break;
-                        }
-                        if (getDataValue.equals("update")) {
-                            Result = data.getModificationTime();
-                            break;
-                        }
-                        if (getDataValue.equals("createTime")) {
-                            Result = data.getCreateTime() + "\n";
-                            break;
-                        }
-                        if (getDataValue.equals("note")) {
-                            Result = data.getNote() + "\n";
-                            break;
-                        }else {
-                            Result = "Command Value Error!";
-                            break;
-                        }
-                    }else {
-                        return "Can not find target data.";
+            Database database = UserRemote.usersHashMap.get(getFIND_DATABASE);
+            if (database != null) {
+                Data data = database.getData(getDataName);
+                if (data != null) {
+                    if (getDataValue.equals("value")) {
+                        return data.getValue() + "\n";
                     }
+                    if (getDataValue.equals("type")) {
+                        return data.getType() + "\n";
+                    }
+                    if (getDataValue.equals("update")) {
+                        return data.getModificationTime();
+                    }
+                    if (getDataValue.equals("createTime")) {
+                        return data.getCreateTime() + "\n";
+                    }
+                    if (getDataValue.equals("note")) {
+                        return data.getNote() + "\n";
+                    } else {
+                        return  "Command Value Error!";
+                    }
+                } else {
+                    return "Can not find target data.";
                 }
             }
-            if (!findDatabase) {
-                return "Can not find database.";
-            }else {
-                return Result;
+            else
+            {
+                return "Can not find target database";
             }
         }else {
-            return "Command Value Error! Error="+command;
+            return "Command Value Error!";
         }
     }
 }

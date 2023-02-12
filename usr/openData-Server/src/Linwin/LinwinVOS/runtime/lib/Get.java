@@ -13,11 +13,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class Get {
+    private static StringBuffer Result = new StringBuffer("");
     public String get(String user,String command)
     {
         String[] getCommand = command.split(" ");
         int commandLength = getCommand.length;
-        String Result = "";
 
         if (commandLength == 2) {
             String getWillGET = getCommand[1];
@@ -37,35 +37,30 @@ public class Get {
                 Data data = vosDatabase.getData(getDataName);
                 if (data != null) {
                     if (getDataValue.equals("value")) {
-                        Result = Result + data.getValue() + "\n";
+                        Get.Result.append(data.getValue());
                         continue;
                     }
                     if (getDataValue.equals("type")) {
-                        Result = Result + data.getType() + "\n";
+                        Get.Result.append(data.getType());
                         continue;
                     }
                     if (getDataValue.equals("update")) {
-                        Result = Result + data.getModificationTime();
+                        Get.Result.append(data.getModificationTime());
                         continue;
                     }
                     if (getDataValue.equals("createTime")) {
-                        Result = Result + data.getCreateTime() + "\n";
+                        Get.Result.append(data.getCreateTime());
                         continue;
                     }
                     if (getDataValue.equals("note")) {
-                        Result = Result + data.getNote() + "\n";
+                        Get.Result.append(data.getNote());
                         continue;
                     }else {
-                        Result = "Command Value Error ! Error="+command;
-                        break;
+                        return "Error command Type.";
                     }
                 }
             }
-            if (Result.equals("")) {
-                return "Can not find data";
-            }else {
-                return Result;
-            }
+            return Get.Result.toString();
         }else if(commandLength == 4) {
             String getWillGET = getCommand[1];
             String getFIND_DATABASE = getCommand[3];
@@ -111,12 +106,10 @@ public class Get {
                 {
                     String name = getDataName;
                     String value = getDataValue;
-                    String finalR = Result;
                     //String find = getFIND_DATABASE;
                     future = LinwinVOS.executorService.submit(new Callable<Integer>() {
                         @Override
                         public Integer call() throws Exception {
-                            String finalRusult = finalR;
                             String message = mirrorHost.sendCommand("get '"+name+"'."+value+" in "+getFIND_DATABASE);
                             if (message.equals("Do not find data") || message.equals("Command Value Error")) {
                                 return 1;
@@ -124,8 +117,8 @@ public class Get {
                             String[] split = message.split("\n");
                             for (String i : split)
                             {
-                                System.out.println(i);
-                                finalRusult = finalRusult + i + "\n";
+                                Get.Result.append(i);
+                                Get.Result.append("\n");
                             }
                             return 0;
                         }
@@ -134,7 +127,7 @@ public class Get {
                 try{
                     future.get();
                 }catch (Exception exception){}
-                return Result;
+                return Get.Result.toString();
             }
             else {
                 return "Can not find target database.";
