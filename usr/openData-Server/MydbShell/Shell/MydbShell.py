@@ -13,7 +13,7 @@ def MainShell(user:str,passwd:str,host:str,port:int):
         return True
     else:
         pathNow = os.getcwd()
-        os.system("../../../../opt/linwinJRE/bin/java -jar ../../release/out/ClientShell.jar "+host+" "+port+" "+user+" "+passwd+" \""+command+"\"")
+        os.system("../../../../opt/linwinJRE/bin/java -jar ../../release/out/ClientShell.jar \""+host+"\" \""+port+"\" \""+user+"\" \""+passwd+"\" \""+command+"\"")
 
 if __name__ == "__main__":
     host = input("Logon Host: ")

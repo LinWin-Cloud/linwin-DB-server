@@ -5,6 +5,7 @@ import LinwinVOS.FileSystem.VosDatabase;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.outPut.OutPutFileSystem;
+import LinwinVOS.runtime.Exec;
 import LinwinVOS.runtime.Func;
 
 public class ReName {
@@ -52,14 +53,22 @@ public class ReName {
                 }
                 else
                 {
-                    String value = new Get().get(user,"get '"+lastName+"'.value in "+database);
-                    String note = new Get().get(user,"get '"+lastName+"'.note in "+database);
+                    String value = new Get().get(user,"get '"+lastName+"'.value in "+database).replace("\n","");
+                    String note = new Get().get(user,"get '"+lastName+"'.note in "+database).replace("\n","");
 
                     if (value.equals("Can not find target database.") || value.equals("Can not find target data.") || note.equals("Can not find target data.") || note.equals("Can not find target database."))
                     {
                         return "ReName error!";
                     }
-                    return "";
+                    Exec exec = new Exec();
+                    String create = exec.create(user,"create data '"+ NewName +"' setting('"+value+"','"+note+"') in "+database);
+                    //System.out.println("create data '"+ NewName +"' setting('"+value+"','"+note+"') in "+database);
+                    System.out.println(database+";");
+                    if (create.replace("\n","").equals("Can not find this database")) {
+                        return "ReName error! type=2";
+                    }
+                    exec.deleteData(user,"delete data '"+lastName+"' in "+database);
+                    return "ReName Successful!\n";
                 }
             }else {
                String dataBase = splitCommand[2];

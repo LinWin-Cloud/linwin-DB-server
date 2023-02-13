@@ -60,7 +60,7 @@ public class Create {
 
                 //System.out.println(value+" "+note+" "+createName+" "+saveDatabase);
                 if (save == null) {
-                    return "Do not find this database";
+                    return "Can not find this database";
                 }else {
                     int a1 = createName.indexOf("'");
                     int b1 = createName.indexOf(";");

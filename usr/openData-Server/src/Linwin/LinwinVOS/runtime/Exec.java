@@ -193,7 +193,7 @@ public class Exec {
                     for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
                     {
                         //System.out.println(mirrorHost.sendCommand("existdatabase "+saveDatabase).replace("\n","")+";");
-                        if (mirrorHost.sendCommand("existdatabase "+saveDatabase).replace("\n","").equals("true")) {
+                        if (mirrorHost.sendCommand("existdb "+saveDatabase).replace("\n","").equals("true")) {
                             getResult = mirrorHost.sendCommand("create data '"+createName+"' setting('"+value+"','"+note+"') in "+saveDatabase);
                             break;
                         }
