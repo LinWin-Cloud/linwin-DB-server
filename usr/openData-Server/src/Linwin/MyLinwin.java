@@ -4,6 +4,7 @@ import LogService.LogService;
 import LinwinVOS.data.*;
 import LinwinVOS.LinwinVOS;
 import LinwinVOS.Users.logon;
+import LinwinVOS.runtime.Func;
 import LinwinVOS.runtime.MydbEngine;
 import ThreadSocket.ThreadSocket;
 
@@ -32,14 +33,17 @@ public class MyLinwin {
          */
         Init init = new Init();
 
-        MyLinwin.LoadFiles();
-        MyLinwin.RuntimeThread(logService);
-        init.loadLogModule();
+        System.out.println(" [Information] Boot Linwin Data Service! ["+Func.getNowTime()+"]");
+        System.out.println(" [Config] Load Remote Mirror Host ["+Func.getNowTime()+"]");
 
-        System.out.println(" [Information] Boot Linwin Data Service!");
+        MyLinwin.LoadFiles();
         System.out.println(" [Config] Start Service Port="+MyLinwin.ServicePort);
-        System.out.println(" [Info ] Boot Successful!");
+        System.out.println(" [Service] Boot the Log Service.["+Func.getNowTime()+"]");
+
         MyLinwin.getServerSocketBoot();
+        MyLinwin.RuntimeThread(logService);
+        System.out.println();
+        init.loadLogModule();
 
         Thread HTTP_SERVICE = new Thread(new Runnable() {
             @Override

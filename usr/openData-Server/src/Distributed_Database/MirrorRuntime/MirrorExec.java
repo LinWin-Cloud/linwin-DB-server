@@ -6,6 +6,7 @@ import MirrorRuntime.lib.ReData;
 import MirrorRuntime.outPut.OutPutFileSystem;
 import remote.Data;
 import remote.Database;
+import remote.Loader;
 import remote.UserRemote;
 
 import java.io.File;
@@ -180,6 +181,8 @@ public class MirrorExec {
     }
     public String update() {
         UserRemote.usersHashMap.clear();
-
+        Loader loader = new Loader();
+        loader.loadUser();
+        return "Update Successful\n";
     }
 }

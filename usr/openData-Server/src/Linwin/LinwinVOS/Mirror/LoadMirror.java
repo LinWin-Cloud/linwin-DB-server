@@ -95,6 +95,7 @@ public class LoadMirror
                 try
                 {
                     LinwinVOS.FileSystem.get(save).addMirrorHost(mirrorHost);
+                    System.out.println(" [OK] LOAD MIRROR USER: "+mirrorHost.getName());
                 }catch (Exception exception)
                 {
                     return;
@@ -107,7 +108,7 @@ public class LoadMirror
         }
         catch (Exception exception)
         {
-            System.out.println("Load Mirror Host Error: "+exception.getMessage());
+            System.out.println(" [ERROR] Load Mirror Host Error: "+exception.getMessage());
             return;
         }
     }

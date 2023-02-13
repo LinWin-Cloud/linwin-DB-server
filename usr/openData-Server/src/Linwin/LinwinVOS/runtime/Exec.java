@@ -15,7 +15,9 @@ import LinwinVOS.DataLoader;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.lib.*;
@@ -343,6 +345,20 @@ public class Exec {
         DataLoader.UsersLoad(listDataBase,LinwinVOS.FileSystem.get(user),user);
         long end = System.currentTimeMillis();
         LinwinVOS.FileSystem.get(user).setLoadOK(true);
+        Future<Integer> future = null;
+        for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+        {
+            future = LinwinVOS.executorService.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    mirrorHost.sendCommand("update");
+                    return 0;
+                }
+            });
+        }
+        try{
+            future.get();
+        }catch (Exception exception){}
         return "[*]Finish Load All the Data From User: "+user+" Use Time: "+(end-start)+"ms\n";
     }
     public String Index(String user,String command) {
