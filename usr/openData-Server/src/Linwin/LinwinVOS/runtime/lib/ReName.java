@@ -63,7 +63,7 @@ public class ReName {
                     Exec exec = new Exec();
                     String create = exec.create(user,"create data '"+ NewName +"' setting('"+value+"','"+note+"') in "+database);
                     //System.out.println("create data '"+ NewName +"' setting('"+value+"','"+note+"') in "+database);
-                    System.out.println(database+";");
+                    //System.out.println(database+";");
                     if (create.replace("\n","").equals("Can not find this database")) {
                         return "ReName error! type=2";
                     }

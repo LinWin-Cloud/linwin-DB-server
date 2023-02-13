@@ -17,6 +17,7 @@ public class View {
             UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
             VosDatabase vosDatabase = usersFileSystem.get(database);
             if (vosDatabase != null) {
+                StringBuffer stringBuffer = new StringBuffer("");
                 for (Data data : vosDatabase.getListData()) {
                     stringBuffer.append(data.getName());
                     stringBuffer.append("   |   ");
@@ -34,6 +35,7 @@ public class View {
                 }
                 return stringBuffer.toString()+"\n";
             }else {
+                StringBuffer stringBuffer = new StringBuffer("");
                 Future<Integer> future = null;
                 for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
                 {
@@ -41,7 +43,12 @@ public class View {
                         @Override
                         public Integer call() throws Exception {
                             String message = mirrorHost.sendCommand("view "+database);
+                            message = message.replace("---","   |   ");
+
                             if (message.equals("Can not find target database")) {
+                                return 1;
+                            }
+                            if (message.equals("Error Command and Shell")) {
                                 return 1;
                             }
                             stringBuffer.append(message);

@@ -20,38 +20,39 @@ public class Engine {
             {
                 this.message = mirrorExec.LS_Database(command);
             }
-            else if (command.substring(0,8).equals("findData"))
-            {
-                this.message = mirrorExec.findData(command);
-            }
             else if (command.substring(0,3).equals("get"))
             {
                 this.message = mirrorExec.get(command);
+            }
+            else if (command.substring(0,4).equals("view")) {
+                this.message = mirrorExec.viewDatabase(command);
             }
             else if (command.substring(0,6).equals("redata"))
             {
                 this.message = mirrorExec.reData(command);
             }
-            else if (command.substring(0,6).equals("create"))
-            {
-                this.message = mirrorExec.create(command);
-            }
-            else if (command.substring(0,4).equals("view")) {
-                this.message = mirrorExec.viewDatabase(command);
-            }
-            else if (command.substring(0,7).equals("existdb")) {
-                this.message = mirrorExec.existDatabase(command);
-            }
             else if (command.substring(0,6).equals("delete"))
             {
                 this.message = mirrorExec.delete(command);
             }
+            else if (command.substring(0,6).equals("create"))
+            {
+                this.message = mirrorExec.create(command);
+            }
+            else if (command.substring(0,7).equals("existdb")) {
+                this.message = mirrorExec.existDatabase(command);
+            }
+            else if (command.substring(0,8).equals("findData"))
+            {
+                this.message = mirrorExec.findData(command);
+            }
             else {
-                this.message = "Error command and shell";
+                this.message = "Error command and shell;";
             }
         }
         catch (Exception exception)
         {
+            //exception.printStackTrace();
             this.message = "Error Command and Shell";
             return;
         }

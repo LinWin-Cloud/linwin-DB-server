@@ -75,11 +75,35 @@ public class Copy {
             }
             else if (Copy.isRemote_target && !Copy.isRemote_resource)
             {
-                return "";
+                StringBuffer stringBuffer = new StringBuffer("");
+                VosDatabase resourceDatabase = usersFileSystem.get(resource);
+                if (resourceDatabase == null) {
+                    return "Can not find resource database.";
+                }
+                for (Data data : resourceDatabase.getListData())
+                {
+                    String send = "create data '"+data.getName()+"' setting('"+data.getValue()+"','"+data.getNote()+"') in "+target;
+                    stringBuffer.append(send);
+                    stringBuffer.append("/n");
+                }
+                Copy.targetHost.sendCommand(stringBuffer.toString());
+                return "Copy Successful!\n";
             }
             else if (Copy.isRemote_resource && !Copy.isRemote_target)
             {
-                return "";
+                try {
+                    StringBuffer stringBuffer = new StringBuffer("");
+                    String mes = Copy.sourceHost.sendCommand("view "+resource);
+                    String[] splitMessage = mes.split("---");
+
+                    String name = splitMessage[0];
+                    String value = splitMessage[1];
+
+                    return "Copy Successful!\n";
+                }
+                catch (Exception exception) {
+                    return "Copy error!";
+                }
             }
             else {
                 if (database == null) {
