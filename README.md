@@ -4,7 +4,17 @@
 Linwin Data Server，基于Java开发的国产高性能数据库软件。支持国产和Linux操作系统，支持多用户操作。采用Nosql结构，自研mys数据库操作语言，更加简单方便高效。
 用户数据的增删改查全部在内存内操作，与硬盘的交互写入读取交由专门的线程管理，无不妨碍.
 
-#### 当前版本: 1.3-2023.2.7 <a href='./Update.md'>更新信息</a>
+#### 当前版本: 1.4-2023.2.13 <a href='./Update.md'>更新信息</a>
+
+### 安装
+方法1: <a href='https://gitee.com/LinwinSoft/Linwin-DB-Server/releases/'>下载deb包</a>
+方法2:
+在Linux终端中属于下列命令行 
+```
+ git clone https://gitee.com/LinwinSoft/linwin-DB-server/ #把源代码克隆到本地
+ dpkg -b linwin-DB-server/ #打包deb包
+ sudo dpkg -i linwin-DB-server.deb #安装deb包
+```
 
 ### Linwin Data Server数据库信息
 最低运行要求:
@@ -14,6 +24,12 @@ Linwin Data Server，基于Java开发的国产高性能数据库软件。支持�
 4. 联网的计算机
 5. 处理器处理速度: **1.0 HZ** 或 **更快**
 6. amd64架构处理器(64位处理器)
+
+特性:
+1. 支持分布式集群部署数据库
+2. 支持本地储存数据库
+3. 支持多用户操作数据库
+4. 采用key-value模式的Nosql架构数据库
 
 操作系统支持:Linux
 文档支持: <a href='https://gitee.com/LinwinSoft/linwin-DB-server/wiki/home'>文档</a>
