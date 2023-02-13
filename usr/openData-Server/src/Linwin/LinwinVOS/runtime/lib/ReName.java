@@ -7,8 +7,6 @@ import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.Func;
 
-import java.security.SecureRandom;
-
 public class ReName {
     public String reName(String user,String command) {
         /**
@@ -38,13 +36,11 @@ public class ReName {
                 String database = command.substring(command.lastIndexOf("in ")+3);
                 UsersFileSystem usersFileSystem = LinwinVOS.FileSystem.get(user);
                 VosDatabase vosDatabase = usersFileSystem.get(database);
-                if (vosDatabase == null) {
-                    return "Do not find target database";
-                }
-                else {
+
+                if (vosDatabase != null) {
                     Data data = vosDatabase.getData(lastName);
                     if (data == null) {
-                        return "Do not find target data";
+                        return "Co not find target data";
                     }else {
                         data.setName(NewName);
                         data.setModificationTime(Func.getNowTime());
@@ -53,6 +49,17 @@ public class ReName {
                         OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Rename Successful!\n";
                     }
+                }
+                else
+                {
+                    String value = new Get().get(user,"get '"+lastName+"'.value in "+database);
+                    String note = new Get().get(user,"get '"+lastName+"'.note in "+database);
+
+                    if (value.equals("Can not find target database.") || value.equals("Can not find target data.") || note.equals("Can not find target data.") || note.equals("Can not find target database."))
+                    {
+                        return "ReName error!";
+                    }
+                    return "";
                 }
             }else {
                String dataBase = splitCommand[2];

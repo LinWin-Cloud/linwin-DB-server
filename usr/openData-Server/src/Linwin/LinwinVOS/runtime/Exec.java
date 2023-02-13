@@ -15,12 +15,7 @@ import LinwinVOS.DataLoader;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.OutputStream;
-import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.lib.*;
@@ -267,7 +262,7 @@ public class Exec {
                     String DataBase = command.substring(command.lastIndexOf("in ") + 3, command.length());
                     VosDatabase vosDatabase = usersFileSystem.get(DataBase);
                     if (vosDatabase == null) {
-                        return "Do not have this database!";
+                        return "Can not have this database!";
                     } else {
                         vosDatabase.removeData(dataName);
                         OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
@@ -276,9 +271,7 @@ public class Exec {
                 } else {
                     String getName = splitCommand[2];
                     VosDatabase vosDatabase = usersFileSystem.get(getName);
-                    if (vosDatabase == null) {
-                        return "Do not have this database!";
-                    } else {
+                    if (vosDatabase != null) {
                         try {
                             usersFileSystem.deleteDataBase(getName);
                             File file = new File(LinwinVOS.DatabasePath + "/" + user + "/Database/" + getName + ".mydb");
@@ -290,6 +283,22 @@ public class Exec {
                             }
                         } catch (Exception exception) {
                             return "Do have Permissions to delete Target File";
+                        }
+                    } else {
+                        boolean delete = false;
+                        for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+                        {
+                            String mes = mirrorHost.sendCommand("delete database "+getName);
+                            if (mes.replace("\n","").equals("Delete Successful!"))
+                            {
+                                delete = true;
+                                break;
+                            }
+                        }
+                        if (delete) {
+                            return "Delete Successful\n";
+                        }else {
+                            return "Delete error!";
                         }
                     }
                 }

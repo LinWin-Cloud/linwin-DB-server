@@ -3,9 +3,12 @@ package MirrorRuntime;
 import MirrorRuntime.lib.Create;
 import MirrorRuntime.lib.Get;
 import MirrorRuntime.lib.ReData;
+import MirrorRuntime.outPut.OutPutFileSystem;
 import remote.Data;
 import remote.Database;
 import remote.UserRemote;
+
+import java.io.File;
 
 public class MirrorExec {
     public String Show_Database()
@@ -119,6 +122,59 @@ public class MirrorExec {
             }
         }
         catch (Exception exception) {
+            return "Command syntax error!";
+        }
+    }
+    public String delete(String command)
+    {
+        /**
+         * 'delete' command:
+         * delete the data or the database.
+         *
+         * How to use:
+         * (This command is to delete the database name call 'hello')
+         * [1] delete database hello
+         *
+         * (This command is to delete the data from the database name call 'helloDB')
+         * [2] delete data 'hello' in helloDB
+         *
+         * (This command will delete all the Mydb Database and data on user's FileSystem)
+         * [3] delete *
+         */
+        try {
+            String[] splitCommand = command.split(" ");
+            Boolean isData = splitCommand[1].equals("data");
+            if (isData) {
+                String dataName = command.substring(command.indexOf("'") + 1, command.lastIndexOf("'"));
+                String DataBase = command.substring(command.lastIndexOf("in ") + 3, command.length());
+                Database vosDatabase = UserRemote.usersHashMap.get(DataBase);
+                if (vosDatabase == null) {
+                    return "Can not have this database!";
+                } else {
+                    vosDatabase.removeData(dataName);
+                    OutPutFileSystem.writeDatabase(vosDatabase.getName());
+                    return "Delete Successful!\n";
+                }
+            } else {
+                String getName = splitCommand[2];
+                Database vosDatabase = UserRemote.usersHashMap.get(getName);
+                if (vosDatabase != null) {
+                    try {
+                        UserRemote.usersHashMap.remove(getName);
+                        File file = new File("../../../../opt/LinwinRemote/RemoteData/" + getName + ".mydb");
+                        if (file.delete()) {
+                            return "Delete Successful!\n";
+                        } else {
+                            return "No Permissions to delete Target File";
+                        }
+                    } catch (Exception exception) {
+                        return "No Permissions to delete Target File";
+                    }
+                } else {
+                    return "Can not find target database";
+                }
+            }
+        }catch (Exception exception){
             return "Command syntax error!";
         }
     }

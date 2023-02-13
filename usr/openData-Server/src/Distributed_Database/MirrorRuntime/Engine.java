@@ -42,6 +42,10 @@ public class Engine {
             else if (command.substring(0,7).equals("existdb")) {
                 this.message = mirrorExec.existDatabase(command);
             }
+            else if (command.substring(0,6).equals("delete"))
+            {
+                this.message = mirrorExec.delete(command);
+            }
             else {
                 this.message = "Error command and shell";
             }
