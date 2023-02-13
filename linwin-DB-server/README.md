@@ -6,6 +6,16 @@ Linwin Data Server，基于Java开发的国产高性能数据库软件。支持�
 
 #### 当前版本: 1.4-2023.2.13 <a href='./Update.md'>更新信息</a>
 
+### 安装
+方法1: <a href='https://gitee.com/LinwinSoft/Linwin-DB-Server/releases/'>下载deb包</a>
+方法2:
+在Linux终端中属于下列命令行 
+```
+ git clone https://gitee.com/LinwinSoft/linwin-DB-server/ #把源代码克隆到本地
+ dpkg -b linwin-DB-server/ #打包deb包
+ sudo dpkg -i linwin-DB-server.deb #安装deb包
+```
+
 ### Linwin Data Server数据库信息
 最低运行要求:
 1. 至少300MB的磁盘空间
