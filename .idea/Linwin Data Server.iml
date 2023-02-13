@@ -20,6 +20,8 @@
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/Mys-Script" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/client" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/Distributed_Database" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/default" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/usr/openData-Server/src/BootCluste" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/usr/openData-Server/out" />
     </content>
