@@ -178,4 +178,8 @@ public class MirrorExec {
             return "Command syntax error!";
         }
     }
+    public String update() {
+        UserRemote.usersHashMap.clear();
+
+    }
 }

@@ -132,7 +132,7 @@ public class Exec {
          * [2] create data 'hello' setting('hello world','LinwinDB') in main
          */
 
-        Boolean isData = false;
+        boolean isData = false;
         String[] splitCommand = command.split(" ");
         String createName = "";
 
@@ -212,6 +212,10 @@ public class Exec {
                 vosDatabase.setUser(user);
                 vosDatabase.setModificationTime(Func.getNowTime());
                 vosDatabase.setSavePath("/");
+
+                if (usersFileSystem.get(createName) != null) {
+                    return "Create Successful!\n";
+                }
 
                 usersFileSystem.putDatabase(createName,vosDatabase);
                 new File(LinwinVOS.DatabasePath+"/"+user+"/Database/"+vosDatabase.getName()+".mydb").createNewFile();
