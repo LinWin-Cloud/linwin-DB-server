@@ -16,10 +16,10 @@ def MainShell(user:str,passwd:str,host:str,port:int):
         os.system("../../../../opt/linwinJRE/bin/java -jar ../../release/out/ClientShell.jar \""+host+"\" \""+port+"\" \""+user+"\" \""+passwd+"\" \""+command+"\"")
 
 if __name__ == "__main__":
-    host = input("Logon Host: ")
-    port = input("Logon Port: ")
-    user = input("Logon Users: ")
-    passwd = input("Logon Passwd: ")
+    host = input("Login Host: ")
+    port = input("Login Port: ")
+    user = input("Login Users: ")
+    passwd = input("Login Passwd: ")
     print("=================Login to Console====================")
     while True:
         MainShell(user,passwd,host,port)
