@@ -1,6 +1,0 @@
-{
-  "Service-Port" : "10001",
-  "Log-Path" : "../../../../var/log/linwinRemote/",
-  "Update-Log" : "3600000",
-  "Key" : "123456"
-}
