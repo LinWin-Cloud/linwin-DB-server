@@ -261,12 +261,26 @@ public class Exec {
                     String dataName = command.substring(command.indexOf("'") + 1, command.lastIndexOf("'"));
                     String DataBase = command.substring(command.lastIndexOf("in ") + 3, command.length());
                     VosDatabase vosDatabase = usersFileSystem.get(DataBase);
-                    if (vosDatabase == null) {
-                        return "Can not have this database!";
-                    } else {
+                    if (vosDatabase != null) {
                         vosDatabase.removeData(dataName);
                         OutPutFileSystem.writeDatabase(vosDatabase.getName(),user);
                         return "Delete Successful!\n";
+                    } else {
+                        boolean delete = false;
+                        for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
+                        {
+                            String mes = mirrorHost.sendCommand("delete data '"+dataName+"' in "+DataBase);
+                            if (mes.replace("\n","").equals("Delete Successful!"))
+                            {
+                                delete = true;
+                                break;
+                            }
+                        }
+                        if (delete) {
+                            return "Delete Successful\n";
+                        }else {
+                            return "Delete error!";
+                        }
                     }
                 } else {
                     String getName = splitCommand[2];
