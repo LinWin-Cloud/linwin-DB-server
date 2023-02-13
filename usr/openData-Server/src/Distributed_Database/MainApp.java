@@ -63,9 +63,17 @@ public class MainApp {
     public static ServerSocket getServerSocket(int port) {
         try{
             boot = boot + 1;
+            if (boot >= 10) {
+                System.exit(0);
+            }
             System.out.println("Bind ServerSocket: localhost:"+port+"  |"+MainApp.boot+"|");
             return new ServerSocket(port);
         }catch (Exception exception){
+            try{
+                Thread.sleep(100);
+            }catch (Exception exception1){
+                exception1.printStackTrace();
+            }
             return MainApp.getServerSocket(port);
         }
     }
