@@ -1,0 +1,9 @@
+[Desktop Entry]
+Comment=openData-UI
+Icon=/usr/openData-Server/default/icon/logo2.png
+Exec=/bin/linwin-ui %F
+Name=openData-Server
+StartupNotify=false
+Terminal=false
+Type=Application
+InitialPreference=3
