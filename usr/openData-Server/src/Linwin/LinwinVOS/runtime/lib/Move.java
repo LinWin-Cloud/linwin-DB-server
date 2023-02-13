@@ -17,13 +17,12 @@ public class Move {
             target = target.substring(target.indexOf("'")+1,target.lastIndexOf("'"));
 
             VosDatabase vosDatabase = usersFileSystem.get(resource);
-            if (vosDatabase == null) {
-                return "Do not find resource database";
-            }else {
+            if (vosDatabase != null) {
                 Exec exec = new Exec();
                 exec.Copy(user,"copy '"+resource+"' '"+target+"'");
                 exec.deleteData(user,"delete database "+ resource);
                 return "Successful!\n";
+            }else {
             }
         }catch (Exception exception){
             return "Command syntax error!";

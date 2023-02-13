@@ -6,7 +6,10 @@ import LinwinVOS.LinwinVOS;
 import LinwinVOS.Mirror.MirrorHost;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.outPut.OutPutFileSystem;
+import LinwinVOS.runtime.Exec;
 import LinwinVOS.runtime.Func;
+
+import java.security.SecureRandom;
 
 public class Copy {
     public static boolean isRemote_resource = false;
@@ -94,11 +97,19 @@ public class Copy {
                 try {
                     StringBuffer stringBuffer = new StringBuffer("");
                     String mes = Copy.sourceHost.sendCommand("view "+resource);
-                    String[] splitMessage = mes.split("---");
+                    String[] splitMessage = mes.split("\n");
+                    Exec exec = new Exec();
+                    for (String i : splitMessage)
+                    {
+                        String[] splitData = i.split("---");
 
-                    String name = splitMessage[0];
-                    String value = splitMessage[1];
+                        String name = splitData[0];
+                        String value = splitData[1];
+                        String note = splitData[5];
 
+                        String send = "create data '"+name+"' setting('"+value+"','"+note+"') in "+target;
+                        exec.create(user,send);
+                    }
                     return "Copy Successful!\n";
                 }
                 catch (Exception exception) {
