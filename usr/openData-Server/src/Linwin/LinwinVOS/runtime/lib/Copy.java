@@ -7,6 +7,7 @@ import LinwinVOS.Mirror.MirrorHost;
 import LinwinVOS.Users.UsersFileSystem;
 import LinwinVOS.outPut.OutPutFileSystem;
 import LinwinVOS.runtime.Func;
+
 public class Copy {
     public static boolean isRemote_resource = false;
     public static boolean isRemote_target = false;
@@ -27,20 +28,50 @@ public class Copy {
 
             for (MirrorHost mirrorHost : LinwinVOS.FileSystem.get(user).getMirrorHosts())
             {
-                if (mirrorHost.sendCommand("existdatabase "+resource).equals("true")) {
+                if (mirrorHost.sendCommand("existdb "+resource).replace("\n","").equals("true")) {
                     Copy.isRemote_resource = true;
                     Copy.sourceHost = mirrorHost;
                 }
-                if (mirrorHost.sendCommand("existdatabase "+target).equals("true")) {
+                if (mirrorHost.sendCommand("existdb "+target).replace("\n","").equals("true")) {
                     Copy.isRemote_target = true;
                     Copy.targetHost = mirrorHost;
                 }
             }
+            //System.out.println(Copy.isRemote_resource+" "+ Copy.isRemote_target);
             if (Copy.isRemote_resource && Copy.isRemote_target)
             {
-                StringBuffer stringBuffer = new StringBuffer("");
-                String[] dataList = sourceHost.sendCommand("ls "+resource).split("\n");
-                return "";
+                try
+                {
+                    StringBuffer stringBuffer = new StringBuffer("");
+                    String[] dataList = sourceHost.sendCommand("view "+resource).split("\n");
+                    for (String i : dataList)
+                    {
+                        //System.out.println(i);
+                        String[] splitData = i.split("---");
+                        String name = splitData[0];
+                        String value = splitData[1];
+                        String note = splitData[5];
+
+                        String send = "create data '"+name+"' setting('"+value+"','"+note+"') in "+target;
+                        stringBuffer.append(send);
+                        stringBuffer.append("/n");
+                    }
+                    boolean success = false;
+
+                    String getMes = Copy.targetHost.sendCommand(stringBuffer.toString());
+                    if (getMes.replace("\n","").indexOf("Create Successful!") != -1) {
+                        success = true;
+                    }
+
+                    if (success) {
+                        return "Successful!\n";
+                    }else {
+                        return "Copy error!";
+                    }
+                }catch (Exception exception){
+                    //exception.printStackTrace();
+                    return "Send Message Error";
+                }
             }
             else if (Copy.isRemote_target && !Copy.isRemote_resource)
             {
@@ -52,7 +83,7 @@ public class Copy {
             }
             else {
                 if (database == null) {
-                    return "Do not find resource database!";
+                    return "Can not find resource database!";
                 }else {
                     VosDatabase TargetCopy = usersFileSystem.get(target);
                     if (TargetCopy == null) {

@@ -36,7 +36,10 @@ public class Engine {
             {
                 this.message = mirrorExec.create(command);
             }
-            else if (command.substring(0,"existDatabase".length()).equals("existdatabase")) {
+            else if (command.substring(0,4).equals("view")) {
+                this.message = mirrorExec.viewDatabase(command);
+            }
+            else if (command.substring(0,7).equals("existdb")) {
                 this.message = mirrorExec.existDatabase(command);
             }
             else {

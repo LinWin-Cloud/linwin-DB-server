@@ -89,4 +89,37 @@ public class MirrorExec {
         Create create = new Create();
         return create.create(command);
     }
+    public String viewDatabase(String command)
+    {
+        try
+        {
+            String targetView = command.substring(command.indexOf(" ")+1);
+            Database database = UserRemote.usersHashMap.get(targetView);
+
+            if (database != null) {
+                StringBuffer stringBuffer = new StringBuffer("");
+                for (Data data : database.getListData()) {
+                    stringBuffer.append(data.getName());
+                    stringBuffer.append("---");
+                    stringBuffer.append(data.getValue());
+                    stringBuffer.append("---");
+                    stringBuffer.append(data.getType());
+                    stringBuffer.append("---");
+                    stringBuffer.append(data.getCreateTime());
+                    stringBuffer.append("---");
+                    stringBuffer.append(data.getModificationTime());
+                    stringBuffer.append("---");
+                    stringBuffer.append(data.getNote());
+                    stringBuffer.append("---");
+                    stringBuffer.append("\n");
+                }
+                return stringBuffer.toString()+"\n";
+            }   else {
+                return "Can not find target database";
+            }
+        }
+        catch (Exception exception) {
+            return "Command syntax error!";
+        }
+    }
 }
