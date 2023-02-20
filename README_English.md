@@ -3,7 +3,7 @@ In the vast ocean of modern big data, the computer is deeply bound to informatio
 Linwin Data Server, a domestic high-performance database software developed based on Java. Support domestic and Linux operating systems, support multi-user operation. Using NoSQL structure, self-developed mys database operation language, more simple, convenient and efficient.
 The addition, deletion, modification and check of user data are all operated in memory, and the interactive writing and reading with the hard disk is managed by a special thread, all of which hinder.
 
-#### Current Version: 1.4-2023.2.13 <a href='./Update.md'> update information</a>
+#### Current Version: 1.5-2023.2.20 <a href='./Update.md'> update information</a>
 
 ### Installation
 Method 1: <a href='https://gitee.com/LinwinSoft/Linwin-DB-Server/releases/'> download the deb package</a> 
