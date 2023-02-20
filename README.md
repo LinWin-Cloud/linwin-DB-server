@@ -11,11 +11,11 @@ Linwin Data Server，基于Java开发的国产高性能数据库软件。支持�
 方法2:
 在Linux终端中属于下列命令行 
 ```
- git clone https://gitee.com/LinwinSoft/linwin-DB-server/ 	#把源代码克隆到本地
+ git clone https://gitee.com/LinwinSoft/linwin-DB-server/ 	# 把源代码克隆到本地
  
- dpkg -b linwin-DB-server/ 					#打包deb包
+ dpkg -b linwin-DB-server/ 					# 打包deb包
  
- sudo dpkg -i linwin-DB-server.deb 				#安装deb包
+ sudo dpkg -i linwin-DB-server.deb 				# 安装deb包
 ```
 
 ### Linwin Data Server数据库信息
