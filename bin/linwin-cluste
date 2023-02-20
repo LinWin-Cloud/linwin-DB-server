@@ -1,4 +1,6 @@
 #! /bin/bash
 
+Jre=../../../../opt/linwinJRE/
+
 cd /usr/openData-Server/release/out/
-../../../../opt/linwinJRE/bin/java -jar BootCluster.jar
+JRE/bin/java -jar BootCluster.jar
